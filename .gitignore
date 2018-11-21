@@ -15,6 +15,7 @@ data-mongodb
 .settings/
 target/
 dependency-reduced-pom.xml
+multitlon.iml
 
 # ------------------------------------
 #              BACKEND
