@@ -1,4 +1,4 @@
-# Sport diary and competition app
+## Multitlon - sport diary and competition app
 
 #### Prerequisites
  

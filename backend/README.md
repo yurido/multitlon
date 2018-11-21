@@ -1,7 +1,6 @@
+## Multitlon - Server
 
-How to start Multitlon Server
----
-
+### How to start 
 1. Change to `/backend` folder  
 1. Run `mvn clean install` to build server
 1. Start server with `java -jar target/multitlon-server-1.0-SNAPSHOT.jar server config.yml`
