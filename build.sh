@@ -7,15 +7,28 @@ echo "[SH] Multitlon building script, v 1.0.0"
 echo "[SH] ---------------------------------------------------------"
 echo "[SH]"
 echo "[SH] ---------------------------------------------------------"
-echo "[SH] Run maven build"
+echo "[SH] Build frontend"
 echo "[SH] ---------------------------------------------------------"
 echo ""
 echo ""
+cd frontend
+npm install
+cd ..
+echo ""
+echo ""
+echo "[SH]"
+echo "[SH] ---------------------------------------------------------"
+echo "[SH] Build backend"
+echo "[SH] ---------------------------------------------------------"
+echo ""
+echo ""
+cd backend
 mvn clean install
+cd ..
 echo ""
 echo ""
 echo "[SH] ---------------------------------------------------------"
-echo "[SH] Maven build is completed"
+echo "[SH] Backend build is completed"
 echo "[SH] ---------------------------------------------------------"
 echo "[SH]"
 echo "[SH]"
