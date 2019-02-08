@@ -24,6 +24,7 @@ e2e/logs/*.log
 *.mv.db
 *.trace.db
 /backend/backend.iml
+/backend/src/main/resources/assets/*
 
 # ------------------------------------
 #              FRONTEND

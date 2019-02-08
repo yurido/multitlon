@@ -8,22 +8,27 @@
 1. `Git` (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 1. `Maven 3.0` or later (https://maven.apache.org/install.html)
 1. `Angular CLI` ()https://angular.io/guide/quickstart (choose step 1))
+1. `Cygwin` if you use windows (http://cygwin.com/) 
 
 #### How to buid the project
 `dubble click build.sh`
 
-##### How to buid Frontend only
-`cd frontend && npm install`
+###### to buid Frontend only
+```
+$ cd frontend && npm install && cd ..
+```
 
-##### How to buid Backend only
-`cd backend && mvn clean install`
+###### to buid Backend only
+```
+$ cd backend && mvn clean install && cd ..
+```
 
 #### How to run the project
 
-##### How to run frontend only
+###### to run frontend only
 
-##### How to run backend only
+###### to run backend only
 
 
-###### Handy
+##### Handy
 *How to change java version:*
