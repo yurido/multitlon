@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {HeloMultitlonService} from "../services/helo-multitlon.service";
-import {Saying} from "../api/saying";
+import {HeloMultitlonService} from '../services/helo-multitlon.service';
+import {Saying} from '../api/saying';
 
 @Component({
   selector: 'app-saying',

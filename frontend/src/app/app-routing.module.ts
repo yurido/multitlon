@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import {RouterModule, Routes} from "@angular/router";
-import {SayingComponent} from "./saying/saying.component";
+import {RouterModule, Routes} from '@angular/router';
+import {SayingComponent} from './saying/saying.component';
 
 const routes: Routes = [
-  {path:'hello', component: SayingComponent}
+  {path: 'hello', component: SayingComponent}
 ];
 
 @NgModule({
