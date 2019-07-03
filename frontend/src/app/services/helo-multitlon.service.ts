@@ -18,7 +18,7 @@ export class HeloMultitlonService {
   getSayings(): Observable<Saying[]> {
     return this.http.get<Saying[]>(this.sayingUrl)
       .pipe(
-        tap(sayings => console.log('got saying object from backend')),
+        tap(sayings => console.log('got saying object from backend: ', sayings)),
         catchError(this.handleError('getSayings', []))
       );
   }

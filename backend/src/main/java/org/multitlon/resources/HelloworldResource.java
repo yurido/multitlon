@@ -17,6 +17,8 @@ public class HelloworldResource {
     @Timed
     public Saying sayHello(@QueryParam("content") Optional<String> name) {
         final String value = String.format(name.orElse("yura"));
+        System.out.print( String.format("/rest/saying request received: %s", value));
+
         return new Saying(value);
     }
 }
