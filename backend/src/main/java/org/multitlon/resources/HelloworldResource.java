@@ -10,7 +10,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.Optional;
 
-@Path("/hello-world")
+@Path("/rest/saying")
 @Produces(MediaType.APPLICATION_JSON)
 public class HelloworldResource {
     @GET
