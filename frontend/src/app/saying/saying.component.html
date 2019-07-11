@@ -1,3 +1,7 @@
 <div>
-  Hej {{sayings.content}} !
+  Hej
+
+  <div *ngFor="let saying of sayings">
+    {{saying.content}}
+  </div>
 </div>

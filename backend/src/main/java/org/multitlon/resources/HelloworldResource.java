@@ -1,24 +1,24 @@
 package org.multitlon.resources;
 
-import com.codahale.metrics.annotation.Timed;
 import org.multitlon.api.Saying;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("/rest/saying")
 @Produces(MediaType.APPLICATION_JSON)
 public class HelloworldResource {
     @GET
-    @Timed
-    public Saying sayHello(@QueryParam("content") Optional<String> name) {
-        final String value = String.format(name.orElse("yura"));
-        System.out.print( String.format("/rest/saying request received: %s", value));
+    public List<Saying> sayHello() {
 
-        return new Saying(value);
+        List<Saying> response = new ArrayList<>();
+        response.add(new Saying("yura"));
+        response.add(new Saying("dasha"));
+        response.add(new Saying("danjel"));
+        return response;
     }
 }

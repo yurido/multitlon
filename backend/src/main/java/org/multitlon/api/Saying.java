@@ -11,7 +11,11 @@ public class Saying {
     }
 
     @JsonCreator
-    public Saying(@JsonProperty("content") String content) {
+    public Saying(String content) {
         this.content = content;
+    }
+
+    public String getContent() {
+        return content;
     }
 }

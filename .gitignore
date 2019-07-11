@@ -16,6 +16,8 @@ data-mongodb
 target/
 dependency-reduced-pom.xml
 multitlon.iml
+multitlon-parent.iml
+multitlon-server.iml
 
 # ------------------------------------
 #              BACKEND
