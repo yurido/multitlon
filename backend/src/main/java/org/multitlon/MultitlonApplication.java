@@ -7,13 +7,18 @@ import io.dropwizard.setup.Environment;
 import org.eclipse.jetty.server.Server;
 import org.multitlon.health.MultitlonHealthCheck;
 import org.multitlon.resources.HelloworldResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
+@WebListener
 public class MultitlonApplication extends Application<MultitlonConfiguration> implements ServletContextListener {
     private static ServletContext servletContext;
+    private static final Logger LOG = LoggerFactory.getLogger(MultitlonApplication.class);
 
     public static void main(final String[] args) throws Exception {
         new MultitlonApplication().run(args);
@@ -21,13 +26,14 @@ public class MultitlonApplication extends Application<MultitlonConfiguration> im
 
     @Override
     public String getName() {
-        return "Sport diary and competition app";
+        return String.format("Sport diary and competition app %", getName());
     }
 
     @Override
     public void initialize(final Bootstrap<MultitlonConfiguration> bootstrap) {
         // TODO: application initialization
         bootstrap.addBundle(new AssetsBundle("/assets", "/", "index.html"));
+        LOG.info("App initialized");
     }
 
     @Override
@@ -39,6 +45,7 @@ public class MultitlonApplication extends Application<MultitlonConfiguration> im
 
         environment.healthChecks().register("app", multitlonHealthCheck);
         environment.jersey().register(helloworldResource);
+        LOG.info("App is beeng run");
     }
 
     @Override
@@ -65,6 +72,10 @@ public class MultitlonApplication extends Application<MultitlonConfiguration> im
             }
         }
         servletContext = null;
+    }
+
+    public static ServletContext servletContext() {
+        return servletContext;
     }
 
 }
