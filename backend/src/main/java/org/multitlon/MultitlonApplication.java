@@ -20,6 +20,7 @@ public class MultitlonApplication extends Application<MultitlonConfiguration> im
     private static ServletContext servletContext;
     private static final Logger LOG = LoggerFactory.getLogger(MultitlonApplication.class);
 
+
     public static void main(final String[] args) throws Exception {
         new MultitlonApplication().run(args);
     }
