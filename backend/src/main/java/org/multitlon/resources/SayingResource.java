@@ -9,9 +9,9 @@ import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("/rest/saying")
+@Path("/saying")
 @Produces(MediaType.APPLICATION_JSON)
-public class HelloworldResource {
+public class SayingResource {
     @GET
     public List<Saying> sayHello() {
 

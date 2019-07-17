@@ -10,7 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>multitlon-server</artifactId>
-    <packaging>war</packaging>
 
     <name>Multitlon</name>
 
@@ -41,7 +40,6 @@
         <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-assets</artifactId>
-            <version>1.3.12</version>
         </dependency>
         <dependency>
             <groupId>javax.xml.bind</groupId>
@@ -99,7 +97,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- plugin>
+            <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.0.2</version>
                 <configuration>
@@ -110,7 +108,7 @@
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin -->
+            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.6.1</version>
@@ -130,15 +128,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.2.3</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <attachClasses>true</attachClasses>
-                </configuration>
             </plugin>
         </plugins>
     </build>
