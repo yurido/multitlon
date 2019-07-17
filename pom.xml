@@ -9,10 +9,6 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <properties>
-        <liquibase.version>3.5.3</liquibase.version>
-    </properties>
-
     <modules>
         <module>backend</module>
     </modules>

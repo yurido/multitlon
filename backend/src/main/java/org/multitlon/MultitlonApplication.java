@@ -46,7 +46,7 @@ public class MultitlonApplication extends Application<MultitlonConfiguration> im
 
         environment.healthChecks().register("app", multitlonHealthCheck);
         environment.jersey().register(helloworldResource);
-        LOG.info("App is beeng run");
+        LOG.info("App is being run");
     }
 
     @Override
