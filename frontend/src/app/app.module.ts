@@ -6,12 +6,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { SayingComponent } from './saying/saying.component';
 import { HttpClientModule} from '@angular/common/http';
 import { ActivitiesComponent } from './activities/activities.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { MainComponent } from './main/main.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SayingComponent,
-    ActivitiesComponent
+    ActivitiesComponent,
+    PageNotFoundComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,
