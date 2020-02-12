@@ -5,11 +5,13 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SayingComponent } from './saying/saying.component';
 import { HttpClientModule} from '@angular/common/http';
+import { ActivitiesComponent } from './activities/activities.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SayingComponent
+    SayingComponent,
+    ActivitiesComponent
   ],
   imports: [
     BrowserModule,
