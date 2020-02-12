@@ -1,10 +1,16 @@
 <div>
-  <!-- header -->
+  <!-- header kind of a constant-->
   <div>
-    <button type="">Back</button>
-    <h4>activities</h4>
+    <span>activities</span>
     <button type="">+</button>
   </div>
 
   <!-- body -->
+  <div>
+    <div *ngFor="let excercise of exercises">
+      picture " "
+      {{excercise.name}} " "
+      {{excercise.totalPoints}} " "
+    </div>
+  </div>
 </div>

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError, tap} from 'rxjs/operators';
-import {Saying} from '../api/saying';
+import {Saying} from '../models/saying';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
