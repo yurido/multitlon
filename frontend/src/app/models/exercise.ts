@@ -1,6 +1,7 @@
 export class Exercise {
-  id: number;
+  id: string;
   name: string;
+  date: Date;
   reps: number;
   weight: number;
   rawPoints: number;
