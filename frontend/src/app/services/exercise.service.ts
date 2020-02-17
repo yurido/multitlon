@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Exercise} from '../models/exercise';
-import {ExerciseList} from '../models/exercise-list';
+import {SprintExercises} from '../models/sprint-exercises';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -15,7 +15,7 @@ export class ExerciseService {
   constructor(private http: HttpClient) {
   }
 
-  getExcercisesForCurrentSprint(): ExerciseList[] {
+  getExcercisesForCurrentSprint(): SprintExercises[] {
     // TODO: change to HTTP REst call to backend
     const excercises = this.createDummiSprintExercises();
     return this.createExerciseListSortedByDate(excercises);
@@ -23,25 +23,31 @@ export class ExerciseService {
 
   private createExerciseListSortedByDate(excercises) {
     const sortedExList = this.sortExerciseListByDate(excercises);
-    const resultList: ExerciseList[] = [];
+    const sprintExercises: SprintExercises[] = [];
 
-    let currentDate = new Date('1970-01-01');
+    const firstDate = new Date('1970-01-01');
+    let currentDate = firstDate;
     let exercisesForDate: Exercise[] = [];
 
-    for (const exercise of sortedExList) {
-      exercisesForDate.push(exercise);
-
-      if (currentDate === new Date('1970-01-01')) {
+    for (let i = 0; i < sortedExList.length; i++) {
+      const exercise = sortedExList[i];
+      if (currentDate.getTime() === firstDate.getTime()) {
         currentDate = exercise.getDate;
       }
 
-      if (exercise.getDate !== currentDate) {
-        resultList.push(new ExerciseList(exercise.getDate, Object.assign([], exercisesForDate)));
+      if (exercise.getDate.getTime() !== currentDate.getTime()) {
+        sprintExercises.push(new SprintExercises(exercisesForDate[0].getDate, Object.assign([], exercisesForDate)));
         currentDate = exercise.getDate;
         exercisesForDate = [];
       }
+
+      exercisesForDate.push(exercise);
+
+      if (i === sortedExList.length - 1) {
+        sprintExercises.push(new SprintExercises(exercisesForDate[0].getDate, Object.assign([], exercisesForDate)));
+      }
     }
-    return resultList;
+    return sprintExercises;
   }
 
   private getTime(date?: Date) {

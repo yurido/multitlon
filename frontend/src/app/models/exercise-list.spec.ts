@@ -1,7 +1,7 @@
-import { ExerciseList } from './exercise-list';
+import { SprintExercises } from './sprint-exercises';
 
 describe('ExerciseList', () => {
   it('should create an instance', () => {
-    expect(new ExerciseList()).toBeTruthy();
+    expect(new SprintExercises()).toBeTruthy();
   });
 });

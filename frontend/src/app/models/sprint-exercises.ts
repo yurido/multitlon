@@ -1,6 +1,6 @@
 import {Exercise} from './exercise';
 
-export class ExerciseList {
+export class SprintExercises {
   date: Date;
   exercises: Exercise[] = [];
 

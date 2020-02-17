@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ExerciseService} from '../services/exercise.service';
-import {ExerciseList} from '../models/exercise-list';
+import {SprintExercises} from '../models/sprint-exercises';
 
 @Component({
   selector: 'app-activities',
@@ -8,7 +8,7 @@ import {ExerciseList} from '../models/exercise-list';
   styleUrls: ['./activities.component.css']
 })
 export class ActivitiesComponent implements OnInit {
-  sprintExercises: ExerciseList[];
+  sprintExercises: SprintExercises[];
   constructor(private exerciseService: ExerciseService) { }
 
   ngOnInit() {
