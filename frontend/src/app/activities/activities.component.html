@@ -7,8 +7,13 @@
 
   <!-- body -->
   <div>
-    <div *ngFor="let excercise of sprintExercises">
-      picture
+    <div *ngFor="let day of sprintExercises">
+      <span>{{day.getSprintDay()}}</span>
+      <div *ngFor="let exercise of day.getExercises()">
+        <div>
+          {{exercise.getName}}, {{exercise.getRawPoints}}, {{exercise.getTotalPoints}}
+        </div>
+      </div>
     </div>
   </div>
 </div>
