@@ -8,10 +8,10 @@
   <!-- body -->
   <div>
     <div *ngFor="let day of sprintExercises">
-      <span>{{day.getSprintDay()}}</span>
+      <span>{{day.getSprintDay() | date}}</span>
       <div *ngFor="let exercise of day.getExercises()">
         <div>
-          {{exercise.getName}}, {{exercise.getRawPoints}}, {{exercise.getTotalPoints}}
+          {{exercise.getName}} {{exercise.getRawPoints}} {{exercise.getTotalPoints}}
         </div>
       </div>
     </div>
