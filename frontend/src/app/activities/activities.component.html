@@ -1,19 +1,37 @@
 <div>
   <!-- header kind of a constant-->
   <div>
-    <span>activities</span>
+    <b>activities</b>
     <button type="">+</button>
   </div>
 
   <!-- body -->
   <div>
-    <div *ngFor="let day of sprintExercises">
-      <span>{{day.getSprintDay() | date}}</span>
-      <div *ngFor="let exercise of day.getExercises()">
-        <div>
-          {{exercise.getName}} {{exercise.getRawPoints}} {{exercise.getTotalPoints}}
+    <table>
+      <tr>
+        <th></th>
+      </tr>
+      <tr>
+        <div *ngFor="let day of sprintExercises">
+          <td>{{day.getSprintDay() | date}}</td>
+          <table>
+            <tr>
+              <th></th>
+              <th></th>
+            </tr>
+            <tr>
+              <div *ngFor="let exercise of day.getExercises()">
+                <div>
+                  <td>{{exercise.getName}} {{exercise.getRawPoints}} {{exercise.getTotalPoints}}</td>
+                  <td>
+                    <button type=""> > </button>
+                  </td>
+                </div>
+              </div>
+            </tr>
+          </table>
         </div>
-      </div>
-    </div>
+      </tr>
+    </table>
   </div>
 </div>
