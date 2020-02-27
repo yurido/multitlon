@@ -1,8 +1,15 @@
-<div>
-  <!-- header kind of a constant-->
-  <div>
-    <b>activities</b>
-    <button type="">+</button>
+<div class="container-fluid">
+  <!-- kandidat för header -->
+  <div class="row badge-dark">
+    <div class="col-sm-2">
+      <button class="btn btn-dark text-white"><</button>
+    </div>
+    <div class="col-sm-8">
+      <a class="text-white text-center">sprint</a>
+    </div>
+    <div class="col-sm-2">
+      <button class="btn btn-dark text-white" (click)="addExercise()">+</button>
+    </div>
   </div>
 
   <!-- body -->
@@ -24,7 +31,7 @@
                 <div>
                   <td>{{exercise.getName}} {{exercise.getRawPoints}} {{exercise.getTotalPoints}}</td>
                   <td>
-                    <button type=""> > </button>
+                    <button type=""> ></button>
                   </td>
                 </div>
               </div>

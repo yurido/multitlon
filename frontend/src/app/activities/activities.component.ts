@@ -17,6 +17,9 @@ export class ActivitiesComponent implements OnInit {
 
   getExcercisesForCurrentSprint(): void {
     this.sprintExercises = this.exerciseService.getExcercisesForCurrentSprint();
-    console.log('sprintExercises:' + this.sprintExercises);
+  }
+
+  addExercise(): void {
+
   }
 }
