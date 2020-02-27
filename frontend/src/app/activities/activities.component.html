@@ -17,11 +17,11 @@
   </div>
 
   <!-- body -->
-  <div>
-    <table>
-      <tr>
-        <th></th>
-      </tr>
+
+    <table class="table">
+      <thead>
+        <tr></tr>
+      </thead>
       <tr>
         <div *ngFor="let day of sprintExercises">
           <td>{{day.getSprintDay() | date}}</td>
@@ -44,5 +44,5 @@
         </div>
       </tr>
     </table>
-  </div>
+
 </div>
