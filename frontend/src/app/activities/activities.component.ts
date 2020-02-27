@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ExerciseService} from '../services/exercise.service';
 import {SprintExercises} from '../models/sprint-exercises';
+import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-activities',
@@ -9,7 +11,11 @@ import {SprintExercises} from '../models/sprint-exercises';
 })
 export class ActivitiesComponent implements OnInit {
   sprintExercises: SprintExercises[];
-  constructor(private exerciseService: ExerciseService) { }
+  faChevronLeft = faChevronLeft;
+  faPlus = faPlus;
+
+  constructor(private exerciseService: ExerciseService) {
+  }
 
   ngOnInit() {
     this.getExcercisesForCurrentSprint();

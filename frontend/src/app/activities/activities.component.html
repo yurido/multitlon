@@ -2,13 +2,17 @@
   <!-- kandidat för header -->
   <div class="row badge-dark">
     <div class="col-sm-2">
-      <button class="btn btn-dark text-white"><</button>
+      <button class="btn btn-dark">
+        <fa-icon [icon]="faChevronLeft"></fa-icon>
+      </button>
     </div>
-    <div class="col-sm-8">
-      <a class="text-white text-center">sprint</a>
+    <div class="col-sm-8 text-center">
+      <span class="text-white text-center" style="display: inline-block; vertical-align: middle;">sprint</span>
     </div>
     <div class="col-sm-2">
-      <button class="btn btn-dark text-white" (click)="addExercise()">+</button>
+      <button class="btn btn-dark" (click)="addExercise()">
+        <fa-icon [icon]="faPlus"></fa-icon>
+      </button>
     </div>
   </div>
 
