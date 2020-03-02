@@ -1,48 +1,57 @@
 <div class="container-fluid">
   <!-- kandidat för header -->
-  <div class="row badge-dark">
+  <!-- div class="row badge-dark">
     <div class="col-2 text-left">
       <button class="btn btn-dark" style="margin: 3px">
         <fa-icon [icon]="faChevronLeft"></fa-icon>
       </button>
     </div>
     <div class="col-8 text-center">
-      <span class="text-white text-center" style="display: inline-block; vertical-align: middle; margin: 8px;">sprint</span>
+      <span class="text-white text-center"
+            style="display: inline-block; vertical-align: middle; margin: 8px;">sprint</span>
     </div>
     <div class="col-2 text-right">
       <button class="btn btn-dark" style="margin: 3px" (click)="addExercise()">
         <fa-icon [icon]="faPlus"></fa-icon>
       </button>
     </div>
-  </div>
+  </div -->
 
   <!-- body -->
-
-    <table class="table">
-      <thead>
-        <tr></tr>
-      </thead>
-      <tr>
-        <div *ngFor="let day of sprintExercises">
-          <td>{{day.getSprintDay() | date}}</td>
-          <table>
-            <tr>
-              <th></th>
-              <th></th>
-            </tr>
-            <tr>
-              <div *ngFor="let exercise of day.getExercises()">
-                <div>
-                  <td>{{exercise.getName}} {{exercise.getRawPoints}} {{exercise.getTotalPoints}}</td>
-                  <td>
-                    <button type=""> ></button>
-                  </td>
-                </div>
-              </div>
-            </tr>
-          </table>
-        </div>
-      </tr>
-    </table>
-
+  <!--div class="row flex-nowrap">
+    <div class="col-12">
+      <div class="table" -->
+        <table class="table">
+          <thead>
+          <tr></tr>
+          </thead>
+          <tbody>
+          <tr>
+            <!-- div *ngFor="let day of sprintExercises">
+              <td>{{day.getSprintDay() | date}}</td -->
+              <td>Bla bla lbal lba</td>
+              <!-- table class="table">
+                <tr>
+                  <div *ngFor="let exercise of day.getExercises()">
+                    <td>{{exercise.getName}}</td>
+                    <td>{{exercise.getRawPoints}}</td>
+                    <td> {{exercise.getTotalPoints}}</td>
+                    <td>
+                      <button class="btn btn-light">
+                        <fa-icon [icon]="faChevronRight"></fa-icon>
+                      </button>
+                    </td>
+                  </div>
+                </tr>
+              </table -->
+            <!-- /div -->
+          </tr>
+          <tr>
+            <td>O la la lal la</td>
+          </tr>
+          </tbody>
+        </table>
+      <!--/div -->
+    <!--/div>
+  </div -->
 </div>

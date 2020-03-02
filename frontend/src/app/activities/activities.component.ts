@@ -3,6 +3,7 @@ import {ExerciseService} from '../services/exercise.service';
 import {SprintExercises} from '../models/sprint-exercises';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-activities',
@@ -13,6 +14,7 @@ export class ActivitiesComponent implements OnInit {
   sprintExercises: SprintExercises[];
   faChevronLeft = faChevronLeft;
   faPlus = faPlus;
+  faChevronRight = faChevronRight;
 
   constructor(private exerciseService: ExerciseService) {
   }
