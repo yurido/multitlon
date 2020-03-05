@@ -24,9 +24,21 @@
         <td>{{day.getSprintDay() | date}} <br>
           <table class="table">
             <tr *ngFor="let exercise of day.getExercises()">
-              <td>{{exercise.getName}}</td>
-              <td>{{exercise.getRawPoints}}</td>
-              <td> {{exercise.getTotalPoints}}</td>
+              <td>
+                <div class="row">
+                  <div class="col-2 text-left">
+                    {{exercise.getName}}
+                  </div>
+                  <div class="col-2 text-left">
+                    {{exercise.getRawPoints}}
+                  </div>
+                  <div class="col-1 text-left">
+                    {{exercise.getTotalPoints}}
+                  </div>
+                  <div class="col-7">
+                  </div>
+                </div>
+              </td>
               <td>
                 <button class="btn btn-light">
                   <fa-icon [icon]="faChevronRight"></fa-icon>
