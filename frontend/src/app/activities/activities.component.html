@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <!-- kandidat för header -->
-  <!-- div class="row badge-dark">
+  <div class="row badge-dark">
     <div class="col-2 text-left">
       <button class="btn btn-dark" style="margin: 3px">
         <fa-icon [icon]="faChevronLeft"></fa-icon>
@@ -15,43 +15,28 @@
         <fa-icon [icon]="faPlus"></fa-icon>
       </button>
     </div>
-  </div -->
+  </div>
 
   <!-- body -->
-  <!--div class="row flex-nowrap">
-    <div class="col-12">
-      <div class="table" -->
-        <table class="table">
-          <thead>
-          <tr></tr>
-          </thead>
-          <tbody>
-          <tr>
-            <!-- div *ngFor="let day of sprintExercises">
-              <td>{{day.getSprintDay() | date}}</td -->
-              <td>Bla bla lbal lba</td>
-              <!-- table class="table">
-                <tr>
-                  <div *ngFor="let exercise of day.getExercises()">
-                    <td>{{exercise.getName}}</td>
-                    <td>{{exercise.getRawPoints}}</td>
-                    <td> {{exercise.getTotalPoints}}</td>
-                    <td>
-                      <button class="btn btn-light">
-                        <fa-icon [icon]="faChevronRight"></fa-icon>
-                      </button>
-                    </td>
-                  </div>
-                </tr>
-              </table -->
-            <!-- /div -->
-          </tr>
-          <tr>
-            <td>O la la lal la</td>
-          </tr>
-          </tbody>
-        </table>
-      <!--/div -->
-    <!--/div>
-  </div -->
+  <table class="table">
+    <tbody>
+      <tr *ngFor="let day of sprintExercises">
+        <td>{{day.getSprintDay() | date}} <br>
+          <table class="table">
+            <tr *ngFor="let exercise of day.getExercises()">
+              <td>{{exercise.getName}}</td>
+              <td>{{exercise.getRawPoints}}</td>
+              <td> {{exercise.getTotalPoints}}</td>
+              <td>
+                <button class="btn btn-light">
+                  <fa-icon [icon]="faChevronRight"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
 </div>
