@@ -18,28 +18,28 @@
   </div>
 
   <!-- body -->
-  <table class="table">
+  <table class="table table-sm" style="margin: 0px;">
     <tbody>
       <tr *ngFor="let day of sprintExercises">
         <td>{{day.getSprintDay() | date}} <br>
-          <table class="table">
+          <table class="table table-sm" style="margin: 0px;">
             <tr *ngFor="let exercise of day.getExercises()">
               <td>
-                <div class="row">
-                  <div class="col-2 text-left">
+                <div class="row" style="padding: 6px;">
+                  <div class="col-2 text-left" style="max-width: 100px; min-width: 100px;">
                     {{exercise.getName}}
                   </div>
-                  <div class="col-2 text-left">
+                  <div class="col-2 text-left" style="max-width: 100px;">
                     {{exercise.getRawPoints}}
                   </div>
-                  <div class="col-1 text-left">
+                  <div class="col-2 text-left">
                     {{exercise.getTotalPoints}}
                   </div>
-                  <div class="col-7">
+                  <div class="col-6">
                   </div>
                 </div>
               </td>
-              <td>
+              <td style="text-align: right;">
                 <button class="btn btn-light">
                   <fa-icon [icon]="faChevronRight"></fa-icon>
                 </button>
