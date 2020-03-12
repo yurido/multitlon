@@ -1,6 +1,6 @@
 <div class="container-fluid" style="padding: 0px">
   <!-- kandidat för header -->
-  <div class="badge-dark">
+  <div class="badge-dark sticky-top">
     <div class="container" align="center" style="max-width: 1010px">
       <div class="row">
         <div class="col-2 text-left" style="padding-left: 0px">
@@ -9,8 +9,9 @@
           </button>
         </div>
         <div class="col-8 text-center">
-        <span class="text-white text-center"
-              style="display: inline-block; vertical-align: middle; margin: 8px;">sprint</span>
+          <span class="text-white"
+                style="display: inline-block; vertical-align: middle; margin: 8px;">sprint
+          </span>
         </div>
         <div class="col-2 text-right">
           <button class="btn btn-dark" style="margin: 3px;" (click)="addExercise()">
@@ -25,7 +26,10 @@
   <table class="table table-sm" style="max-width: 1000px;" align="center">
     <tbody>
     <tr *ngFor="let day of sprintExercises">
-      <td>{{day.getSprintDay() | date}} <br>
+      <td class="text-center" style="padding: 0px">
+        <div class="container" style="background-color: #e9ecef; padding: 0px; margin: 0px">
+          {{day.getSprintDay() | date}}
+        </div>
         <table class="table table-sm" style="margin: 0px;">
           <tr *ngFor="let exercise of day.getExercises()">
             <td>
@@ -44,7 +48,7 @@
               </div>
             </td>
             <td style="text-align: right;">
-              <button class="btn btn-light">
+              <button class="btn btn-link" style="color: #adb5bd">
                 <fa-icon [icon]="faChevronRight"></fa-icon>
               </button>
             </td>
