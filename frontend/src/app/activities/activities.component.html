@@ -1,59 +1,58 @@
-<div class="container-fluid" style="padding: 0px;">
+<div class="container-fluid" style="padding: 0px">
   <!-- kandidat för header -->
-  <!--div class="badge-dark" -->
-    <div class="row" style="max-width: 1010px;">
-      <div class="col-2 text-left">
-        <button class="btn btn-dark" style="margin: 3px">
-          <fa-icon [icon]="faChevronLeft"></fa-icon>
-        </button>
-      </div>
-      <div class="col-8 text-center">
+  <div class="badge-dark">
+    <div class="container" align="center" style="max-width: 1010px">
+      <div class="row">
+        <div class="col-2 text-left" style="padding-left: 0px">
+          <button class="btn btn-dark" style="margin: 3px">
+            <fa-icon [icon]="faChevronLeft"></fa-icon>
+          </button>
+        </div>
+        <div class="col-8 text-center">
         <span class="text-white text-center"
               style="display: inline-block; vertical-align: middle; margin: 8px;">sprint</span>
+        </div>
+        <div class="col-2 text-right">
+          <button class="btn btn-dark" style="margin: 3px;" (click)="addExercise()">
+            <fa-icon [icon]="faPlus"></fa-icon>
+          </button>
+        </div>
       </div>
-      <div class="col-2 text-right">
-        <button class="btn btn-dark text-center" style="margin: 3px;" (click)="addExercise()">
-          <fa-icon [icon]="faPlus"></fa-icon>
-        </button>
-      </div>
-    </div>
-  <!-- /div -->
-
-  <!-- body -->
-  <div class="row text-center">
-    <div class="col-12 text-center">
-      <table class="table table-sm" style="max-width: 1010px;">
-        <tbody>
-          <tr *ngFor="let day of sprintExercises">
-            <td>{{day.getSprintDay() | date}} <br>
-              <table class="table table-sm" style="margin: 0px;">
-                <tr *ngFor="let exercise of day.getExercises()">
-                  <td>
-                    <div class="row" style="padding: 6px;">
-                      <div class="col-2 text-left" style="max-width: 100px; min-width: 100px;">
-                        {{exercise.getName}}
-                      </div>
-                      <div class="col-2 text-left" style="max-width: 100px;">
-                        {{exercise.getRawPoints}}
-                      </div>
-                      <div class="col-2 text-left">
-                        {{exercise.getTotalPoints}}
-                      </div>
-                      <div class="col-6">
-                      </div>
-                    </div>
-                  </td>
-                  <td style="text-align: right;">
-                    <button class="btn btn-light">
-                      <fa-icon [icon]="faChevronRight"></fa-icon>
-                    </button>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
+
+  <!-- body -->
+  <table class="table table-sm" style="max-width: 1000px;" align="center">
+    <tbody>
+    <tr *ngFor="let day of sprintExercises">
+      <td>{{day.getSprintDay() | date}} <br>
+        <table class="table table-sm" style="margin: 0px;">
+          <tr *ngFor="let exercise of day.getExercises()">
+            <td>
+              <div class="row" style="padding: 6px;">
+                <div class="col-2 text-left" style="max-width: 100px; min-width: 100px;">
+                  {{exercise.getName}}
+                </div>
+                <div class="col-2 text-left" style="max-width: 100px;">
+                  {{exercise.getRawPoints}}
+                </div>
+                <div class="col-2 text-left">
+                  {{exercise.getTotalPoints}}
+                </div>
+                <div class="col-6">
+                </div>
+              </div>
+            </td>
+            <td style="text-align: right;">
+              <button class="btn btn-light">
+                <fa-icon [icon]="faChevronRight"></fa-icon>
+              </button>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
 </div>
