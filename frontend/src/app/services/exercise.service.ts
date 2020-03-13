@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Exercise} from '../models/exercise';
 import {SprintExercises} from '../models/sprint-exercises';
+import {Observable, of} from "rxjs";
+import {catchError, tap} from "rxjs/operators";
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -11,14 +13,16 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class ExerciseService {
+  private sprintUrl = 'rest/activities';
 
   constructor(private http: HttpClient) {
   }
 
-  getExcercisesForCurrentSprint(): SprintExercises[] {
-    // TODO: change to HTTP REst call to backend
-    const excercises = this.createDummiSprintExercises();
-    return this.createExerciseListSortedByDate(excercises);
+  getCurrentSprint(): Observable<SprintExercises[]> {
+    this.getSprint(new Date()).subscribe(sprint => {
+      const excercises = this.sortSprintByDate(sprint);
+      // TODO: something;
+    });
   }
 
   private createExerciseListSortedByDate(excercises) {
@@ -62,6 +66,7 @@ export class ExerciseService {
   }
 
   private createDummiSprintExercises() {
+
     const excercises: Exercise[] = [];
 
     excercises.push(new Exercise('PUSH-UPS', 'Push-ups', new Date('2020-02-10'), 150, 20, 650, 500));
@@ -82,5 +87,23 @@ export class ExerciseService {
     excercises.push(new Exercise('SQUATS', 'Squats', new Date('2020-02-20'), 10, 130, 6500, 5000));
 
     return excercises;
+  }
+
+  private getSprint(date: Date): Observable<SprintExercises[]> {
+    return this.http.get<SprintExercises[]>(this.sprintUrl)
+      .pipe(
+        tap(sprint => console.log('got sprint from backend: ', sprint)),
+        catchError(this.handleError('getSprint', []))
+      );
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+
+      console.error(error);
+
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+    };
   }
 }

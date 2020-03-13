@@ -17,15 +17,16 @@ export class ActivitiesComponent implements OnInit {
   faPlus = faPlus;
   faChevronRight = faChevronRight;
 
-  constructor(private exerciseService: ExerciseService) {
-  }
+  constructor(private exerciseService: ExerciseService) { }
 
   ngOnInit() {
     this.getExcercisesForCurrentSprint();
   }
 
   getExcercisesForCurrentSprint(): void {
-    this.sprintExercises = this.exerciseService.getExcercisesForCurrentSprint();
+    this.exerciseService.getCurrentSprint().subscribe(sprint => {
+      this.sprintExercises = sprint;
+    });
   }
 
   addExercise(): void {

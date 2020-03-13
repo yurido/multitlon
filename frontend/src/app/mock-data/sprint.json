@@ -1,0 +1,181 @@
+[
+  {
+    "date": 1581289200000,
+    "exercises": [
+      {
+        "id": "PUSH-UPS",
+        "name": "Push-ups",
+        "date": 1581289200000,
+        "reps": 150,
+        "weight": 20,
+        "time": 0,
+        "distance": 0,
+        "rawPoints": 650,
+        "totalPoints": 500
+      },
+      {
+        "id": "PULL-UPS",
+        "name": "Pull-ups",
+        "date": 1581289200000,
+        "reps": 100,
+        "weight": 80,
+        "time": 0,
+        "distance": 0,
+        "rawPoints": 650,
+        "totalPoints": 900
+      },
+      {
+        "id": "BARS",
+        "name": "Bars",
+        "date": 1581289200000,
+        "reps": 10,
+        "weight": 101,
+        "time": 0,
+        "distance": 0,
+        "rawPoints": 1650,
+        "totalPoints": 1300
+      }
+    ]
+  },
+  {
+    "date": 1580770800000,
+    "exercises": [
+      {
+        "id": "BICEPS",
+        "name": "Biceps",
+        "date": 1580770800000,
+        "reps": 150,
+        "weight": 20,
+        "time": 0,
+        "distance": 0,
+        "rawPoints": 650,
+        "totalPoints": 500
+      },
+      {
+        "id": "TRICEPS",
+        "name": "Triceps",
+        "date": 1580770800000,
+        "reps": 100,
+        "weight": 80,
+        "time": 0,
+        "distance": 0,
+        "rawPoints": 650,
+        "totalPoints": 900
+      },
+      {
+        "id": "ABS",
+        "name": "Abs",
+        "date": 1580770800000,
+        "reps": 1,
+        "weight": 0,
+        "time": 0,
+        "distance": 0,
+        "rawPoints": 1650,
+        "totalPoints": 1300
+      }
+    ]
+  },
+  {
+    "date": 1580511600000,
+    "exercises": [
+      {
+        "id": "SHOULDERS",
+        "name": "Shoulders",
+        "date": 1580511600000,
+        "reps": 150,
+        "weight": 20,
+        "time": 0,
+        "distance": 0,
+        "rawPoints": 650,
+        "totalPoints": 500
+      },
+      {
+        "id": "TRICEPS",
+        "name": "Triceps",
+        "date": 1580511600000,
+        "reps": 100,
+        "weight": 80,
+        "time": 0,
+        "distance": 0,
+        "rawPoints": 650,
+        "totalPoints": 900
+      },
+      {
+        "id": "PLANKA",
+        "name": "Planka",
+        "date": 1580511600000,
+        "reps": 0,
+        "weight": 0,
+        "time": 2.30,
+        "distance": 0,
+        "rawPoints": 1650,
+        "totalPoints": 1300
+      }
+    ]
+  },
+  {
+    "date": 1582153200000,
+    "exercises": [
+      {
+        "id": "OVERHEAD_PRESS",
+        "name": "Overhead press",
+        "date": 1582153200000,
+        "reps": 8,
+        "weight": 130,
+        "time": 0,
+        "distance": 0,
+        "rawPoints": 2000,
+        "totalPoints": 1000
+      }
+    ]
+  },
+  {
+    "date": 1582239600000,
+    "exercises": [
+      {
+        "id": "SWIM",
+        "name": "Swim",
+        "date": 1582239600000,
+        "reps": 0,
+        "weight": 0,
+        "time": 40,
+        "distance": 1,
+        "rawPoints": 2000,
+        "totalPoints": 1000
+      },
+      {
+        "id": "SQUATS",
+        "name": "Squats",
+        "date": 1582239600000,
+        "reps": 20,
+        "weight": 100,
+        "time": 0,
+        "distance": 0,
+        "rawPoints": 2000,
+        "totalPoints": 1000
+      },
+      {
+        "id": "RUN",
+        "name": "Run",
+        "date": 1582239600000,
+        "reps": 0,
+        "weight": 0,
+        "time": 20,
+        "distance": 1.3,
+        "rawPoints": 2000,
+        "totalPoints": 1000
+      },
+      {
+        "id": "PLANKA",
+        "name": "Planka",
+        "date": 1582239600000,
+        "reps": 0,
+        "weight": 0,
+        "time": 2.30,
+        "distance": 0,
+        "rawPoints": 1650,
+        "totalPoints": 1300
+      }
+    ]
+  }
+]
