@@ -17,10 +17,10 @@ export class SayingComponent implements OnInit {
   }
 
   getSaying(): void {
-    // this.helloService.getSayings().subscribe(sayings => {
-    //   this.sayings = sayings;
-    //   console.log('sayings: ', this.sayings);
-    // });
+    this.helloService.getSayings().subscribe(sayings => {
+       this.sayings = sayings;
+       console.log('sayings: ', this.sayings);
+    });
   }
 
 }
