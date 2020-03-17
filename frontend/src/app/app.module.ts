@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { SayingComponent } from './saying/saying.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { ActivitiesComponent } from './activities/activities.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -14,7 +13,6 @@ import {MockHttpCalIInterceptor} from './http.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
-    SayingComponent,
     ActivitiesComponent,
     PageNotFoundComponent,
     MainComponent

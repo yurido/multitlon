@@ -1,20 +1,15 @@
-export class Exercise {
+import {Serializable} from './serializable';
+
+export class Exercise implements Serializable<Exercise> {
   private id: string;
   private name: string;
-  private date: Date;
+  private date: number;
   private reps: number;
   private weight: number;
   private rawPoints: number;
   private totalPoints: number;
 
-  constructor(id: string, name: string, date: Date, reps: number, weight: number, rawPoints: number, totalPoints: number) {
-    this.id = id;
-    this.name = name;
-    this.date = date;
-    this.reps = reps;
-    this.weight = weight;
-    this.rawPoints = rawPoints;
-    this.totalPoints = totalPoints;
+  constructor() {
   }
 
   get getId(): string {
@@ -25,7 +20,7 @@ export class Exercise {
     return this.name;
   }
 
-  get getDate(): Date {
+  get getDate(): number {
     return this.date;
   }
 
@@ -43,5 +38,16 @@ export class Exercise {
 
   get getTotalPoints(): number {
     return this.totalPoints;
+  }
+
+  deserialize(input): Exercise {
+    this.id = input.id;
+    this.name = input.name;
+    this.date = input.date;
+    this.reps = input.reps;
+    this.weight = input.weight;
+    this.rawPoints = input.rawPoints;
+    this.totalPoints = input.total;
+    return this;
   }
 }

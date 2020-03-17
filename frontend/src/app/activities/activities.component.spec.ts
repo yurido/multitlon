@@ -1,6 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ActivitiesComponent } from './activities.component';
+import {ActivitiesComponent} from './activities.component';
+import {SprintService} from '../services/sprint.service';
+import {HttpClient, HttpHandler} from '@angular/common/http';
 
 describe('ActivitiesComponent', () => {
   let component: ActivitiesComponent;
@@ -8,9 +10,10 @@ describe('ActivitiesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ActivitiesComponent ]
+      declarations: [ActivitiesComponent],
+      providers: [SprintService, HttpClient, HttpHandler]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

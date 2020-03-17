@@ -1,10 +1,9 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {SprintService} from '../services/sprint.service';
-import {SprintExercises} from '../models/sprint-exercises';
+import {SprintExercises} from '../models/sprintExercises';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
-import {SprintDate} from "../models/SprintDate";
 
 @Component({
   selector: 'app-activities',
@@ -25,21 +24,11 @@ export class ActivitiesComponent implements OnInit {
     this.getExcercisesForCurrentSprint();
   }
 
-  private deserializeSprintExercises(json, clazz) {
-    var instance = new clazz();
-  };
-
   getExcercisesForCurrentSprint(): void {
     this.exerciseService.getCurrentSprint()
       .subscribe(data => {
-
-        for (var obj in data) {
-          if(typeof data[obj] === 'object') {
-
-          }
-          // this.sprintExercises.push(new SprintExercises(new SprintDate(data[i]['date'].
-        }
-
+        // TODO: deserialize response
+        // TODO: sort response
         // this.sprintExercises = this.exerciseService.sortSprintExercisesByDate(sprint);
       });
   }
