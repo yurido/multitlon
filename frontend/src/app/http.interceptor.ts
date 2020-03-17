@@ -5,7 +5,7 @@ import * as sayings from './mock-data/saying.json';
 import * as sprintData from './mock-data/sprint.json';
 
 const SAYING_URL = 'rest/saying';
-const SPRINT_URL = 'rest/activities';
+const SPRINT_URL = 'rest/currentSprint';
 
 @Injectable()
 export class MockHttpCalIInterceptor implements HttpInterceptor {

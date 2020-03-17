@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Exercise} from '../models/exercise';
 import {SprintExercises} from '../models/sprint-exercises';
-import {Observable, of} from "rxjs";
-import {catchError, tap} from "rxjs/operators";
+import {Observable, of} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -12,19 +12,12 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class ExerciseService {
-  private sprintUrl = 'rest/activities';
+export class SprintService {
+  private CURRENT_SPRINT_URL = 'rest/currentSprint';
 
   constructor(private http: HttpClient) {
   }
-
-  getCurrentSprint(): Observable<SprintExercises[]> {
-    this.getSprint(new Date()).subscribe(sprint => {
-      const excercises = this.sortSprintByDate(sprint);
-      // TODO: something;
-    });
-  }
-
+/*
   private createExerciseListSortedByDate(excercises) {
     const sortedExList = this.sortExerciseListByDate(excercises);
     const sprintExercises: SprintExercises[] = [];
@@ -53,14 +46,15 @@ export class ExerciseService {
     }
     return sprintExercises;
   }
-
-  private getTime(date?: Date) {
-    return date != null ? date.getTime() : 0;
+*/
+  private getTime(date?: number) {
+    return date != null ? date : 0;
   }
 
-  private sortExerciseListByDate(list: Exercise[]) {
-    list.sort((a: Exercise, b: Exercise) => {
-      return this.getTime(a.getDate) - this.getTime(b.getDate);
+  public sortSprintExercisesByDate(list: SprintExercises[]) {
+    console.info('list ', list[0].getSprintDate());
+    list.sort((a: SprintExercises, b: SprintExercises) => {
+      return (a.getSprintDate().getSprintDate() - b.getSprintDate().getSprintDate());
     });
     return list;
   }
@@ -89,21 +83,19 @@ export class ExerciseService {
     return excercises;
   }
 
-  private getSprint(date: Date): Observable<SprintExercises[]> {
-    return this.http.get<SprintExercises[]>(this.sprintUrl)
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error);
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+    };
+  }
+
+  getCurrentSprint(): Observable<SprintExercises[]> {
+    return this.http.get<SprintExercises[]>(this.CURRENT_SPRINT_URL, httpOptions)
       .pipe(
         tap(sprint => console.log('got sprint from backend: ', sprint)),
         catchError(this.handleError('getSprint', []))
       );
-  }
-
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-
-      console.error(error);
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
   }
 }

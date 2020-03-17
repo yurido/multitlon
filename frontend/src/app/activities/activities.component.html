@@ -25,13 +25,13 @@
   <!-- body -->
   <table class="table table-sm" style="max-width: 1000px;" align="center">
     <tbody>
-    <tr *ngFor="let day of sprintExercises">
+    <tr *ngFor="let sprintExercise of sprintExercises">
       <td class="text-center" style="padding: 0px">
         <div class="container" style="background-color: #e9ecef; padding: 0px; margin: 0px">
-          {{day.getSprintDay() | date}}
+          {{sprintExercise.getSprintDate().getSprintDate() | date}}
         </div>
         <table class="table table-sm" style="margin: 0px;">
-          <tr *ngFor="let exercise of day.getExercises()">
+          <tr *ngFor="let exercise of sprintExercise.getExercises()">
             <td>
               <div class="row" style="padding: 6px;">
                 <div class="col-2 text-left" style="max-width: 100px; min-width: 100px;">
