@@ -8,36 +8,46 @@ export class Exercise implements Serializable<Exercise> {
   private weight: number;
   private rawPoints: number;
   private totalPoints: number;
+  private distance: number;
+  private time: number;
 
   constructor() {
   }
 
-  get getId(): string {
+  public getId(): string {
     return this.id;
   }
 
-  get getName(): string {
+  public getName(): string {
     return this.name;
   }
 
-  get getDate(): number {
+  public getDate(): number {
     return this.date;
   }
 
-  get getReps(): number {
+  public getReps(): number {
     return this.reps;
   }
 
-  get getWeight(): number {
+  public getWeight(): number {
     return this.weight;
   }
 
-  get getRawPoints(): number {
+  public getRawPoints(): number {
     return this.rawPoints;
   }
 
-  get getTotalPoints(): number {
+  public getTotalPoints(): number {
     return this.totalPoints;
+  }
+
+  public getTime(): number {
+    return this.time;
+  }
+
+  public getDistance(): number {
+    return this.distance;
   }
 
   deserialize(input): Exercise {
@@ -48,6 +58,8 @@ export class Exercise implements Serializable<Exercise> {
     this.weight = input.weight;
     this.rawPoints = input.rawPoints;
     this.totalPoints = input.total;
+    this.distance = input.distance;
+    this.time = input.time;
     return this;
   }
 }
