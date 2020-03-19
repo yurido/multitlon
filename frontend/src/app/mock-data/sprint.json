@@ -177,5 +177,9 @@
         "totalPoints": 1300
       }
     ]
+  },
+  {
+    "sprintDate": {"date": 1585067312000, "isWeekend": true},
+    "exercises": []
   }
 ]}
