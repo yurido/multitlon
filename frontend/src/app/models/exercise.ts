@@ -1,6 +1,7 @@
 import {Serializable} from './serializable';
+import {Serializator} from './serializator';
 
-export class Exercise implements Serializable<Exercise> {
+export class Exercise extends Serializator implements Serializable<Exercise> {
   private id: string;
   private name: string;
   private date: number;
@@ -12,6 +13,7 @@ export class Exercise implements Serializable<Exercise> {
   private time: number;
 
   constructor() {
+    super(Exercise.name);
   }
 
   public getId(): string {
@@ -51,15 +53,16 @@ export class Exercise implements Serializable<Exercise> {
   }
 
   deserialize(input): Exercise {
-    this.id = input.id;
-    this.name = input.name;
-    this.date = input.date;
-    this.reps = input.reps;
-    this.weight = input.weight;
-    this.rawPoints = input.rawPoints;
-    this.totalPoints = input.total;
-    this.distance = input.distance;
-    this.time = input.time;
+    console.log('exercise = ', input);
+    this.id = super.getObjectProperty(input, 'id');
+    this.name = super.getObjectProperty(input, 'name');
+    this.date = super.getObjectProperty(input, 'date');
+    this.reps = super.getObjectProperty(input, 'reps');
+    this.rawPoints = super.getObjectProperty(input, 'rawPoints');
+    this.totalPoints = super.getObjectProperty(input, 'totalPoints');
+    this.weight = super.getObjectProperty(input, 'weight');
+    this.distance = super.getObjectProperty(input, 'distance');
+    this.time = super.getObjectProperty(input, 'time');
     return this;
   }
 }

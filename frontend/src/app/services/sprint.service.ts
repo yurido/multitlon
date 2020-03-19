@@ -53,7 +53,7 @@ export class SprintService {
   }
 
   public sortSprintExercisesByDate(list: SprintExercises[]) {
-    console.info('list ', list[0].getSprintDate());
+    console.log('list ', list[0].getSprintDate());
     list.sort((a: SprintExercises, b: SprintExercises) => {
       return (a.getSprintDate().getSprintDate() - b.getSprintDate().getSprintDate());
     });

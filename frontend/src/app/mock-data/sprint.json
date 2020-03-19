@@ -1,6 +1,6 @@
-[
+{"sprintExercises":[
   {
-    "date": {"date": 1581289200000, "isWeekend": false},
+    "sprintDate": {"date": 1581289200000, "isWeekend": false},
     "exercises": [
       {
         "id": "PUSH-UPS",
@@ -38,7 +38,7 @@
     ]
   },
   {
-    "date": {"date": 1580770800000, "isWeekend": false},
+    "sprintDate": {"date": 1580770800000, "isWeekend": false},
     "exercises": [
       {
         "id": "BICEPS",
@@ -76,7 +76,7 @@
     ]
   },
   {
-    "date": {"date": 1580511600000, "isWeekend": false},
+    "sprintDate": {"date": 1580511600000, "isWeekend": false},
     "exercises": [
       {
         "id": "SHOULDERS",
@@ -114,7 +114,7 @@
     ]
   },
   {
-    "date":{"date": 1582153200000, "isWeekend": false},
+    "sprintDate":{"date": 1582153200000, "isWeekend": false},
     "exercises": [
       {
         "id": "OVERHEAD_PRESS",
@@ -130,7 +130,7 @@
     ]
   },
   {
-    "date": {"date": 1582239600000, "isWeekend": false},
+    "sprintDate": {"date": 1582239600000, "isWeekend": false},
     "exercises": [
       {
         "id": "SWIM",
@@ -178,4 +178,4 @@
       }
     ]
   }
-]
+]}

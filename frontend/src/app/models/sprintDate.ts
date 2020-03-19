@@ -1,11 +1,12 @@
 import {Serializable} from './serializable';
-import {isUndefined} from 'util';
+import {Serializator} from './serializator';
 
-export class SprintDate implements Serializable<SprintDate> {
+export class SprintDate extends Serializator implements Serializable<SprintDate> {
   private date: number;
   private isWeekend: boolean;
 
   constructor() {
+    super(SprintDate.name);
   }
 
   public getSprintDate(): number {
@@ -17,15 +18,8 @@ export class SprintDate implements Serializable<SprintDate> {
   }
 
   deserialize(input): SprintDate {
-    this.date = input.date;
-    this.isWeekend = input.isWeekend;
-
-    if (isUndefined(this.date)) {
-      throw SyntaxError('SprintDate deserialization, property "date" is undefined');
-    }
-    if (isUndefined(this.isWeekend)) {
-      throw SyntaxError('SprintDate deserialization, property "isWeekend" is undefined');
-    }
+    this.date = super.getObjectProperty(input, 'date');
+    this.isWeekend = super.getObjectProperty(input, 'isWeekend');
     return this;
   }
 }

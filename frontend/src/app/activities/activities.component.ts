@@ -4,6 +4,7 @@ import {SprintExercises} from '../models/sprintExercises';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
+import {SprintCalendar} from '../models/sprintCalendar';
 
 @Component({
   selector: 'app-activities',
@@ -28,6 +29,7 @@ export class ActivitiesComponent implements OnInit {
     this.exerciseService.getCurrentSprint()
       .subscribe(data => {
         // TODO: deserialize response
+        // new SprintCalendar().deserialize(data);
         // TODO: sort response
         // this.sprintExercises = this.exerciseService.sortSprintExercisesByDate(sprint);
       });
