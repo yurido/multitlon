@@ -10,5 +10,6 @@ describe('Excercise', () => {
     const exercise = new Exercise().deserialize(json);
 
     expect(exercise.getId()).toEqual('SHOULDERS');
+    expect(exercise.getRawPoints()).toEqual(1500);
   });
 });
