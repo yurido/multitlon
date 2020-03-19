@@ -1,12 +1,11 @@
 import {Serializable} from './serializable';
 import {Serializator} from './serializator';
 
-export class SprintDate extends Serializator implements Serializable<SprintDate> {
+export class SprintDate implements Serializable<SprintDate> {
   private date: number;
   private isWeekend: boolean;
 
   constructor() {
-    super(SprintDate.name);
   }
 
   public getSprintDate(): number {
@@ -18,8 +17,9 @@ export class SprintDate extends Serializator implements Serializable<SprintDate>
   }
 
   deserialize(input): SprintDate {
-    this.date = super.getObjectProperty(input, 'date');
-    this.isWeekend = super.getObjectProperty(input, 'isWeekend');
+    const serializator = new Serializator(SprintDate.name);
+    this.date = serializator.getObjectProperty(input, 'date');
+    this.isWeekend = serializator.getObjectProperty(input, 'isWeekend');
     return this;
   }
 }

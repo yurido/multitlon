@@ -2,11 +2,10 @@ import {SprintExercises} from './sprintExercises';
 import {Serializable} from './serializable';
 import {Serializator} from './serializator';
 
-export class SprintCalendar extends Serializator implements Serializable<SprintCalendar> {
+export class SprintCalendar implements Serializable<SprintCalendar> {
   private sprintExercises: SprintExercises[] = [];
 
   constructor() {
-    super(SprintCalendar.name);
   }
 
   public getSprintExercises(): SprintExercises[] {
@@ -14,7 +13,8 @@ export class SprintCalendar extends Serializator implements Serializable<SprintC
   }
 
   public deserialize(input): SprintCalendar {
-    const sprintExercises = super.getObjectProperty(input, 'sprintExercises');
+    const serializator = new Serializator(SprintCalendar.name);
+    const sprintExercises = serializator.getObjectProperty(input, 'sprintExercises');
 
     for (const i in sprintExercises) {
       this.sprintExercises.push(new SprintExercises().deserialize(sprintExercises[i]));
