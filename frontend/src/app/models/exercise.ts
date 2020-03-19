@@ -53,7 +53,6 @@ export class Exercise extends Serializator implements Serializable<Exercise> {
   }
 
   deserialize(input): Exercise {
-    console.log('exercise = ', input);
     this.id = super.getObjectProperty(input, 'id');
     this.name = super.getObjectProperty(input, 'name');
     this.date = super.getObjectProperty(input, 'date');

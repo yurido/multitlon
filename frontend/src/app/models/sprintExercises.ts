@@ -20,7 +20,6 @@ export class SprintExercises extends Serializator implements Serializable<Sprint
   }
 
   deserialize(input): SprintExercises {
-    console.log('SprintExercise = ', input);
     const sprintDate = super.getObjectProperty(input, 'sprintDate');
     this.sprintDate = new SprintDate().deserialize(sprintDate);
     const exercises = super.getObjectProperty(input, 'exercises');

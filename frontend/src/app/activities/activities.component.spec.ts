@@ -9,11 +9,16 @@ describe('ActivitiesComponent', () => {
   let fixture: ComponentFixture<ActivitiesComponent>;
 
   beforeEach(async(() => {
+
+    const spySprintService = jasmine.createSpyObj('SprintService', ['getCurrentSprint']);
+    spySprintService.getCurrentSprint.and.returnValue({ subscribe: () => {
+      return '{"sprintExercises": []}';
+      } });
+
     TestBed.configureTestingModule({
       declarations: [ActivitiesComponent],
-      providers: [SprintService, HttpClient, HttpHandler]
-    })
-      .compileComponents();
+      providers: [{provide: SprintService, useValue: spySprintService}, HttpClient, HttpHandler]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
