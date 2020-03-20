@@ -4,7 +4,7 @@
     <div class="container" align="center" style="max-width: 1010px">
       <div class="row">
         <div class="col-2 text-left" style="padding-left: 0px">
-          <button class="btn btn-dark" style="margin: 3px">
+          <button class="btn btn-dark" style="margin: 3px" (click)="goBack()">
             <fa-icon [icon]="faChevronLeft"></fa-icon>
           </button>
         </div>
@@ -35,20 +35,20 @@
             <td>
               <div class="row" style="padding: 6px;">
                 <div class="col-2 text-left" style="max-width: 100px; min-width: 100px;">
-                  {{exercise.getName}}
+                  {{exercise.getName()}}
                 </div>
                 <div class="col-2 text-left" style="max-width: 100px;">
-                  {{exercise.getRawPoints}}
+                  {{exercise.getRawPoints()}}
                 </div>
                 <div class="col-2 text-left">
-                  {{exercise.getTotalPoints}}
+                  {{exercise.getTotalPoints()}}
                 </div>
                 <div class="col-6">
                 </div>
               </div>
             </td>
             <td style="text-align: right;">
-              <button class="btn btn-link" style="color: #adb5bd">
+              <button class="btn btn-link" style="color: #adb5bd" (click)="openExercise()">
                 <fa-icon [icon]="faChevronRight"></fa-icon>
               </button>
             </td>

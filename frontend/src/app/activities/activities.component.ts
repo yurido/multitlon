@@ -13,7 +13,6 @@ import {SprintCalendar} from '../models/sprintCalendar';
   encapsulation: ViewEncapsulation.None
 })
 export class ActivitiesComponent implements OnInit {
-  sprintCalendar: SprintCalendar;
   sprintExercises: SprintExercises[];
   faChevronLeft = faChevronLeft;
   faPlus = faPlus;
@@ -29,15 +28,20 @@ export class ActivitiesComponent implements OnInit {
   getExcercisesForCurrentSprint(): void {
     this.exerciseService.getCurrentSprint()
       .subscribe(data => {
-        // TODO: deserialize response
-        this.sprintCalendar = new SprintCalendar().deserialize(data);
-        console.log('sprintCalendar =', this.sprintCalendar);
-        // TODO: sort response
-        // this.sprintExercises = this.exerciseService.sortSprintExercisesByDate(sprint);
+        const sprintCalendar = new SprintCalendar().deserialize(data);
+        this.sprintExercises = this.exerciseService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
       });
   }
 
   addExercise(): void {
+    console.log('add exercise click!');
+  }
 
+  openExercise(): void {
+    console.log('open exercise click!');
+  }
+
+  goBack(): void {
+    console.log('goBack click!');
   }
 }
