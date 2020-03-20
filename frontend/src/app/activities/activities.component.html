@@ -22,6 +22,12 @@
     </div>
   </div>
 
+  <!-- div class="alert alert-danger" *ngIf="error">
+    {{error}}
+  </div -->
+
+  <app-alert [error]="error"></app-alert>
+
   <!-- body -->
   <table class="table table-sm" style="max-width: 1000px;" align="center">
     <tbody>

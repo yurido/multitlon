@@ -5,6 +5,7 @@ import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {SprintCalendar} from '../models/sprintCalendar';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-activities',
@@ -17,8 +18,9 @@ export class ActivitiesComponent implements OnInit {
   faChevronLeft = faChevronLeft;
   faPlus = faPlus;
   faChevronRight = faChevronRight;
+  error: any;
 
-  constructor(private exerciseService: SprintService) {
+  constructor(private sprintService: SprintService) {
   }
 
   ngOnInit() {
@@ -26,10 +28,16 @@ export class ActivitiesComponent implements OnInit {
   }
 
   getExcercisesForCurrentSprint(): void {
-    this.exerciseService.getCurrentSprint()
+    this.sprintService.getCurrentSprint()
       .subscribe(data => {
+        if (isUndefined(data)) {
+          // TODO: check error!
+          this.error = this.sprintService.getError();
+          return;
+        }
+
         const sprintCalendar = new SprintCalendar().deserialize(data);
-        this.sprintExercises = this.exerciseService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
+        this.sprintExercises = this.sprintService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
       });
   }
 

@@ -8,12 +8,14 @@ import { ActivitiesComponent } from './activities/activities.component';
 import { MainComponent } from './main/main.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {MockHttpCalIInterceptor} from './http.interceptor';
+import { AlertComponent } from './alert/alert.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ActivitiesComponent,
-    MainComponent
+    MainComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
