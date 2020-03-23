@@ -22,14 +22,14 @@
     </div>
   </div>
 
-  <!-- div class="alert alert-danger" *ngIf="error">
-    {{error}}
-  </div -->
-
   <app-alert [error]="error"></app-alert>
 
   <!-- body -->
-  <table class="table table-sm" style="max-width: 1000px;" align="center">
+  <div class="container-fluid" align="center" style="height: 100%; width: 100%; overflow: auto" *ngIf="!loaded">
+    <fa-icon [icon]="faSpinner" size="6x" style="color: #adb5bd"></fa-icon>
+  </div>
+
+  <table class="table table-sm" style="max-width: 1000px;" align="center" *ngIf="loaded">
     <tbody>
     <tr *ngFor="let sprintExercise of sprintExercises">
       <td class="text-center" style="padding: 0px">
