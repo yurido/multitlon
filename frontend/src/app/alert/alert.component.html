@@ -1,5 +1,11 @@
-<div class="form-control" *ngIf="error">
-  <div class="alert alert-danger">
-    {{getMessage()}}
+<div class="alert {{alertClass}}" *ngIf="error">
+  <div class="row">
+    <div class="col-11 text-center" style="text-align: center; padding: 0px">
+      <fa-icon [icon]="faExclamationTriangle" style="color: red"></fa-icon> &nbsp; &nbsp;
+      {{getMessage()}}
+    </div>
+    <div class="col-1" style="text-align: right; padding: 0px">
+      <button class="btn btn-link" style="color: black" (click)="close()">x</button>
+    </div>
   </div>
 </div>
