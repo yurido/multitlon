@@ -9,13 +9,15 @@ import { MainComponent } from './main/main.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {MockHttpCalIInterceptor} from './http.interceptor';
 import { AlertComponent } from './alert/alert.component';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ActivitiesComponent,
     MainComponent,
-    AlertComponent
+    AlertComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,

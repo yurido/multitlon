@@ -25,10 +25,7 @@
   <app-alert [error]="error"></app-alert>
 
   <!-- body -->
-  <div class="container-fluid" align="center" style="height: 100%; width: 100%; overflow: auto" *ngIf="!loaded">
-    <fa-icon [icon]="faSpinner" size="6x" style="color: #adb5bd"></fa-icon>
-  </div>
-
+  <app-spinner [loaded]="loaded"></app-spinner>
   <table class="table table-sm" style="max-width: 1000px;" align="center" *ngIf="loaded">
     <tbody>
     <tr *ngFor="let sprintExercise of sprintExercises">

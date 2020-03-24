@@ -6,7 +6,6 @@ import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {SprintCalendar} from '../models/sprintCalendar';
 import {isUndefined} from 'util';
-import {faSpinner} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-activities',
@@ -19,7 +18,6 @@ export class ActivitiesComponent implements OnInit {
   faChevronLeft = faChevronLeft;
   faPlus = faPlus;
   faChevronRight = faChevronRight;
-  faSpinner = faSpinner;
   error: any;
   loaded: boolean;
 
