@@ -25,8 +25,8 @@
   <app-alert [error]="error"></app-alert>
 
   <!-- body -->
-  <app-spinner [loaded]="loaded"></app-spinner>
-  <table class="table table-sm" style="max-width: 1000px;" align="center" *ngIf="loaded">
+  <app-spinner [loading]="loading"></app-spinner>
+  <table class="table table-sm" style="max-width: 1000px;" align="center" *ngIf="!loading">
     <tbody>
     <tr *ngFor="let sprintExercise of sprintExercises">
       <td class="text-center" style="padding: 0px">

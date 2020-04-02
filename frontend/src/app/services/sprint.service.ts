@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {SprintExercises} from '../models/sprintExercises';
 import {Observable, of} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
-import {ErrorService} from "./error.service";
+import {ErrorService} from './error.service';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -14,13 +14,8 @@ const httpOptions = {
 })
 export class SprintService {
   private CURRENT_SPRINT_URL = 'rest/currentSprint';
-  private error: any;
 
-  constructor(private http: HttpClient, private errorService: ErrorService) {
-  }
-
-  getError(): string {
-    return this.error;
+  constructor(private http: HttpClient) {
   }
 
   /*  TODO: saved for backend!
@@ -63,8 +58,7 @@ export class SprintService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.error('error: ', error);
-      this.error = error;
+      // console.error('error: ', error);
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
@@ -73,8 +67,8 @@ export class SprintService {
   getCurrentSprint(): Observable<SprintExercises[]> {
     return this.http.get<SprintExercises[]>(this.CURRENT_SPRINT_URL, httpOptions)
       .pipe(
-        tap(sprint => console.log('got currentSprint from backend: ', sprint)),
-        catchError(this.handleError('getCurrentSprint', undefined))
+        tap(sprint => console.log('got currentSprint from backend: ', sprint))
+        // catchError(this.handleError('getCurrentSprint', undefined))
       );
   }
 }

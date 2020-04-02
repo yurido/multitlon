@@ -9,12 +9,7 @@ export class ErrorService {
   constructor() {
   }
 
-  handleError(error: any): void {
-    this.message = error.message;
-  }
-
   getErrorMessage(error: any) {
-    console.log('error: ', error);
     return error.message;
   }
 

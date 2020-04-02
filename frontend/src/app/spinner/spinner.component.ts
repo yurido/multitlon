@@ -8,7 +8,7 @@ import {faSpinner} from '@fortawesome/free-solid-svg-icons';
   encapsulation: ViewEncapsulation.None
 })
 export class SpinnerComponent implements OnInit {
-  @Input() loaded: boolean;
+  @Input() loading: boolean;
   faSpinner = faSpinner;
 
   constructor() { }

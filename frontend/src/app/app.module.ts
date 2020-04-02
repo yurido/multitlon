@@ -7,7 +7,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { ActivitiesComponent } from './activities/activities.component';
 import { MainComponent } from './main/main.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {MockHttpCalIInterceptor} from './http.interceptor';
+import {MockHttpCalIInterceptor} from './mock.http.call.interceptor';
 import { AlertComponent } from './alert/alert.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 

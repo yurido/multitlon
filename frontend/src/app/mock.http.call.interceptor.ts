@@ -21,17 +21,17 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     console.log('Intercepted request: ' + request.url);
     if (request.url === SPRINT_URL) {
-      // this.throwError(request.headers, request.url);
-      return of(new HttpResponse({status: 200, body: ((sprintData) as any).default}))
+      //  this.throwError(request.headers, request.url);
+
+       return of(new HttpResponse({status: 200, body: ((sprintData) as any).default}))
         .pipe(
-          delay(60000)
-        );
+          delay(4000)
+       );
     }
     return next.handle(request);
   }
 
   private throwError(headers, url) {
-
     throw new HttpErrorResponse({
       error: 'your error',
       headers: headers,
