@@ -1,0 +1,33 @@
+<div class="container-fluid" style="padding: 0px">
+  <!-- header -->
+  <div class="badge-dark sticky-top">
+    <div class="container" align="center" style="max-width: 1010px">
+      <div class="row">
+        <div class="col-2 text-left" style="padding-left: 0px">
+          <button class="btn btn-dark" style="margin: 3px" (click)="goBack()">
+            <fa-icon [icon]="faChevronLeft"></fa-icon>
+          </button>
+        </div>
+        <div class="col-8 text-center">
+          <span class="text-white" *ngIf="!loading"
+                style="display: inline-block; vertical-align: middle; margin: 8px;">{{exercise.getName()}}
+          </span>
+        </div>
+        <div class="col-2 text-right">
+          <button class="btn btn-dark" style="margin: 3px;" *ngIf="false">
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <app-alert [error]="error"></app-alert>
+
+  <!-- body -->
+  <app-spinner [loading]="loading"></app-spinner>
+
+  <div *ngIf="!loading">
+    Bla bla bla!
+  </div>
+</div>

@@ -5,6 +5,8 @@ import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {SprintCalendar} from '../models/sprintCalendar';
+import {Router} from '@angular/router';
+import {Exercise} from '../models/exercise';
 
 @Component({
   selector: 'app-activities',
@@ -20,7 +22,7 @@ export class ActivitiesComponent implements OnInit {
   error: any;
   loading: boolean;
 
-  constructor(private sprintService: SprintService) {
+  constructor(private sprintService: SprintService, private router: Router) {
   }
 
   ngOnInit() {
@@ -47,11 +49,13 @@ export class ActivitiesComponent implements OnInit {
     console.log('add exercise click!');
   }
 
-  openExercise(): void {
+  openExercise(exercise: Exercise): void {
     console.log('open exercise click!');
+    this.router.navigate(['/exercise'], {state: {data: exercise}});
   }
 
   goBack(): void {
     console.log('goBack click!');
+    this.router.navigate(['/main']);
   }
 }

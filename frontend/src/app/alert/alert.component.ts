@@ -1,5 +1,4 @@
 import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
-import {ErrorService} from '../services/error.service';
 import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -14,7 +13,7 @@ export class AlertComponent implements OnInit {
   alertClass: any;
   faExclamationTriangle = faExclamationTriangle;
 
-  constructor(private errorService: ErrorService) {
+  constructor() {
   }
 
   ngOnInit(): void {
@@ -22,7 +21,7 @@ export class AlertComponent implements OnInit {
   }
 
   getMessage(): string {
-    return this.errorService.getErrorMessage(this.error);
+    return this.error.message;
   }
 
   close(): void {

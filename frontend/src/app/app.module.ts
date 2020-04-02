@@ -10,6 +10,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {MockHttpCalIInterceptor} from './mock.http.call.interceptor';
 import { AlertComponent } from './alert/alert.component';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { ExerciseComponent } from './exercise/exercise.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { SpinnerComponent } from './spinner/spinner.component';
     ActivitiesComponent,
     MainComponent,
     AlertComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    ExerciseComponent
   ],
   imports: [
     BrowserModule,
