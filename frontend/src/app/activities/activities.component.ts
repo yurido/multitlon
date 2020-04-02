@@ -41,8 +41,7 @@ export class ActivitiesComponent implements OnInit {
         console.log('error here ', error);
         this.loading = false;
         this.error = error;
-      },
-      () => console.log('method complete! loading', this.loading));
+      });
   }
 
   addExercise(): void {

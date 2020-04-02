@@ -28,6 +28,14 @@
   <app-spinner [loading]="loading"></app-spinner>
 
   <div *ngIf="!loading">
-    Bla bla bla!
+    <!-- progress bar -->
+    <div class="container" align="center" style="max-width: 1010px">
+      <div class="row">
+        <div class="col-12 text-center">
+          <span>{{exercise.getTotalPoints()}}</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
