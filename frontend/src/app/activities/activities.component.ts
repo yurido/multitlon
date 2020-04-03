@@ -7,7 +7,6 @@ import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {SprintCalendar} from '../models/sprintCalendar';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
-import {SprintDate} from '../models/sprintDate';
 
 @Component({
   selector: 'app-activities',

@@ -1,0 +1,6 @@
+<div class="progress" style="height: 1.5rem; padding-top: 1px">
+  <div [ngClass]="calcClass()" role="progressbar" [ngStyle]="{'width.%':percent}" aria-valuenow="{{percent}}" aria-valuemin="0"
+       aria-valuemax="100">
+    {{percent}}%
+  </div>
+</div>

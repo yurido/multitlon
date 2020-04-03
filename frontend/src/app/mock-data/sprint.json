@@ -11,7 +11,8 @@
         "time": 0,
         "distance": 0,
         "rawPoints": 650,
-        "totalPoints": 500
+        "totalPoints": 500,
+        "progress": 25
       },
       {
         "id": "PULL-UPS",
@@ -22,7 +23,8 @@
         "time": 0,
         "distance": 0,
         "rawPoints": 650,
-        "totalPoints": 900
+        "totalPoints": 900,
+        "progress": 84
       },
       {
         "id": "BARS",
@@ -33,7 +35,8 @@
         "time": 0,
         "distance": 0,
         "rawPoints": 1650,
-        "totalPoints": 1300
+        "totalPoints": 1300,
+        "progress": 102
       }
     ]
   },
@@ -49,7 +52,8 @@
         "time": 0,
         "distance": 0,
         "rawPoints": 650,
-        "totalPoints": 500
+        "totalPoints": 500,
+        "progress": 5
       },
       {
         "id": "TRICEPS",
@@ -60,7 +64,8 @@
         "time": 0,
         "distance": 0,
         "rawPoints": 650,
-        "totalPoints": 900
+        "totalPoints": 900,
+        "progress": 1
       },
       {
         "id": "ABS",
@@ -71,7 +76,8 @@
         "time": 0,
         "distance": 0,
         "rawPoints": 1650,
-        "totalPoints": 1300
+        "totalPoints": 1300,
+        "progress": 50
       }
     ]
   },
@@ -87,7 +93,8 @@
         "time": 0,
         "distance": 0,
         "rawPoints": 650,
-        "totalPoints": 500
+        "totalPoints": 500,
+        "progress": 66
       },
       {
         "id": "TRICEPS",
@@ -98,7 +105,8 @@
         "time": 0,
         "distance": 0,
         "rawPoints": 650,
-        "totalPoints": 900
+        "totalPoints": 900,
+        "progress": 98
       },
       {
         "id": "PLANKA",
@@ -109,7 +117,8 @@
         "time": 2.30,
         "distance": 0,
         "rawPoints": 1650,
-        "totalPoints": 1300
+        "totalPoints": 1300,
+        "progress": 219
       }
     ]
   },
@@ -125,7 +134,8 @@
         "time": 0,
         "distance": 0,
         "rawPoints": 2000,
-        "totalPoints": 1000
+        "totalPoints": 1000,
+        "progress": 15
       }
     ]
   },
@@ -141,7 +151,8 @@
         "time": 40,
         "distance": 1,
         "rawPoints": 2000,
-        "totalPoints": 1000
+        "totalPoints": 1000,
+        "progress": 89
       },
       {
         "id": "SQUATS",
@@ -152,7 +163,8 @@
         "time": 0,
         "distance": 0,
         "rawPoints": 2000,
-        "totalPoints": 1000
+        "totalPoints": 1000,
+        "progress": 10
       },
       {
         "id": "RUN",
@@ -163,7 +175,8 @@
         "time": 20,
         "distance": 1.3,
         "rawPoints": 2000,
-        "totalPoints": 1000
+        "totalPoints": 1000,
+        "progress": 44
       },
       {
         "id": "PLANKA",
@@ -174,7 +187,8 @@
         "time": 2.30,
         "distance": 0,
         "rawPoints": 1650,
-        "totalPoints": 1300
+        "totalPoints": 1300,
+        "progress": 7
       }
     ]
   },

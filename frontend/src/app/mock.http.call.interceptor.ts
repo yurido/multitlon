@@ -26,7 +26,7 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
 
        return of(new HttpResponse({status: 200, body: ((sprintData) as any).default}))
         .pipe(
-          delay(4000)
+          delay(1000)
        );
 
     }

@@ -11,6 +11,7 @@ import {MockHttpCalIInterceptor} from './mock.http.call.interceptor';
 import { AlertComponent } from './alert/alert.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ExerciseComponent } from './exercise/exercise.component';
+import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ExerciseComponent } from './exercise/exercise.component';
     MainComponent,
     AlertComponent,
     SpinnerComponent,
-    ExerciseComponent
+    ExerciseComponent,
+    ProgressBarComponent
   ],
   imports: [
     BrowserModule,

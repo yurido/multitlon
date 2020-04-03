@@ -24,18 +24,19 @@
 
   <app-alert [error]="error"></app-alert>
 
-  <!-- body -->
   <app-spinner [loading]="loading"></app-spinner>
 
-  <div *ngIf="!loading">
+  <!-- body -->
+  <div *ngIf="!loading" class="container" align="center" style="max-width: 1010px; padding: 0px">
+
     <!-- progress bar -->
-    <div class="container" align="center" style="max-width: 1010px">
-      <div class="row">
-        <div class="col-12 text-center">
-          <span>{{exercise.getTotalPoints()}}</span>
-        </div>
+    <app-progress-bar [percent]="exercise.getProgress()" [striped]="true"></app-progress-bar>
+    <div class="row">
+      <div class="col-12 text-center">
+        <span>{{exercise.getTotalPoints()}}</span>
       </div>
     </div>
 
   </div>
+
 </div>

@@ -11,6 +11,7 @@ export class Exercise implements Serializable<Exercise> {
   private totalPoints: number;
   private distance: number;
   private time: number;
+  private progress: number;
 
   constructor() {
   }
@@ -51,6 +52,10 @@ export class Exercise implements Serializable<Exercise> {
     return this.distance;
   }
 
+  public getProgress(): number {
+    return this.progress;
+  }
+
   deserialize(input): Exercise {
     const serializator = new Serializator(Exercise.name);
     this.id = serializator.getObjectProperty(input, 'id');
@@ -62,6 +67,7 @@ export class Exercise implements Serializable<Exercise> {
     this.weight = serializator.getObjectProperty(input, 'weight');
     this.distance = serializator.getObjectProperty(input, 'distance');
     this.time = serializator.getObjectProperty(input, 'time');
+    this.progress = serializator.getObjectProperty(input, 'progress');
     return this;
   }
 }
