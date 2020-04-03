@@ -181,5 +181,13 @@
   {
     "sprintDate": {"date": 1585067312000, "isWeekend": true},
     "exercises": []
+  },
+  {
+    "sprintDate": {"date": 1581379200000, "isWeekend": true},
+    "exercises": []
+  },
+  {
+    "sprintDate": {"date": 1581465600000, "isWeekend": true},
+    "exercises": []
   }
 ]}

@@ -30,7 +30,7 @@
     <tbody>
     <tr *ngFor="let sprintExercise of sprintExercises">
       <td class="text-center" style="padding: 0px">
-        <div class="container" style="background-color: #e9ecef; padding: 0px; margin: 0px">
+        <div class="container" [style.background-color]= "sprintExercise.getSprintDate().getIsWeekend() ? 'red': '#e9ecef'" style="padding: 0px; margin: 0px">
           {{sprintExercise.getSprintDate().getSprintDate() | date}}
         </div>
         <table class="table table-sm" style="margin: 0px;">

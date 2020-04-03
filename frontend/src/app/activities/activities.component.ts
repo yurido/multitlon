@@ -7,6 +7,7 @@ import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {SprintCalendar} from '../models/sprintCalendar';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
+import {SprintDate} from '../models/sprintDate';
 
 @Component({
   selector: 'app-activities',
@@ -33,15 +34,15 @@ export class ActivitiesComponent implements OnInit {
   getExcercisesForCurrentSprint(): void {
     this.sprintService.getCurrentSprint()
       .subscribe(data => {
-        const sprintCalendar = new SprintCalendar().deserialize(data);
-        this.sprintExercises = this.sprintService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
-        this.loading = false;
-      },
-      error => {
-        console.log('error here ', error);
-        this.loading = false;
-        this.error = error;
-      });
+          const sprintCalendar = new SprintCalendar().deserialize(data);
+          this.sprintExercises = this.sprintService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
+          this.loading = false;
+        },
+        error => {
+          console.log('error here ', error);
+          this.loading = false;
+          this.error = error;
+        });
   }
 
   addExercise(): void {
@@ -57,4 +58,5 @@ export class ActivitiesComponent implements OnInit {
     console.log('goBack click!');
     this.router.navigate(['/main']);
   }
+
 }
