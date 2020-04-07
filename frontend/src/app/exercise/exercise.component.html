@@ -10,7 +10,7 @@
         </div>
         <div class="col-8 text-center">
           <span class="text-white" *ngIf="!loading"
-                style="display: inline-block; vertical-align: middle; margin: 8px;">{{exercise.getName()}}
+                style="display: inline-block; vertical-align: middle; margin: 8px;">{{getExName()}}
           </span>
         </div>
         <div class="col-2 text-right">
@@ -30,10 +30,31 @@
   <div *ngIf="!loading" class="container" align="center" style="max-width: 1010px; padding: 0px">
 
     <!-- progress bar -->
-    <app-progress-bar [percent]="exercise.getProgress()" [striped]="true"></app-progress-bar>
+    <app-progress-bar [percent]="exercise.getProgress()" [striped]="true">
+      {{exercise.getProgress()}} %
+    </app-progress-bar>
+
+    <!-- points -->
     <div class="row">
-      <div class="col-12 text-center">
-        <span>{{exercise.getTotalPoints()}}</span>
+      <div class="col-4 text-center">
+        raw
+      </div>
+      <div class="col-4 text-center">
+        total
+      </div>
+      <div class="col-4 text-center">
+        quota
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4 text-center">
+        {{exercise.getRawPoints()}} {{item}}
+      </div>
+      <div class="col-4 text-center">
+        {{exercise.getTotalPoints()}}
+      </div>
+      <div class="col-4 text-center">
+        {{exercise.getQuota()}} %
       </div>
     </div>
 

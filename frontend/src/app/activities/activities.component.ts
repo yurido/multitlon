@@ -7,6 +7,7 @@ import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {SprintCalendar} from '../models/sprintCalendar';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-activities',
@@ -56,6 +57,14 @@ export class ActivitiesComponent implements OnInit {
   goBack(): void {
     console.log('goBack click!');
     this.router.navigate(['/main']);
+  }
+
+  getExName(sid: string): string {
+    return environment.EXERCISES.find(value => value.sid === sid).name;
+  }
+
+  getExItem(sid: string): string {
+    return environment.EXERCISES.find(value => value.sid === sid).item;
   }
 
 }

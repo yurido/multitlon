@@ -12,6 +12,7 @@ import { AlertComponent } from './alert/alert.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ExerciseComponent } from './exercise/exercise.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+import { ExerciseFilterPipe } from './pipes/exercise-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
     AlertComponent,
     SpinnerComponent,
     ExerciseComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    ExerciseFilterPipe
   ],
   imports: [
     BrowserModule,

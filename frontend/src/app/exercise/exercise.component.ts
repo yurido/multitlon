@@ -3,6 +3,7 @@ import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
 import {isUndefined} from 'util';
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-exercise',
@@ -15,6 +16,7 @@ export class ExerciseComponent implements OnInit {
   error: any;
   loading: boolean;
   exercise: Exercise;
+  item: string;
 
   constructor(private router: Router) {
   }
@@ -27,11 +29,20 @@ export class ExerciseComponent implements OnInit {
       return;
     }
     this.exercise = new Exercise().deserialize(history.state.data);
+    this.setItem();
     this.loading = false;
   }
 
   goBack(): void {
     console.log('goBack click!');
     this.router.navigate(['/activities']);
+  }
+
+  getExName(): string {
+    return environment.EXERCISES.find(value => value.sid === this.exercise.getSid()).name;
+  }
+
+  private setItem(): void {
+     this.item = environment.EXERCISES.find(value => value.sid === this.exercise.getSid()).item;
   }
 }

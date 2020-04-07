@@ -10,6 +10,7 @@ export class ProgressBarComponent implements OnInit {
   @Input() percent: number;
   @Input() striped: boolean;
   color: string;
+  ariaWidth: number;
 
   constructor() {
   }
@@ -17,12 +18,22 @@ export class ProgressBarComponent implements OnInit {
   ngOnInit(): void {
     if (this.percent <= 25) {
       this.color = 'bg-danger';
+      this.ariaWidth = this.percent;
+      if (this.percent < 10) {
+        this.ariaWidth = 10;
+      }
     } else if (this.percent > 25 && this.percent <= 50) {
       this.color = 'bg-warning';
+      this.ariaWidth = this.percent;
     } else if (this.percent > 50 && this.percent <= 75) {
       this.color = 'bg-info';
+      this.ariaWidth = this.percent;
     } else {
       this.color = 'bg-success';
+      this.ariaWidth = this.percent;
+      if (this.percent > 100) {
+        this.ariaWidth = 100;
+      }
     }
   }
 

@@ -3,7 +3,25 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  test: {A: 'a', B: 'b'},
+  EXERCISES: [{sid: 'PUSH-UPS', name: 'Push-ups', item: 'kg'},
+    {sid: 'PULL-UPS', name: 'Pull-ups', item: 'kg'},
+    {sid: 'BARS', name: 'Bars', item: 'kg'},
+    {sid: 'BICEPS', name: 'Biceps', item: 'kg'},
+    {sid: 'TRICEPS', name: 'Triceps', item: 'kg'},
+    {sid: 'ABS', name: 'Abs', item: 'aj'},
+    {sid: 'SHOULDERS', name: 'Shoulders', item: 'kg'},
+    {sid: 'OVERHEAD_PRESS', name: 'Overhead press', item: 'kg'},
+    {sid: 'SQUATS', name: 'Squats', item: 'kg'},
+    {sid: 'SWIM', name: 'Swim', item: 'km'},
+    {sid: 'RUN', name: 'Run', item: 'km'},
+    {sid: 'CYCLING', name: 'Cycling', item: 'km'},
+    {sid: 'DEADLIFT', name: 'Deadlift', item: 'km'},
+    {sid: 'PLANK', name: 'Plank', item: 'min'},
+    {sid: 'CALVES', name: 'Calves', item: 'kg'},
+    {sid: 'ZUMBA', name: 'Zumba', item: 'h'}
+  ]
 };
 
 /*

@@ -3,40 +3,43 @@
     "sprintDate": {"date": 1581289200000, "isWeekend": false},
     "exercises": [
       {
-        "id": "PUSH-UPS",
-        "name": "Push-ups",
+        "id": 1,
+        "sid": "PUSH-UPS",
         "date": 1581289200000,
-        "reps": 150,
-        "weight": 20,
+        "reps": 30,
+        "weight": 88,
         "time": 0,
         "distance": 0,
-        "rawPoints": 650,
+        "rawPoints": 880,
         "totalPoints": 500,
-        "progress": 25
+        "progress": 1,
+        "quota": 20
       },
       {
-        "id": "PULL-UPS",
-        "name": "Pull-ups",
+        "id": 2,
+        "sid": "PULL-UPS",
         "date": 1581289200000,
-        "reps": 100,
-        "weight": 80,
+        "reps": 15,
+        "weight": 88,
         "time": 0,
         "distance": 0,
-        "rawPoints": 650,
+        "rawPoints": 1320,
         "totalPoints": 900,
-        "progress": 84
+        "progress": 84,
+        "quota": 20
       },
       {
-        "id": "BARS",
-        "name": "Bars",
+        "id": 2365,
+        "sid": "BARS",
         "date": 1581289200000,
         "reps": 10,
-        "weight": 101,
+        "weight": 100,
         "time": 0,
         "distance": 0,
-        "rawPoints": 1650,
+        "rawPoints": 1000,
         "totalPoints": 1300,
-        "progress": 102
+        "progress": 102,
+        "quota": 20
       }
     ]
   },
@@ -44,40 +47,43 @@
     "sprintDate": {"date": 1580770800000, "isWeekend": false},
     "exercises": [
       {
-        "id": "BICEPS",
-        "name": "Biceps",
+        "id": 698,
+        "sid": "BICEPS",
         "date": 1580770800000,
-        "reps": 150,
+        "reps": 40,
         "weight": 20,
         "time": 0,
         "distance": 0,
-        "rawPoints": 650,
+        "rawPoints": 800,
         "totalPoints": 500,
-        "progress": 5
+        "progress": 5,
+        "quota": 20
       },
       {
-        "id": "TRICEPS",
-        "name": "Triceps",
+        "id": 78999,
+        "sid": "TRICEPS",
         "date": 1580770800000,
-        "reps": 100,
-        "weight": 80,
+        "reps": 10,
+        "weight": 20,
         "time": 0,
         "distance": 0,
-        "rawPoints": 650,
+        "rawPoints": 200,
         "totalPoints": 900,
-        "progress": 1
+        "progress": 1,
+        "quota": 20
       },
       {
-        "id": "ABS",
-        "name": "Abs",
+        "id": 998969,
+        "sid": "ABS",
         "date": 1580770800000,
         "reps": 1,
         "weight": 0,
         "time": 0,
         "distance": 0,
-        "rawPoints": 1650,
+        "rawPoints": 15,
         "totalPoints": 1300,
-        "progress": 50
+        "progress": 50,
+        "quota": 20
       }
     ]
   },
@@ -85,40 +91,43 @@
     "sprintDate": {"date": 1580511600000, "isWeekend": false},
     "exercises": [
       {
-        "id": "SHOULDERS",
-        "name": "Shoulders",
+        "id": 12345678998,
+        "sid": "SHOULDERS",
         "date": 1580511600000,
-        "reps": 150,
+        "reps": 30,
         "weight": 20,
         "time": 0,
         "distance": 0,
-        "rawPoints": 650,
-        "totalPoints": 500,
-        "progress": 66
+        "rawPoints": 600,
+        "totalPoints": 1820,
+        "progress": 1,
+        "quota": 20
       },
       {
-        "id": "TRICEPS",
-        "name": "Triceps",
+        "id": 9695959898,
+        "sid": "TRICEPS",
         "date": 1580511600000,
-        "reps": 100,
-        "weight": 80,
+        "reps": 20,
+        "weight": 30,
         "time": 0,
         "distance": 0,
         "rawPoints": 650,
         "totalPoints": 900,
-        "progress": 98
+        "progress": 98,
+        "quota": 20
       },
       {
-        "id": "PLANKA",
-        "name": "Planka",
+        "id": 9878454,
+        "sid": "PLANK",
         "date": 1580511600000,
         "reps": 0,
         "weight": 0,
-        "time": 2.30,
+        "time": 0,
         "distance": 0,
-        "rawPoints": 1650,
-        "totalPoints": 1300,
-        "progress": 219
+        "rawPoints": 2.30,
+        "totalPoints": 1650,
+        "progress": 219,
+        "quota": 20
       }
     ]
   },
@@ -126,8 +135,8 @@
     "sprintDate":{"date": 1582153200000, "isWeekend": false},
     "exercises": [
       {
-        "id": "OVERHEAD_PRESS",
-        "name": "Overhead press",
+        "id": 998,
+        "sid": "OVERHEAD_PRESS",
         "date": 1582153200000,
         "reps": 8,
         "weight": 130,
@@ -135,7 +144,8 @@
         "distance": 0,
         "rawPoints": 2000,
         "totalPoints": 1000,
-        "progress": 15
+        "progress": 15,
+        "quota": 20
       }
     ]
   },
@@ -143,20 +153,21 @@
     "sprintDate": {"date": 1582239600000, "isWeekend": false},
     "exercises": [
       {
-        "id": "SWIM",
-        "name": "Swim",
+        "id": 8,
+        "sid": "SWIM",
         "date": 1582239600000,
         "reps": 0,
         "weight": 0,
         "time": 40,
         "distance": 1,
-        "rawPoints": 2000,
-        "totalPoints": 1000,
-        "progress": 89
+        "rawPoints": 2,
+        "totalPoints": 2000,
+        "progress": 89,
+        "quota": 20
       },
       {
-        "id": "SQUATS",
-        "name": "Squats",
+        "id": 3,
+        "sid": "SQUATS",
         "date": 1582239600000,
         "reps": 20,
         "weight": 100,
@@ -164,31 +175,34 @@
         "distance": 0,
         "rawPoints": 2000,
         "totalPoints": 1000,
-        "progress": 10
+        "progress": 10,
+        "quota": 20
       },
       {
-        "id": "RUN",
-        "name": "Run",
+        "id": 7,
+        "sid": "RUN",
         "date": 1582239600000,
         "reps": 0,
         "weight": 0,
-        "time": 20,
-        "distance": 1.3,
-        "rawPoints": 2000,
-        "totalPoints": 1000,
-        "progress": 44
-      },
-      {
-        "id": "PLANKA",
-        "name": "Planka",
-        "date": 1582239600000,
-        "reps": 0,
-        "weight": 0,
-        "time": 2.30,
+        "time": 0,
         "distance": 0,
-        "rawPoints": 1650,
-        "totalPoints": 1300,
-        "progress": 7
+        "rawPoints": 1.3,
+        "totalPoints": 1600,
+        "progress": 44,
+        "quota": 20
+      },
+      {
+        "id": 77,
+        "sid": "PLANK",
+        "date": 1582239600000,
+        "reps": 0,
+        "weight": 0,
+        "time": 0,
+        "distance": 0,
+        "rawPoints": 1,
+        "totalPoints": 800,
+        "progress": 7,
+        "quota": 20
       }
     ]
   },
