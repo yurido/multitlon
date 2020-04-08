@@ -1,12 +1,12 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {ActivitiesComponent} from './activities.component';
+import {SprintComponent} from './sprint.component';
 import {SprintService} from '../services/sprint.service';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 
-describe('ActivitiesComponent', () => {
-  let component: ActivitiesComponent;
-  let fixture: ComponentFixture<ActivitiesComponent>;
+describe('SprintComponent', () => {
+  let component: SprintComponent;
+  let fixture: ComponentFixture<SprintComponent>;
 
   beforeEach(async(() => {
 
@@ -16,13 +16,13 @@ describe('ActivitiesComponent', () => {
       } });
 
     TestBed.configureTestingModule({
-      declarations: [ActivitiesComponent],
+      declarations: [SprintComponent],
       providers: [{provide: SprintService, useValue: spySprintService}, HttpClient, HttpHandler]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ActivitiesComponent);
+    fixture = TestBed.createComponent(SprintComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

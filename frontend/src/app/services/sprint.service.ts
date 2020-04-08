@@ -2,8 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {SprintExercises} from '../models/sprintExercises';
 import {Observable, of} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
-import {ErrorService} from './error.service';
+import {tap} from 'rxjs/operators';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})

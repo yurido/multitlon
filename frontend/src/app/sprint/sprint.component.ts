@@ -10,18 +10,19 @@ import {Exercise} from '../models/exercise';
 import {environment} from '../../environments/environment';
 
 @Component({
-  selector: 'app-activities',
-  templateUrl: './activities.component.html',
-  styleUrls: ['./activities.component.css'],
+  selector: 'app-sprint',
+  templateUrl: './sprint.component.html',
+  styleUrls: ['./sprint.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class ActivitiesComponent implements OnInit {
+export class SprintComponent implements OnInit {
   sprintExercises: SprintExercises[];
   faChevronLeft = faChevronLeft;
   faPlus = faPlus;
   faChevronRight = faChevronRight;
   error: any;
   loading: boolean;
+  month: string;
 
   constructor(private sprintService: SprintService, private router: Router) {
   }
@@ -37,6 +38,8 @@ export class ActivitiesComponent implements OnInit {
           const sprintCalendar = new SprintCalendar().deserialize(data);
           this.sprintExercises = this.sprintService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
           this.loading = false;
+          const monthN = new Date(this.sprintExercises[0].getSprintDate().getSprintDate()).getMonth();
+          this.month = environment.MONTHS.find(value => value.id === monthN).name;
         },
         error => {
           console.log('error here ', error);
