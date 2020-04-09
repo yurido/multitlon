@@ -50,7 +50,7 @@ export class SprintService {
 
   public sortSprintExercisesByDate(list: SprintExercises[]): SprintExercises[] {
     list.sort((a: SprintExercises, b: SprintExercises) => {
-      return (a.getSprintDate().getSprintDate() - b.getSprintDate().getSprintDate());
+      return (a.getSprintDay().getSprintDate() - b.getSprintDay().getSprintDate());
     });
     return list;
   }

@@ -1,6 +1,8 @@
 {"sprintExercises":[
   {
-    "sprintDate": {"date": 1581289200000, "isWeekend": false},
+    "sprintDay": {"date": 1581289200000, "isWeekend": false,
+      "total": 3375
+    },
     "exercises": [
       {
         "id": 1,
@@ -44,7 +46,9 @@
     ]
   },
   {
-    "sprintDate": {"date": 1580770800000, "isWeekend": false},
+    "sprintDay": {"date": 1580770800000, "isWeekend": false,
+      "total": 4500
+    },
     "exercises": [
       {
         "id": 698,
@@ -88,7 +92,9 @@
     ]
   },
   {
-    "sprintDate": {"date": 1580511600000, "isWeekend": false},
+    "sprintDay": {"date": 1580511600000, "isWeekend": false,
+      "total": 5000
+    },
     "exercises": [
       {
         "id": 12345678998,
@@ -132,7 +138,9 @@
     ]
   },
   {
-    "sprintDate":{"date": 1582153200000, "isWeekend": false},
+    "sprintDay":{"date": 1582153200000, "isWeekend": false,
+      "total": 1000
+    },
     "exercises": [
       {
         "id": 998,
@@ -150,7 +158,9 @@
     ]
   },
   {
-    "sprintDate": {"date": 1582239600000, "isWeekend": false},
+    "sprintDay": {"date": 1582239600000, "isWeekend": false,
+      "total": 8600
+    },
     "exercises": [
       {
         "id": 8,
@@ -207,15 +217,21 @@
     ]
   },
   {
-    "sprintDate": {"date": 1585067312000, "isWeekend": true},
+    "sprintDay": {"date": 1585067312000, "isWeekend": true,
+      "total": 0
+    },
     "exercises": []
   },
   {
-    "sprintDate": {"date": 1581379200000, "isWeekend": true},
+    "sprintDay": {"date": 1581379200000, "isWeekend": true,
+      "total": 0
+    },
     "exercises": []
   },
   {
-    "sprintDate": {"date": 1581465600000, "isWeekend": true},
+    "sprintDay": {"date": 1581465600000, "isWeekend": true,
+      "total": 0
+    },
     "exercises": []
   }
 ]}

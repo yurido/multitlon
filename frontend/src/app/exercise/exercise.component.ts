@@ -35,7 +35,7 @@ export class ExerciseComponent implements OnInit {
 
   goBack(): void {
     console.log('goBack click!');
-    this.router.navigate(['/activities']);
+    this.router.navigate(['/sprint']);
   }
 
   getExName(): string {

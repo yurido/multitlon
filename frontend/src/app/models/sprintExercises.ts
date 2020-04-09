@@ -1,17 +1,17 @@
 import {Exercise} from './exercise';
-import {SprintDate} from './sprintDate';
+import {SprintDay} from './sprintDay';
 import {Serializable} from './serializable';
 import {Serializator} from './serializator';
 
 export class SprintExercises implements Serializable<SprintExercises> {
-  private sprintDate: SprintDate;
+  private sprintDay: SprintDay;
   private exercises: Exercise[] = [];
 
   constructor() {
   }
 
-  public getSprintDate(): SprintDate {
-    return this.sprintDate;
+  public getSprintDay(): SprintDay {
+    return this.sprintDay;
   }
 
   public getExercises(): Exercise[] {
@@ -20,8 +20,8 @@ export class SprintExercises implements Serializable<SprintExercises> {
 
   deserialize(input): SprintExercises {
     const serializator = new Serializator(SprintExercises.name);
-    const sprintDate = serializator.getObjectProperty(input, 'sprintDate');
-    this.sprintDate = new SprintDate().deserialize(sprintDate);
+    const sprintDay = serializator.getObjectProperty(input, 'sprintDay');
+    this.sprintDay = new SprintDay().deserialize(sprintDay);
     const exercises = serializator.getObjectProperty(input, 'exercises');
 
     for (const i in exercises) {

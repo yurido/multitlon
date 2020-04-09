@@ -38,7 +38,7 @@ export class SprintComponent implements OnInit {
           const sprintCalendar = new SprintCalendar().deserialize(data);
           this.sprintExercises = this.sprintService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
           this.loading = false;
-          const monthN = new Date(this.sprintExercises[0].getSprintDate().getSprintDate()).getMonth();
+          const monthN = new Date(this.sprintExercises[0].getSprintDay().getSprintDate()).getMonth();
           this.month = environment.MONTHS.find(value => value.id === monthN).name;
         },
         error => {

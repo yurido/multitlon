@@ -1,23 +1,21 @@
 <div class="container-fluid" style="padding: 0px">
-  <!-- kandidat för header -->
-  <div class="badge-dark sticky-top">
-    <div class="container" align="center" style="max-width: 1010px">
-      <div class="row">
-        <div class="col-2 text-left" style="padding-left: 0px">
-          <button class="btn btn-dark" style="margin: 3px" (click)="goBack()">
-            <fa-icon [icon]="faChevronLeft"></fa-icon>
-          </button>
-        </div>
-        <div class="col-8 text-center">
-          <span class="text-white"
-                style="display: inline-block; vertical-align: middle; margin: 8px;">{{month}}
-          </span>
-        </div>
-        <div class="col-2 text-right">
-          <button class="btn btn-dark" style="margin: 3px;" (click)="addExercise()">
-            <fa-icon [icon]="faPlus"></fa-icon>
-          </button>
-        </div>
+  <!-- header -->
+  <div class="badge-dark container sticky-top" align="center" style="max-width: 1010px">
+    <div class="row">
+      <div class="col-2 text-left" style="padding-left: 0px">
+        <button class="btn btn-dark" style="margin: 3px" (click)="goBack()">
+          <fa-icon [icon]="faChevronLeft"></fa-icon>
+        </button>
+      </div>
+      <div class="col-8 text-center">
+        <span class="text-white"
+              style="display: inline-block; vertical-align: middle; margin: 8px;">{{month}}
+        </span>
+      </div>
+      <div class="col-2 text-right">
+        <button class="btn btn-dark" style="margin: 3px;" (click)="addExercise()">
+          <fa-icon [icon]="faPlus"></fa-icon>
+        </button>
       </div>
     </div>
   </div>
@@ -30,9 +28,18 @@
     <tbody>
     <tr *ngFor="let sprintExercise of sprintExercises">
       <td class="text-center" style="padding: 0px">
-        <div class="container" [style.background-color]= "sprintExercise.getSprintDate().getIsWeekend() ? 'red': '#e9ecef'" style="padding: 0px; margin: 0px">
-          {{sprintExercise.getSprintDate().getSprintDate() | date}}
+        <!-- Day -->
+        <div class="container" [style.background-color]= "sprintExercise.getSprintDay().getIsWeekend() ? 'red': '#e9ecef'" style="padding-left: 10px; margin: 0px">
+          <div class="row">
+            <div class="col-8 text-left">
+              {{sprintExercise.getSprintDay().getSprintDate() | date}}
+            </div>
+            <div class="col-4 text-right" *ngIf="!sprintExercise.getSprintDay().getIsWeekend()">
+              {{sprintExercise.getSprintDay().getTotal()}}
+            </div>
+          </div>
         </div>
+        <!-- Exercises -->
         <table class="table table-sm" style="margin: 0px;">
           <tr *ngFor="let exercise of sprintExercise.getExercises()">
             <td>
