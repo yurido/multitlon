@@ -17,7 +17,7 @@ export const environment = {
     {id: 10, name: 'november'},
     {id: 11, name: 'december'}
   ],
-  EXERCISES: [{sid: 'PUSH-UPS', name: 'Push-ups', item: 'kg'},
+  EXERCISES: [{sid: 'PUSH-UPS', name: 'push-ups', item: 'kg'},
     {sid: 'PULL-UPS', name: 'pull-ups', item: 'kg'},
     {sid: 'BARS', name: 'bars', item: 'kg'},
     {sid: 'BICEPS', name: 'biceps', item: 'kg'},
@@ -35,19 +35,19 @@ export const environment = {
     {sid: 'ZUMBA', name: 'zumba', item: 'h'},
     {sid: 'BODY-PUMP', name: 'bodyPump', item: 'h'},
     {sid: 'SCOOTER', name: 'Scooter', item: 'km'},
-    {sid: 'BURPEE', name: 'Burpee', item: 'n'},
-    {sid: 'SKATING', name: 'Skating', item: 'km'},
-    {sid: 'SKIING', name: 'Skiing(x-country)', item: 'km'},
-    {sid: 'SNOWBOARDING', name: 'Snowbord', item: 'km'},
-    {sid: 'DANCING', name: 'Dancing', item: 'h'},
-    {sid: 'YOGA', name: 'Yoga', item: 'h'},
-    {sid: 'STRETCHING', name: 'Stretching', item: '10min'},
-    {sid: 'TENNIS', name: 'Tennis', item: 'h'},
-    {sid: 'SHAPE-UP', name: 'Shape Up', item: 'h'},
-    {sid: 'KNEE-ROLL-OUT', name: 'Knee roll-out', item: 'n'},
+    {sid: 'BURPEE', name: 'burpee', item: 'n'},
+    {sid: 'SKATING', name: 'skating', item: 'km'},
+    {sid: 'SKIING', name: 'skiing(x-country)', item: 'km'},
+    {sid: 'SNOWBOARDING', name: 'snowbord', item: 'km'},
+    {sid: 'DANCING', name: 'dancing', item: 'h'},
+    {sid: 'YOGA', name: 'yoga', item: 'h'},
+    {sid: 'STRETCHING', name: 'stretching', item: '10min'},
+    {sid: 'TENNIS', name: 'tennis', item: 'h'},
+    {sid: 'SHAPE-UP', name: 'shape Up', item: 'h'},
+    {sid: 'KNEE-ROLL-OUT', name: 'knee roll-out', item: 'n'},
     {sid: 'ZEPN', name: 'zEPN', item: 'h'},
-    {sid: 'HYPEREXTENSION', name: 'Hyperextension', item: 'kg'},
-    {sid: 'BENCH-PRESS', name: 'Bench press', item: 'kg'}
+    {sid: 'HYPEREXTENSION', name: 'hyperextension', item: 'kg'},
+    {sid: 'BENCH-PRESS', name: 'bench press', item: 'kg'}
   ]
 };
 

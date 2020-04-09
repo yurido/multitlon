@@ -29,7 +29,7 @@
     <tr *ngFor="let sprintExercise of sprintExercises">
       <td class="text-center" style="padding: 0px">
         <!-- Day -->
-        <div class="container" [style.background-color]= "sprintExercise.getSprintDay().getIsWeekend() ? 'red': '#e9ecef'" style="padding-left: 10px; margin: 0px">
+        <div class="container" [style.background-color]= "sprintExercise.getSprintDay().getIsWeekend() ? 'red': '#e9ecef'" style="padding-left: 10px; margin: 0px; padding-right: 25px">
           <div class="row">
             <div class="col-8 text-left">
               {{sprintExercise.getSprintDay().getSprintDate() | date}}

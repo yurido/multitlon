@@ -1,15 +1,14 @@
 import {Serializable} from './serializable';
 import {Serializator} from './serializator';
+import {Reps} from './reps';
 
 export class Exercise implements Serializable<Exercise> {
   private id: string;
   private sid: string;
   private date: number;
-  private reps: number;
-  private weight: number;
+  private reps: Reps[] = [];
   private rawPoints: number;
   private totalPoints: number;
-  private distance: number;
   private time: number;
   private progress: number;
   private quota: number;
@@ -29,12 +28,8 @@ export class Exercise implements Serializable<Exercise> {
     return this.date;
   }
 
-  public getReps(): number {
+  public getReps(): Reps[] {
     return this.reps;
-  }
-
-  public getWeight(): number {
-    return this.weight;
   }
 
   public getRawPoints(): number {
@@ -49,10 +44,6 @@ export class Exercise implements Serializable<Exercise> {
     return this.time;
   }
 
-  public getDistance(): number {
-    return this.distance;
-  }
-
   public getProgress(): number {
     return this.progress;
   }
@@ -61,16 +52,21 @@ export class Exercise implements Serializable<Exercise> {
     return this.quota;
   }
 
+  public setReps(reps: Reps[]): void {
+    this.reps = reps;
+  }
+
   deserialize(input): Exercise {
     const serializator = new Serializator(Exercise.name);
     this.id = serializator.getObjectProperty(input, 'id');
     this.sid = serializator.getObjectProperty(input, 'sid');
     this.date = serializator.getObjectProperty(input, 'date');
-    this.reps = serializator.getObjectProperty(input, 'reps');
+    const reps = serializator.getObjectProperty(input, 'reps');
+    for (const i in reps) {
+      this.reps.push(new Reps().deserialize(reps[i]));
+    }
     this.rawPoints = serializator.getObjectProperty(input, 'rawPoints');
     this.totalPoints = serializator.getObjectProperty(input, 'totalPoints');
-    this.weight = serializator.getObjectProperty(input, 'weight');
-    this.distance = serializator.getObjectProperty(input, 'distance');
     this.time = serializator.getObjectProperty(input, 'time');
     this.progress = serializator.getObjectProperty(input, 'progress');
     this.quota = serializator.getObjectProperty(input, 'quota');
