@@ -1,6 +1,6 @@
-<div class="container-fluid" style="padding: 0px;">
+<div class="container-fluid" align="center" style="padding: 0">
   <!-- header -->
-  <div class="badge-dark sticky-top container" align="center" style="max-width: 1010px">
+  <div class="badge-dark sticky-top container" align="center" style="max-width: 1010px;">
     <div class="row">
       <div class="col-2 text-left" style="padding-left: 0px">
         <button class="btn btn-dark" style="margin: 3px" (click)="back()" *ngIf="!inEditMode">
@@ -15,7 +15,7 @@
               style="display: inline-block; vertical-align: middle; margin: 8px;">{{getExName()}}
         </span>
       </div>
-      <div class="col-2 text-right">
+      <div class="col-2 text-right" style="padding-left: 0px">
         <button class="btn btn-dark" style="margin: 3px;" *ngIf="inEditMode" (click)="delete()">
           <fa-icon [icon]="faTrash"></fa-icon>
         </button>
@@ -28,7 +28,7 @@
   <app-spinner [loading]="loading"></app-spinner>
 
   <!-- body -->
-  <div *ngIf="!loading" class="container" align="center" style="max-width: 1010px; padding: 0px">
+  <div *ngIf="!loading" class="container" align="center" style="max-width: 1010px; padding: 5px">
 
     <!-- progress bar -->
     <app-progress-bar [percent]="exercise.getProgress()" [striped]="true">
@@ -60,27 +60,37 @@
     </div>
 
     <!-- reps -->
-    <span>reps</span>
-    <table class="table table-sm table-borderless" style="max-width: 1000px; margin-top: 20px; margin-left: 15px"
-           align="center" *ngIf="!loading">
+    <div class="row" style="padding-top: 40px" *ngIf="exercise.getReps().length>0">
+      <div class="col-4">
+        <h6>Reps</h6>
+      </div>
+      <div class="col-4">
+      </div>
+      <div class="col-4">
+      </div>
+    </div>
+
+    <table class="table table-sm table-borderless" style="max-width: 600px;" align="center" *ngIf="exercise.getReps().length>0">
       <tbody>
       <tr *ngFor="let reps of exercise.getReps()">
-        <td class="text-center">
-          <div class="row">
-            <div class="col-4 text-right" style="padding-right:0px">
-              <input type="text" value="{{reps.getWeight()}}kg" disabled="{{!inEditMode}}"
-                     style="width: 105px; border-radius: 0.4em; text-align: center; margin-top: 4px"
+        <td class="text-center" style="padding-top: 0; padding-bottom: 0px">
+          <div class="row" style="height: 45px">
+            <div class="col-1" style="padding-left: 10px; padding-right: 0px">
+            </div>
+            <div class="col-4 text-center" style="padding: 0px;">
+              <input type="text" value="{{reps.getWeight()}}kg"
+                     style="text-align: center; margin-top: 6px; height: 35px; max-width: 100px; border-radius: 0.3em; border-width: 1px; border-color: dimgrey"
                      placeholder="weight">
             </div>
             <div class="col-1 text-center" style="padding: 0px">
-              <p style="margin-top: 5px">X</p>
+              <p style="margin-top: 10px">X</p>
             </div>
-            <div class="col-4 text-left" style="padding: 0px">
-              <input type="text" value="{{reps.getReps()}}" disabled="{{!inEditMode}}"
-                     style="width: 110px; border-radius: 0.4em; text-align: center; margin-top: 4px" placeholder="reps">
+            <div class="col-4 text-center" style="padding: 0px">
+              <input type="text" value="{{reps.getReps()}}"
+                     style="text-align: center; margin-top: 6px; height: 35px; max-width: 100px; border-radius: 0.3em; border-width: 1px; border-color: dimgrey">
             </div>
-            <div class="col-3 text-left" style="padding: 0px">
-              <button class="btn btn-light" style="background-color: transparent" (click)="deleteReps(reps)"
+            <div class="col-2 text-left" style="padding-right: 10px; padding-left: 0px">
+              <button class="btn btn-light" style="background-color: transparent; margin-top: 4px" (click)="deleteReps(reps)"
                       *ngIf="inEditMode">
                 <fa-icon [icon]="faTrash"></fa-icon>
               </button>
