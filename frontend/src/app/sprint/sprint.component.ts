@@ -49,16 +49,13 @@ export class SprintComponent implements OnInit {
   }
 
   addExercise(): void {
-    console.log('add exercise click!');
   }
 
   openExercise(exercise: Exercise): void {
-    console.log('open exercise click!');
     this.router.navigate(['/exercise'], {state: {data: exercise}});
   }
 
   goBack(): void {
-    console.log('goBack click!');
     this.router.navigate(['/main']);
   }
 

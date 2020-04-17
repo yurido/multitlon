@@ -61,30 +61,30 @@
 
     <div style="padding-top: 40px"></div>
     <table class="table table-sm table-borderless" style="max-width: 600px;" align="center"
-           *ngIf="exercise.getReps().length>0">
+           *ngIf="reps.length>0">
       <tbody>
-      <tr *ngFor="let reps of exercise.getReps()">
+      <tr *ngFor="let rep of reps; let i = index">
         <td class="text-center" style="padding-top: 0; padding-bottom: 0px">
           <div class="row" style="height: 45px">
             <div class="col-1" style="padding-left: 10px; padding-right: 0px">
             </div>
             <div class="col-4 text-center" style="padding: 0px;">
-              <input type="text" value="{{reps.getWeight()}}{{reps.getWeight() !== '' ? 'kg': ''}}"
+              <input type="text" value="{{rep.getWeight() >0 ? rep.getWeight(): ''}}{{rep.getWeight() > 0 ? 'kg': ''}}"
                      style="text-align: center; margin-top: 6px; height: 35px; max-width: 100px; border-radius: 0.3em; border-width: 1px; border-color: dimgrey; outline-color: dodgerblue;"
-                     placeholder="weight" [disabled]="!inEditMode">
+                     placeholder="weight" [disabled]="!inEditMode" (change)="changeWeight(i, $event)" required>
             </div>
             <div class="col-1 text-center" style="padding: 0px">
               <p style="margin-top: 10px">X</p>
             </div>
             <div class="col-4 text-center" style="padding: 0px">
-              <input type="text" value="{{reps.getReps()}}"
+              <input type="text" value="{{rep.getReps() >0 ? rep.getReps(): ''}}"
                      style="text-align: center; margin-top: 6px; height: 35px; max-width: 100px; border-radius: 0.3em; border-width: 1px; border-color: dimgrey; outline-color: dodgerblue"
-                     placeholder="reps" [disabled]="!inEditMode">
+                     placeholder="reps" [disabled]="!inEditMode" (change)="changeReps(i, $event)" required>
             </div>
             <div class="col-2 text-left" style="padding-right: 10px; padding-left: 0px">
               <button class="btn btn-light"
                       style="background-color: transparent; margin-top: 4px; outline-color: dodgerblue"
-                      (click)="deleteReps(reps)"
+                      (click)="deleteReps(i)"
                       *ngIf="inEditMode">
                 <fa-icon [icon]="faTrash"></fa-icon>
               </button>
@@ -101,7 +101,7 @@
         <div class="col-4" style="padding: 0px"></div>
         <div class="col-1" style="padding: 0px"></div>
         <div class="col-4" style="padding: 0px"></div>
-        <div class="col-2 text-left" style="padding-right: 2px; padding-left: 7px">
+        <div class="col-2 text-left" style="padding-right: 2px; padding-left: 7px" *ngIf="canAddMoreReps()">
           <button class="btn btn-light" style="background-color: transparent" (click)="addReps()">
             <fa-icon [icon]="faPlus"></fa-icon>
           </button>
@@ -114,12 +114,12 @@
   <!-- footer -->
   <div class="container" align="center" style="max-width: 1010px; padding: 5px">
     <div align="center"
-         style="max-width: 1010px; position: fixed; bottom: 12px; left: 50%; margin-left: -90px; padding-bottom: 20px; padding-top: 10px">
+         style="max-width: 1010px; left: 50%; margin-left: -15px; padding-bottom: 20px; padding-top: 10px;">
       <button class="btn btn-light" style="width: 180px; border-radius: 0.8em; border-color: dimgrey" (click)="edit()"
               *ngIf="!inEditMode">edit
       </button>
       <button class="btn btn-success" style="width: 180px; border-radius: 0.8em; border-color: dimgrey" (click)="save()"
-              *ngIf="inEditMode">save
+              *ngIf="inEditMode" [disabled]="!canAddMoreReps()">save
       </button>
     </div>
   </div>
