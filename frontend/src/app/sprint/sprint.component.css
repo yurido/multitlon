@@ -1,0 +1,20 @@
+.sprint-day {
+  padding-left: 10px;
+  padding-right: 25px;
+  margin: 0px;
+}
+.sprint-day-dayoff {
+  background-color: red;
+}
+.sprint-day-training {
+  background-color: #e9ecef;
+}
+.btn-open-exercise {
+  color: #adb5bd;
+}
+.max-width-100 {
+  max-width: 100px;
+}
+.min-width-100 {
+  min-width: 100px;
+}

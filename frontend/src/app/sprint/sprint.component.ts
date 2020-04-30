@@ -52,7 +52,7 @@ export class SprintComponent implements OnInit {
   }
 
   openExercise(exercise: Exercise): void {
-    this.router.navigate(['/exercise'], {state: {data: exercise}});
+    this.router.navigate(['/sprint/exercise'], {state: {data: exercise}});
   }
 
   goBack(): void {
@@ -65,6 +65,10 @@ export class SprintComponent implements OnInit {
 
   getExItem(sid: string): string {
     return environment.EXERCISES.find(value => value.sid === sid).item;
+  }
+
+  calcDayColor(isDayOff: boolean): string {
+    return isDayOff ? 'sprint-day-dayoff' : 'sprint-day-training';
   }
 
 }

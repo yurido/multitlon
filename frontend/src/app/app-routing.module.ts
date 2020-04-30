@@ -8,7 +8,7 @@ import {Exercise} from './models/exercise';
 const routes: Routes = [
   {path: 'sprint', component: SprintComponent},
   {path: 'main', component: MainComponent},
-  {path: 'exercise', component: ExerciseComponent, data: Exercise},
+  {path: 'sprint/exercise', component: ExerciseComponent, data: Exercise},
   {path: '', redirectTo: '/main', pathMatch: 'full'},
   {path: '**', redirectTo: '/main', pathMatch: 'full'}
 ];

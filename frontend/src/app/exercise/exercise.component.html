@@ -1,22 +1,20 @@
-<div class="container-fluid" align="center" style="padding: 0">
+<div class="container-fluid container-fluid-styling">
   <!-- header -->
-  <div class="badge-dark sticky-top container" align="center" style="max-width: 1010px;">
+  <div class="badge-dark sticky-top container max-width" align="center">
     <div class="row">
-      <div class="col-2 text-left" style="padding-left: 0px">
-        <button class="btn btn-dark" style="margin: 3px" (click)="back()" *ngIf="!inEditMode">
+      <div class="col-2 text-left padding-left-0">
+        <button class="btn btn-dark margin-3px" (click)="back()" *ngIf="!inEditMode">
           <fa-icon [icon]="faChevronLeft"></fa-icon>
         </button>
-        <button class="btn btn-dark" style="margin: 3px" (click)="cancel()" *ngIf="inEditMode">
+        <button class="btn btn-dark margin-3px" (click)="cancel()" *ngIf="inEditMode">
           cancel
         </button>
       </div>
       <div class="col-8 text-center">
-        <span class="text-white" *ngIf="!loading"
-              style="display: inline-block; vertical-align: middle; margin: 8px;">{{getExName()}}
-        </span>
+        <span class="text-white header-text-style" *ngIf="!loading">{{getExName()}}</span>
       </div>
-      <div class="col-2 text-right" style="padding-left: 0px">
-        <button class="btn btn-dark" style="margin: 3px;" *ngIf="inEditMode" (click)="delete()">
+      <div class="col-2 text-right header-rigth-column-style">
+        <button class="btn btn-dark margin-3px" *ngIf="inEditMode" (click)="delete()">
           <fa-icon [icon]="faTrash"></fa-icon>
         </button>
       </div>
@@ -28,8 +26,7 @@
   <app-spinner [loading]="loading"></app-spinner>
 
   <!-- body -->
-  <div *ngIf="!loading" class="container" align="center" style="max-width: 1010px; padding-top:5px; padding-left:5px; padding-right:5px; padding-bottom: 15px">
-
+  <div *ngIf="!loading" class="container exercise-body max-width" align="center">
     <!-- progress bar -->
     <app-progress-bar [percent]="exercise.getProgress()" [striped]="true">
       {{exercise.getProgress()}} %
@@ -55,35 +52,34 @@
         {{exercise.getTotalPoints()}}
       </div>
       <div class="col-4 text-center">
-        {{exercise.getQuota()}} %
+        <div class="container quota-style" [ngClass]="calcQuotaColor()">
+            {{exercise.getQuota()}} %
+        </div>
       </div>
     </div>
 
-    <div style="padding-top: 40px"></div>
-    <table class="table table-sm table-borderless" style="max-width: 600px;" align="center"
+    <div class="padding-top-40"></div>
+    <table class="table table-sm table-borderless max-width-600" align="center"
            *ngIf="reps.length>0">
       <tbody>
       <tr *ngFor="let rep of reps; let i = index">
-        <td class="text-center" style="padding-top: 0; padding-bottom: 0px">
+        <td class="text-center padding-top-bottom-0">
           <div class="row" style="height: 45px">
             <div class="col-1" style="padding-left: 10px; padding-right: 0px">
             </div>
-            <div class="col-4 text-center" style="padding: 0px;">
-              <input type="text" value="{{rep.getWeight() >0 ? rep.getWeight(): ''}}{{rep.getWeight() > 0 ? 'kg': ''}}"
-                     style="text-align: center; margin-top: 6px; height: 35px; max-width: 100px; border-radius: 0.3em; border-width: 1px; border-color: dimgrey; outline-color: dodgerblue;"
+            <div class="col-4 text-center padding-0">
+              <input type="text" class="exercise-input" value="{{rep.getWeight() >0 ? rep.getWeight(): ''}}{{rep.getWeight() > 0 ? 'kg': ''}}"
                      placeholder="weight" [disabled]="!inEditMode" (change)="changeWeight(i, $event)" required>
             </div>
-            <div class="col-1 text-center" style="padding: 0px">
+            <div class="col-1 text-center padding-0">
               <p style="margin-top: 10px">X</p>
             </div>
-            <div class="col-4 text-center" style="padding: 0px">
-              <input type="text" value="{{rep.getReps() >0 ? rep.getReps(): ''}}"
-                     style="text-align: center; margin-top: 6px; height: 35px; max-width: 100px; border-radius: 0.3em; border-width: 1px; border-color: dimgrey; outline-color: dodgerblue"
+            <div class="col-4 text-center padding-0">
+              <input type="text" class="exercise-input" value="{{rep.getReps() >0 ? rep.getReps(): ''}}"
                      placeholder="reps" [disabled]="!inEditMode" (change)="changeReps(i, $event)" required>
             </div>
-            <div class="col-2 text-left" style="padding-right: 10px; padding-left: 0px">
-              <button class="btn btn-light"
-                      style="background-color: transparent; margin-top: 4px; outline-color: dodgerblue"
+            <div class="col-2 text-left col-delete-reps">
+              <button class="btn btn-light btn-delete-reps"
                       (click)="deleteReps(i)"
                       *ngIf="inEditMode">
                 <fa-icon [icon]="faTrash"></fa-icon>
@@ -95,14 +91,14 @@
       </tbody>
     </table>
 
-    <div class="container" style="max-width: 600px" align="center" *ngIf="inEditMode">
+    <div class="container max-width-600" align="center" *ngIf="inEditMode">
       <div class="row">
         <div class="col-1" style="padding-left: 10px; padding-right: 0px"></div>
-        <div class="col-4" style="padding: 0px"></div>
-        <div class="col-1" style="padding: 0px"></div>
-        <div class="col-4" style="padding: 0px"></div>
+        <div class="col-4 padding-0"></div>
+        <div class="col-1 padding-0"></div>
+        <div class="col-4 padding-0"></div>
         <div class="col-2 text-left" style="padding-right: 2px; padding-left: 7px" *ngIf="canAddMoreReps()">
-          <button class="btn btn-light" style="background-color: transparent" (click)="addReps()">
+          <button class="btn btn-light btn-transparent" (click)="addReps()">
             <fa-icon [icon]="faPlus"></fa-icon>
           </button>
         </div>
@@ -112,13 +108,12 @@
   </div>
 
   <!-- footer -->
-  <div class="container" align="center" style="max-width: 1010px; padding: 5px">
-    <div align="center"
-         style="max-width: 1010px; left: 50%; margin-left: -15px; padding-bottom: 20px; padding-top: 10px;">
-      <button class="btn btn-light" style="width: 180px; border-radius: 0.8em; border-color: dimgrey" (click)="edit()"
+  <div class="container max-width" align="center" style="padding: 5px">
+    <div class="max-width" align="center" style="left: 50%; margin-left: -15px; padding-bottom: 20px; padding-top: 10px;">
+      <button class="btn btn-light btn-exercise-operate" (click)="edit()"
               *ngIf="!inEditMode">edit
       </button>
-      <button class="btn btn-success" style="width: 180px; border-radius: 0.8em; border-color: dimgrey" (click)="save()"
+      <button class="btn btn-success btn-exercise-operate" (click)="save()"
               *ngIf="inEditMode" [disabled]="!canAddMoreReps()">save
       </button>
     </div>

@@ -1,19 +1,17 @@
-<div class="container-fluid" style="padding: 0px">
+<div class="container-fluid container-fluid-styling">
   <!-- header -->
-  <div class="badge-dark container sticky-top" align="center" style="max-width: 1010px">
+  <div class="badge-dark container sticky-top max-width">
     <div class="row">
-      <div class="col-2 text-left" style="padding-left: 0px">
-        <button class="btn btn-dark" style="margin: 3px" (click)="goBack()">
+      <div class="col-2 text-left padding-left-0">
+        <button class="btn btn-dark margin-3px" (click)="goBack()">
           <fa-icon [icon]="faChevronLeft"></fa-icon>
         </button>
       </div>
       <div class="col-8 text-center">
-        <span class="text-white"
-              style="display: inline-block; vertical-align: middle; margin: 8px;">{{month}}
-        </span>
+        <span class="text-white header-text-style">{{month}}</span>
       </div>
-      <div class="col-2 text-right" style="padding-left: 0px">
-        <button class="btn btn-dark" style="margin: 3px" (click)="addExercise()">
+      <div class="col-2 text-right header-rigth-column-style">
+        <button class="btn btn-dark margin-3px" (click)="addExercise()">
           <fa-icon [icon]="faPlus"></fa-icon>
         </button>
       </div>
@@ -27,9 +25,9 @@
   <table class="table table-sm" style="max-width: 1000px;" align="center" *ngIf="!loading">
     <tbody>
     <tr *ngFor="let sprintExercise of sprintExercises">
-      <td class="text-center" style="padding: 0px">
+      <td class="text-center padding-0">
         <!-- Day -->
-        <div class="container" [style.background-color]= "sprintExercise.getSprintDay().getIsWeekend() ? 'red': '#e9ecef'" style="padding-left: 10px; margin: 0px; padding-right: 25px">
+        <div class="container sprint-day" [ngClass]="calcDayColor(sprintExercise.getSprintDay().getIsWeekend())">
           <div class="row">
             <div class="col-8 text-left">
               {{sprintExercise.getSprintDay().getSprintDate() | date}}
@@ -44,10 +42,10 @@
           <tr *ngFor="let exercise of sprintExercise.getExercises()">
             <td>
               <div class="row" style="padding: 6px;">
-                <div class="col-2 text-left" style="max-width: 100px; min-width: 100px;">
+                <div class="col-2 text-left max-width-100 min-width-100">
                   {{getExName(exercise.getSid())}}
                 </div>
-                <div class="col-4 text-left" style="max-width: 100px;">
+                <div class="col-4 text-left max-width-100">
                   {{exercise.getRawPoints()}} {{getExItem(exercise.getSid())}}
                 </div>
                 <div class="col-2 text-left">
@@ -58,7 +56,7 @@
               </div>
             </td>
             <td style="text-align: right;">
-              <button class="btn btn-link" style="color: #adb5bd" (click)="openExercise(exercise)">
+              <button class="btn btn-link btn-open-exercise" (click)="openExercise(exercise)">
                 <fa-icon [icon]="faChevronRight"></fa-icon>
               </button>
             </td>

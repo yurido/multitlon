@@ -25,6 +25,7 @@ export class ExerciseComponent implements OnInit {
   isModified: boolean;
   inEditMode: boolean;
   reps: Reps[] = [];
+  quotaColor: string;
 
   constructor(private router: Router) {
   }
@@ -107,5 +108,15 @@ export class ExerciseComponent implements OnInit {
 
   private setItem(): void {
     this.item = environment.EXERCISES.find(value => value.sid === this.exercise.getSid()).item;
+  }
+
+  calcQuotaColor(): string {
+    if (this.exercise.getQuota() < 26) {
+      return 'quota-green';
+    } else if (this.exercise.getQuota() >= 26 && this.exercise.getQuota() < 31) {
+      return 'quota-yellow';
+    } else {
+      return 'quota-red';
+    }
   }
 }

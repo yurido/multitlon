@@ -30,7 +30,7 @@
           "totalPoints": 500,
           "rawPoints": 1000,
           "progress": 1,
-          "quota": 20
+          "quota": 35
         },
         {
           "id": 2,
@@ -78,7 +78,7 @@
           "rawPoints": 1000,
           "totalPoints": 1300,
           "progress": 102,
-          "quota": 20
+          "quota": 5
         }
       ]
     },
@@ -111,7 +111,7 @@
           "rawPoints": 800,
           "totalPoints": 500,
           "progress": 5,
-          "quota": 20
+          "quota": 46
         },
         {
           "id": 78999,
@@ -146,7 +146,7 @@
           "rawPoints": 15,
           "totalPoints": 1300,
           "progress": 50,
-          "quota": 20
+          "quota": 2
         }
       ]
     },
@@ -214,7 +214,7 @@
           "rawPoints": 2.30,
           "totalPoints": 1650,
           "progress": 219,
-          "quota": 20
+          "quota": 100
         }
       ]
     },

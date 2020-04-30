@@ -1,0 +1,49 @@
+.quota-green {
+  background-color: green;
+}
+.quota-yellow {
+  background-color: lightyellow;
+}
+.quota-red {
+  background-color: red;
+}
+.quota-style {
+  max-width: 60px;
+  padding: 0px;
+  border-radius: 0.2em;
+  align-content: center;
+}
+.exercise-body {
+  alignment: center;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 15px;
+}
+.exercise-input {
+  text-align: center;
+  margin-top: 6px;
+  height: 35px;
+  max-width: 100px;
+  border-radius: 0.3em;
+  border-width: 1px;
+  border-color: dimgray;
+  outline-color: dodgerblue;
+}
+.btn-delete-reps {
+  background-color: transparent;
+  margin-top: 4px;
+  outline-color: dodgerblue;
+}
+.col-delete-reps {
+  padding-right: 10px;
+  padding-left: 0px;
+}
+.btn-exercise-operate {
+  width: 180px;
+  border-radius: 0.8em;
+  border-color: dimgray;
+}
+.max-width-600 {
+  max-width: 600px;
+}
