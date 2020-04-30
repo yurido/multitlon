@@ -68,15 +68,15 @@
             <div class="col-1" style="padding-left: 10px; padding-right: 0px">
             </div>
             <div class="col-4 text-center padding-0">
-              <input type="text" class="exercise-input" value="{{rep.getWeight() >0 ? rep.getWeight(): ''}}{{rep.getWeight() > 0 ? 'kg': ''}}"
-                     placeholder="weight" [disabled]="!inEditMode" (change)="changeWeight(i, $event)" required>
+              <input type="text" class="exercise-input" value="{{rep.getWeight()}}"
+                     placeholder="weight" [disabled]="!inEditMode" (keyup)="changeWeight(i, $event)" required (change)="addKg(i, $event)">
             </div>
             <div class="col-1 text-center padding-0">
               <p style="margin-top: 10px">X</p>
             </div>
             <div class="col-4 text-center padding-0">
-              <input type="text" class="exercise-input" value="{{rep.getReps() >0 ? rep.getReps(): ''}}"
-                     placeholder="reps" [disabled]="!inEditMode" (change)="changeReps(i, $event)" required>
+              <input type="text" class="exercise-input" value="{{rep.getReps() >0 ? rep.getReps(): ''}}" (keyup)="changeReps(i, $event)"
+                     placeholder="reps" [disabled]="!inEditMode" required>
             </div>
             <div class="col-2 text-left col-delete-reps">
               <button class="btn btn-light btn-delete-reps"
@@ -91,6 +91,7 @@
       </tbody>
     </table>
 
+    <!-- + button -->
     <div class="container max-width-600" align="center" *ngIf="inEditMode">
       <div class="row">
         <div class="col-1" style="padding-left: 10px; padding-right: 0px"></div>
@@ -114,7 +115,7 @@
               *ngIf="!inEditMode">edit
       </button>
       <button class="btn btn-success btn-exercise-operate" (click)="save()"
-              *ngIf="inEditMode" [disabled]="!canAddMoreReps()">save
+              *ngIf="inEditMode" [disabled]="!canSave()">save
       </button>
     </div>
   </div>

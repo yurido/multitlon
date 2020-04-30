@@ -12,6 +12,7 @@ import { AlertComponent } from './alert/alert.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ExerciseComponent } from './exercise/exercise.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -23,12 +24,13 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
     ExerciseComponent,
     ProgressBarComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FontAwesomeModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FontAwesomeModule,
+        FormsModule
+    ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: MockHttpCalIInterceptor,

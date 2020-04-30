@@ -25,7 +25,6 @@ export class ExerciseComponent implements OnInit {
   isModified: boolean;
   inEditMode: boolean;
   reps: Reps[] = [];
-  quotaColor: string;
 
   constructor(private router: Router) {
   }
@@ -58,6 +57,7 @@ export class ExerciseComponent implements OnInit {
 
   cancel(): void {
     this.inEditMode = false;
+    this.isModified = false;
     this.reps = [];
     this.exercise.getReps().forEach(reps => this.reps.push(reps));
   }
@@ -69,8 +69,8 @@ export class ExerciseComponent implements OnInit {
   save(): void {
     this.inEditMode = false;
     this.isModified = true;
-
     this.exercise.setReps(this.reps);
+    // TODO: call backend
     console.log(this.exercise.getReps());
   }
 
@@ -79,10 +79,12 @@ export class ExerciseComponent implements OnInit {
     rep.setReps(0);
     rep.setWeight(0);
     this.reps.push(rep);
+    this.isModified = true;
   }
 
   deleteReps(index: number): void {
     this.reps.splice(index, 1);
+    this.isModified = true;
   }
 
   canAddMoreReps(): boolean {
@@ -95,13 +97,15 @@ export class ExerciseComponent implements OnInit {
   }
 
   changeReps(index: number, $event): void {
+    console.log('change input ', index);
     this.reps[index].setReps(+this.changeInputElementValue($event));
   }
 
   private changeInputElementValue($event): number {
     const newStrValue = $event.target.value;
+    console.log('value ', newStrValue);
     const newNumbValue = newStrValue.match(/\d+/);
-    const value = (newNumbValue !== null ? newNumbValue[0] : 0);
+    const value = (newNumbValue !== null ? newNumbValue[0] : '');
     $event.target.value = value;
     return value;
   }
@@ -118,5 +122,14 @@ export class ExerciseComponent implements OnInit {
     } else {
       return 'quota-red';
     }
+  }
+
+  canSave(): boolean {
+    return this.isModified && this.canAddMoreReps();
+  }
+
+  addKg(index: number, $event): void {
+    const newValue = $event.target.value + ($event.target.value.length > 0 ? 'kg' : '');
+    $event.target.value = newValue;
   }
 }
