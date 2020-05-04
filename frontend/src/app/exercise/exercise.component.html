@@ -11,7 +11,7 @@
         </button>
       </div>
       <div class="col-8 text-center">
-        <span class="text-white header-text-style" *ngIf="!loading">{{getExName()}}</span>
+        <span class="text-white header-text-style" *ngIf="!loading">{{config.name}}</span>
       </div>
       <div class="col-2 text-right header-rigth-column-style">
         <button class="btn btn-dark margin-3px" *ngIf="inEditMode" (click)="delete()">
@@ -46,7 +46,7 @@
     </div>
     <div class="row">
       <div class="col-4 text-center">
-        {{exercise.getRawPoints()}} {{item}}
+        {{exercise.getRawPoints()}} {{config.item}}
       </div>
       <div class="col-4 text-center">
         {{exercise.getTotalPoints()}}
@@ -60,7 +60,7 @@
 
     <div class="padding-top-40"></div>
     <table class="table table-sm table-borderless max-width-600" align="center"
-           *ngIf="reps.length>0">
+           *ngIf="config.withReps && reps.length>0">
       <tbody>
       <tr *ngFor="let rep of reps; let i = index">
         <td class="text-center padding-top-bottom-0">
@@ -69,7 +69,10 @@
             </div>
             <div class="col-4 text-center padding-0">
               <input type="text" class="exercise-input" value="{{rep.getWeight()}}"
-                     placeholder="weight" [disabled]="!inEditMode" (keyup)="changeWeight(i, $event)" required (change)="addKg(i, $event)">
+                     placeholder="weight" [disabled]="!inEditMode" (keyup)="changeWeight(i, $event)"
+                     required
+                     (focusin)="removeKg($event)"
+                     (focusout)="addKg($event)">
             </div>
             <div class="col-1 text-center padding-0">
               <p style="margin-top: 10px">X</p>
@@ -92,7 +95,7 @@
     </table>
 
     <!-- + button -->
-    <div class="container max-width-600" align="center" *ngIf="inEditMode">
+    <div class="container max-width-600" align="center" *ngIf="inEditMode && config.withReps">
       <div class="row">
         <div class="col-1" style="padding-left: 10px; padding-right: 0px"></div>
         <div class="col-4 padding-0"></div>
@@ -104,6 +107,11 @@
           </button>
         </div>
       </div>
+    </div>
+
+    <div class="container max-width-600" align="center" *ngIf="!config.withReps">
+      <input class="text" class="exercise-input" value="{{rawPoints}}" placeholder="{{config.item}}"
+             [disabled]="!inEditMode" required (keyup)="changeRawPoints($event)">
     </div>
 
   </div>

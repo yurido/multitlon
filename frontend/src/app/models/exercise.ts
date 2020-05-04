@@ -56,6 +56,10 @@ export class Exercise implements Serializable<Exercise> {
     this.reps = reps;
   }
 
+  public setRawPoints(rawPoints: number): void {
+    this.rawPoints = rawPoints;
+  }
+
   deserialize(input): Exercise {
     const serializator = new Serializator(Exercise.name);
     this.id = serializator.getObjectProperty(input, 'id');

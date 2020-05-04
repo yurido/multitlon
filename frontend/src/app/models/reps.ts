@@ -2,13 +2,13 @@ import {Serializable} from './serializable';
 import {Serializator} from './serializator';
 
 export class Reps implements Serializable<Reps> {
-  private weight: number;
+  private weight: string;
   private reps: number;
 
   constructor() {
   }
 
-  public getWeight(): number {
+  public getWeight(): string {
     return this.weight;
   }
 
@@ -20,7 +20,7 @@ export class Reps implements Serializable<Reps> {
     this.reps = reps;
   }
 
-  public setWeight(weight: number): void {
+  public setWeight(weight: string): void {
     this.weight = weight;
   }
 

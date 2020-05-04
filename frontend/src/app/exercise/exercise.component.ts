@@ -7,6 +7,7 @@ import {environment} from '../../environments/environment';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {Reps} from '../models/reps';
+import {SprintService} from '../services/sprint.service';
 
 @Component({
   selector: 'app-exercise',
@@ -21,12 +22,13 @@ export class ExerciseComponent implements OnInit {
   error: any;
   loading: boolean;
   exercise: Exercise;
-  item: string;
   isModified: boolean;
   inEditMode: boolean;
   reps: Reps[] = [];
+  config: any;
+  rawPoints: string;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private sprintService: SprintService) {
   }
 
   ngOnInit(): void {
@@ -37,18 +39,19 @@ export class ExerciseComponent implements OnInit {
       return;
     }
     this.exercise = new Exercise().deserialize(history.state.data);
-    this.setItem();
-    this.exercise.getReps().forEach(reps => this.reps.push(reps));
-
+    this.exercise.getReps().forEach(reps => {
+      const weightWithKg = new Reps();
+      weightWithKg.setWeight(reps.getWeight() + 'kg');
+      weightWithKg.setReps(reps.getReps());
+      this.reps.push(weightWithKg);
+    });
+    this.rawPoints = '' + this.exercise.getRawPoints();
+    this.config = environment.EXERCISES.find(value => value.sid === this.exercise.getSid());
     this.loading = false;
   }
 
   back(): void {
     this.router.navigate(['/sprint']);
-  }
-
-  getExName(): string {
-    return environment.EXERCISES.find(value => value.sid === this.exercise.getSid()).name;
   }
 
   edit(): void {
@@ -60,6 +63,7 @@ export class ExerciseComponent implements OnInit {
     this.isModified = false;
     this.reps = [];
     this.exercise.getReps().forEach(reps => this.reps.push(reps));
+    this.rawPoints = '' + this.exercise.getRawPoints();
   }
 
   delete(): void {
@@ -68,16 +72,25 @@ export class ExerciseComponent implements OnInit {
 
   save(): void {
     this.inEditMode = false;
-    this.isModified = true;
+    this.isModified = false;
+    this.loading = false;
     this.exercise.setReps(this.reps);
+    this.exercise.setRawPoints(this.getNumberFromString(this.rawPoints));
     // TODO: call backend
     console.log(this.exercise.getReps());
+    this.sprintService.updateExercise(this.exercise)
+      .subscribe(data => {
+        this.exercise = new Exercise().deserialize(data);
+        this.loading = false;
+      }, error => {
+        this.loading = false;
+      });
   }
 
   addReps(): void {
     const rep = new Reps();
     rep.setReps(0);
-    rep.setWeight(0);
+    rep.setWeight('');
     this.reps.push(rep);
     this.isModified = true;
   }
@@ -88,30 +101,20 @@ export class ExerciseComponent implements OnInit {
   }
 
   canAddMoreReps(): boolean {
-    const emptyElements = this.reps.findIndex(element => element.getWeight() === 0 || element.getReps() === 0);
+    const emptyElements = this.reps.findIndex(element => element.getWeight() === '' || element.getReps() === 0);
     return emptyElements === -1;
   }
 
   changeWeight(index: number, $event): void {
-    this.reps[index].setWeight(+this.changeInputElementValue($event));
+    this.isModified = true;
+    this.reps[index].setWeight('' + this.getNumberFromString($event.target.value));
+    $event.target.value = this.reps[index].getWeight();
   }
 
   changeReps(index: number, $event): void {
-    console.log('change input ', index);
-    this.reps[index].setReps(+this.changeInputElementValue($event));
-  }
-
-  private changeInputElementValue($event): number {
-    const newStrValue = $event.target.value;
-    console.log('value ', newStrValue);
-    const newNumbValue = newStrValue.match(/\d+/);
-    const value = (newNumbValue !== null ? newNumbValue[0] : '');
-    $event.target.value = value;
-    return value;
-  }
-
-  private setItem(): void {
-    this.item = environment.EXERCISES.find(value => value.sid === this.exercise.getSid()).item;
+    this.isModified = true;
+    this.reps[index].setReps(+this.getNumberFromString($event.target.value));
+    $event.target.value = this.reps[index].getReps();
   }
 
   calcQuotaColor(): string {
@@ -125,11 +128,33 @@ export class ExerciseComponent implements OnInit {
   }
 
   canSave(): boolean {
-    return this.isModified && this.canAddMoreReps();
+    let condis = false;
+    if (this.config.withReps) {
+      condis = (this.canAddMoreReps() && this.reps.length > 0);
+    } else {
+      condis = this.rawPoints !== '';
+    }
+    return this.isModified && condis;
   }
 
-  addKg(index: number, $event): void {
-    const newValue = $event.target.value + ($event.target.value.length > 0 ? 'kg' : '');
-    $event.target.value = newValue;
+  changeRawPoints($event): void {
+    if (this.rawPoints !== $event.target.value) {
+      this.isModified = true;
+    }
+    this.rawPoints = $event.target.value;
   }
+
+  addKg($event): void {
+    $event.target.value = $event.target.value + ($event.target.value.length > 0 ? 'kg' : '');
+  }
+
+  removeKg($event): void {
+    $event.target.value = this.getNumberFromString($event.target.value);
+  }
+
+  private getNumberFromString(str: string): number {
+    const numberValue = str.match(/\d+/);
+    return (numberValue !== null ? +numberValue[0] : 0);
+  }
+
 }
