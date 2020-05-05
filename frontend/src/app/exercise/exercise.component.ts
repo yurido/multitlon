@@ -47,11 +47,12 @@ export class ExerciseComponent implements OnInit {
     });
     this.rawPoints = '' + this.exercise.getRawPoints();
     this.config = environment.EXERCISES.find(value => value.sid === this.exercise.getSid());
+    this.isModified = false;
     this.loading = false;
   }
 
   back(): void {
-    this.router.navigate(['/sprint']);
+    this.router.navigate(['/sprint'], {state: {isDataChanged: this.isModified}});
   }
 
   edit(): void {

@@ -8,6 +8,7 @@ import {SprintCalendar} from '../models/sprintCalendar';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
 import {environment} from '../../environments/environment';
+import {isDefined} from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-sprint',
@@ -29,7 +30,12 @@ export class SprintComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.getExcercisesForCurrentSprint();
+    if (isDefined(history.state.isDataChanged) && !history.state.isDataChanged) {
+      this.loadExercisesFromCash();
+      this.loading = false;
+    } else {
+      this.getExcercisesForCurrentSprint();
+    }
   }
 
   getExcercisesForCurrentSprint(): void {
@@ -37,9 +43,10 @@ export class SprintComponent implements OnInit {
       .subscribe(data => {
           const sprintCalendar = new SprintCalendar().deserialize(data);
           this.sprintExercises = this.sprintService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
-          this.loading = false;
           const monthN = new Date(this.sprintExercises[0].getSprintDay().getSprintDate()).getMonth();
           this.month = environment.MONTHS.find(value => value.id === monthN).name;
+          this.sprintService.setSprintCache(this.sprintExercises);
+          this.loading = false;
         },
         error => {
           console.log('error here ', error);
@@ -69,6 +76,11 @@ export class SprintComponent implements OnInit {
 
   calcDayColor(isDayOff: boolean): string {
     return isDayOff ? 'sprint-day-dayoff' : 'sprint-day-training';
+  }
+
+  private loadExercisesFromCash(): void {
+    this.sprintExercises = this.sprintService.getSprintCache();
+    console.log('got sprint data from cache');
   }
 
 }

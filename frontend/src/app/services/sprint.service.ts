@@ -3,6 +3,8 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {SprintExercises} from '../models/sprintExercises';
 import {Observable, of} from 'rxjs';
 import {tap} from 'rxjs/operators';
+import {Exercise} from '../models/exercise';
+import {isUndefined} from 'util';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -13,6 +15,8 @@ const httpOptions = {
 })
 export class SprintService {
   private CURRENT_SPRINT_URL = 'rest/currentSprint';
+  private EXERCISE_URL = 'rest/exercise';
+  private SPRINT_CACHE: SprintExercises[];
 
   constructor(private http: HttpClient) {
   }
@@ -48,11 +52,34 @@ export class SprintService {
     }
   */
 
-  public sortSprintExercisesByDate(list: SprintExercises[]): SprintExercises[] {
+  sortSprintExercisesByDate(list: SprintExercises[]): SprintExercises[] {
     list.sort((a: SprintExercises, b: SprintExercises) => {
       return (a.getSprintDay().getSprintDate() - b.getSprintDay().getSprintDate());
     });
     return list;
+  }
+
+  getCurrentSprint(): Observable<SprintExercises[]> {
+    return this.http.get<SprintExercises[]>(this.CURRENT_SPRINT_URL, httpOptions)
+      .pipe(
+        tap(sprint => console.log('got currentSprint from backend: ', sprint))
+        // catchError(this.handleError('getCurrentSprint', undefined))
+      );
+  }
+
+  updateExercise(exercise: Exercise): Observable<Exercise> {
+    return this.http.put<Exercise>(this.EXERCISE_URL, exercise, httpOptions)
+      .pipe(
+        tap(ex => console.log('exercise ' + exercise.getSid() + ' updated'))
+      );
+  }
+
+  getSprintCache(): SprintExercises[] {
+    return this.SPRINT_CACHE;
+  }
+
+  setSprintCache(data: SprintExercises[]) {
+    this.SPRINT_CACHE = data;
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
@@ -63,11 +90,4 @@ export class SprintService {
     };
   }
 
-  getCurrentSprint(): Observable<SprintExercises[]> {
-    return this.http.get<SprintExercises[]>(this.CURRENT_SPRINT_URL, httpOptions)
-      .pipe(
-        tap(sprint => console.log('got currentSprint from backend: ', sprint))
-        // catchError(this.handleError('getCurrentSprint', undefined))
-      );
-  }
 }
