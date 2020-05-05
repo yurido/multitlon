@@ -60,6 +60,18 @@ export class Exercise implements Serializable<Exercise> {
     this.rawPoints = rawPoints;
   }
 
+  public setTotalPoints(totalPoints: number): void {
+    this.totalPoints = totalPoints;
+  }
+
+  public setProgress(progress: number): void {
+    this.progress = progress;
+  }
+
+  public setQuota(quota: number): void {
+    this.quota = quota;
+  }
+
   deserialize(input): Exercise {
     const serializator = new Serializator(Exercise.name);
     this.id = serializator.getObjectProperty(input, 'id');
