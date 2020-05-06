@@ -68,18 +68,27 @@
             <div class="col-1" style="padding-left: 10px; padding-right: 0px">
             </div>
             <div class="col-4 text-center padding-0">
-              <input type="text" class="exercise-input" value="{{rep.getWeight()}}"
-                     placeholder="weight" [disabled]="!inEditMode" (keyup)="changeWeight(i, $event)"
+              <input type="text"
+                     class="exercise-input"
+                     value="{{rep.getWeight()}}"
+                     placeholder="weight"
                      required
-                     (focusin)="removeKg($event)"
-                     (focusout)="addKg($event)">
+                     [disabled]="!inEditMode"
+                     (keyup)="changeWeight(i, $event)"
+                     (focusin)="removePostfix($event)"
+                     (focusout)="addPostfix('kg', $event)">
             </div>
             <div class="col-1 text-center padding-0">
               <p style="margin-top: 10px">X</p>
             </div>
             <div class="col-4 text-center padding-0">
-              <input type="text" class="exercise-input" value="{{rep.getReps()}}" (keyup)="changeReps(i, $event)"
-                     placeholder="reps" [disabled]="!inEditMode" required>
+              <input type="text"
+                     class="exercise-input"
+                     value="{{rep.getReps()}}"
+                     (keyup)="changeReps(i, $event)"
+                     placeholder="reps"
+                     [disabled]="!inEditMode"
+                     required>
             </div>
             <div class="col-2 text-left col-delete-reps">
               <button class="btn btn-light btn-delete-reps"

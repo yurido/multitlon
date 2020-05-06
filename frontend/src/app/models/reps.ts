@@ -5,10 +5,7 @@ export class Reps implements Serializable<Reps> {
   private weight: number;
   private reps: number;
 
-  constructor(weight: number, reps: number) {
-    this.weight = weight;
-    this.reps = reps;
-  }
+  constructor() {}
 
   public getWeight(): number {
     return this.weight;

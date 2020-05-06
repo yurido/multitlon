@@ -76,11 +76,13 @@ export class ExerciseComponent implements OnInit {
 
     this.exercise.setReps([]);
     this.reps.forEach(rep => {
-      const newRep = new Reps(this.getNumberFromString(rep.getWeight()), this.getNumberFromString(rep.getReps()));
+      const newRep = new Reps();
+      newRep.setWeight(this.getNumberFromString(rep.getWeight()));
+      newRep.setReps(this.getNumberFromString(rep.getReps()));
       this.exercise.getReps().push(newRep);
     });
 
-    this.exercise.setRawPoints(this.getNumberFromString(this.rawPoints));
+    this.exercise.setRawPoints(this.getFloatFromString(this.rawPoints));
     this.sprintService.updateExercise(this.exercise)
       .subscribe(data => {
         this.exercise = new Exercise().deserialize(data);
@@ -109,15 +111,22 @@ export class ExerciseComponent implements OnInit {
   }
 
   changeWeight(index: number, $event): void {
-    this.isModified = true;
-    this.reps[index].setWeight(this.getNumberFromString($event.target.value) === 0 ? '' : '' + this.getNumberFromString($event.target.value));
-    $event.target.value = this.reps[index].getWeight();
+    const newValue = this.modifyRepsElement($event.target.value, this.reps[index].getWeight());
+    this.reps[index].setWeight(newValue);
+    $event.target.value = newValue;
   }
 
   changeReps(index: number, $event): void {
-    this.isModified = true;
-    this.reps[index].setReps(this.getNumberFromString($event.target.value) === 0 ? '' : '' + this.getNumberFromString($event.target.value));
-    $event.target.value = this.reps[index].getReps();
+    const newValue = this.modifyRepsElement($event.target.value, this.reps[index].getReps());
+    this.reps[index].setReps(newValue);
+    $event.target.value = newValue;
+  }
+
+  changeRawPoints($event): void {
+    if (this.rawPoints !== $event.target.value) {
+      this.isModified = true;
+    }
+    this.rawPoints = $event.target.value;
   }
 
   calcQuotaColor(): string {
@@ -135,31 +144,30 @@ export class ExerciseComponent implements OnInit {
     if (this.config.withReps) {
       condis = (this.canAddMoreReps() && this.reps.length > 0);
     } else {
-      condis = (this.getNumberFromString(this.rawPoints) !== 0);
+      condis = (this.getFloatFromString(this.rawPoints) !== 0);
     }
     return this.isModified && condis;
   }
 
-  changeRawPoints($event): void {
-    if (this.rawPoints !== $event.target.value) {
-      this.isModified = true;
+  addPostfix(postfix: string, $event): void {
+    $event.target.value = $event.target.value + ($event.target.value.length > 0 ? postfix : '');
+  }
+
+  removePostfix($event): void {
+    if ($event.target.value.length > 0) {
+      $event.target.value = this.getNumberFromString($event.target.value);
     }
-    console.log('new raw points=', this.getNumberFromString($event.target.value));
-    // $event.target.value = this.getNumberFromString($event.target.value) === 0 ? '' : '' + this.getNumberFromString($event.target.value);
-    this.rawPoints = $event.target.value;
   }
 
-  addKg($event): void {
-    $event.target.value = $event.target.value + ($event.target.value.length > 0 ? 'kg' : '');
-  }
-
-  removeKg($event): void {
-    $event.target.value = this.getNumberFromString($event.target.value);
+  private getFloatFromString(str: string): number {
+    const numberValue = str.match(/\d+(\.\d+)?/);
+    console.log('getFloatFromString=', numberValue);
+    return (numberValue !== null ? +numberValue[0] : 0);
   }
 
   private getNumberFromString(str: string): number {
-    const numberValue = str.match(/^[+-]?\d+(\.\d+)?$/);
-    return (numberValue !== null ? + numberValue[0] : 0);
+    const numberValue = str.match(/\d+/);
+    return (numberValue !== null ? +numberValue[0] : 0);
   }
 
   private initRepsView(): void {
@@ -170,4 +178,11 @@ export class ExerciseComponent implements OnInit {
     });
   }
 
+  private modifyRepsElement(newValue: string, oldValue: string): string {
+    if (oldValue !== newValue) {
+      this.isModified = true;
+    }
+    const newNumberValue = this.getNumberFromString(newValue);
+    return (newNumberValue === 0 ? '' : '' + newNumberValue);
+  }
 }
