@@ -119,8 +119,12 @@
     </div>
 
     <div class="container max-width-600" align="center" *ngIf="!config.withReps">
-      <input class="text" class="exercise-input" value="{{rawPoints}}" placeholder="{{config.item}}"
-             [disabled]="!inEditMode" required (keyup)="changeRawPoints($event)">
+      <input class="text" class="exercise-input"
+             value="{{rawPoints}}"
+             placeholder="{{config.item}}"
+             [disabled]="!inEditMode"
+             required
+             (keyup)="changeRawPoints($event)">
     </div>
 
   </div>

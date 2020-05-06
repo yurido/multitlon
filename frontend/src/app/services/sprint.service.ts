@@ -4,7 +4,6 @@ import {SprintExercises} from '../models/sprintExercises';
 import {Observable, of} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {Exercise} from '../models/exercise';
-import {isUndefined} from 'util';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -80,6 +79,21 @@ export class SprintService {
 
   setSprintCache(data: SprintExercises[]) {
     this.SPRINT_CACHE = data;
+  }
+
+  getFloatFromString(str: string): number {
+    const numberValue = str.match(/\d+(\.\d+)?/);
+    return (numberValue !== null ? +numberValue[0] : 0);
+  }
+
+  isStringContainsNumbers(str: string): boolean {
+    const numberValue = str.match(/^\d+(\.\d+)?$/);
+    return numberValue === null ? false : true;
+  }
+
+  getNumberFromString(str: string): number {
+    const numberValue = str.match(/\d+/);
+    return (numberValue !== null ? +numberValue[0] : 0);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

@@ -36,6 +36,10 @@ export class ExerciseComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
 
+    this.isModified = false;
+    this.exerciseSaved = false;
+    this.inEditMode = false;
+
     if (isUndefined(history.state.data)) {
       this.back();
       return;
@@ -44,7 +48,6 @@ export class ExerciseComponent implements OnInit {
     this.initRepsView();
     this.rawPoints = '' + this.exercise.getRawPoints();
     this.config = environment.EXERCISES.find(value => value.sid === this.exercise.getSid());
-    this.isModified = false;
     this.loading = false;
   }
 
@@ -77,12 +80,12 @@ export class ExerciseComponent implements OnInit {
     this.exercise.setReps([]);
     this.reps.forEach(rep => {
       const newRep = new Reps();
-      newRep.setWeight(this.getNumberFromString(rep.getWeight()));
-      newRep.setReps(this.getNumberFromString(rep.getReps()));
+      newRep.setWeight(this.sprintService.getNumberFromString(rep.getWeight()));
+      newRep.setReps(this.sprintService.getNumberFromString(rep.getReps()));
       this.exercise.getReps().push(newRep);
     });
 
-    this.exercise.setRawPoints(this.getFloatFromString(this.rawPoints));
+    this.exercise.setRawPoints(this.sprintService.getFloatFromString(this.rawPoints));
     this.sprintService.updateExercise(this.exercise)
       .subscribe(data => {
         this.exercise = new Exercise().deserialize(data);
@@ -144,7 +147,7 @@ export class ExerciseComponent implements OnInit {
     if (this.config.withReps) {
       condis = (this.canAddMoreReps() && this.reps.length > 0);
     } else {
-      condis = (this.getFloatFromString(this.rawPoints) !== 0);
+      condis = this.sprintService.isStringContainsNumbers(this.rawPoints);
     }
     return this.isModified && condis;
   }
@@ -155,19 +158,8 @@ export class ExerciseComponent implements OnInit {
 
   removePostfix($event): void {
     if ($event.target.value.length > 0) {
-      $event.target.value = this.getNumberFromString($event.target.value);
+      $event.target.value = this.sprintService.getNumberFromString($event.target.value);
     }
-  }
-
-  private getFloatFromString(str: string): number {
-    const numberValue = str.match(/\d+(\.\d+)?/);
-    console.log('getFloatFromString=', numberValue);
-    return (numberValue !== null ? +numberValue[0] : 0);
-  }
-
-  private getNumberFromString(str: string): number {
-    const numberValue = str.match(/\d+/);
-    return (numberValue !== null ? +numberValue[0] : 0);
   }
 
   private initRepsView(): void {
@@ -182,7 +174,7 @@ export class ExerciseComponent implements OnInit {
     if (oldValue !== newValue) {
       this.isModified = true;
     }
-    const newNumberValue = this.getNumberFromString(newValue);
+    const newNumberValue = this.sprintService.getNumberFromString(newValue);
     return (newNumberValue === 0 ? '' : '' + newNumberValue);
   }
 }
