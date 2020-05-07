@@ -1,4 +1,4 @@
-import {SprintCalendar} from './sprintCalendar';
+import {SprintCalendar} from './sprint.calendar';
 import {isUndefined} from 'util';
 
 describe('SprintCalendar', () => {
@@ -14,11 +14,11 @@ describe('SprintCalendar', () => {
   });
 
   it('should deserialize calendar without exercises', () => {
-    const json = JSON.parse('{"sprintExercises": [{"sprintDate": {"date": 1581289200000, "isWeekend": true}, "exercises":[]}]}');
+    const json = JSON.parse('{"sprintExercises": [{"sprintDay": {"date": 1581289200000, "isWeekend": true, "total": 500}, "exercises":[]}]}');
     const calendar = new SprintCalendar().deserialize(json);
 
     expect(calendar.getSprintExercises().length).toEqual(1);
-    expect(isUndefined(calendar.getSprintExercises()[0].getSprintDate())).toBeFalsy();
+    expect(isUndefined(calendar.getSprintExercises()[0].getSprintDay() )).toBeFalsy();
     expect(calendar.getSprintExercises()[0].getExercises().length).toEqual(0);
   });
 });

@@ -11,6 +11,7 @@ import {Observable, of} from 'rxjs';
 import * as sprintData from './mock-data/sprint.json';
 import {delay} from 'rxjs/operators';
 import {Exercise} from './models/exercise';
+import * as exerciseStatistic from './mock-data/sprint-statistic.json';
 
 const CURRENT_SPRINT_URL = 'rest/currentSprint';
 const EXERCISE_URL = 'rest/exercise';
@@ -40,9 +41,12 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
         exercise.setRawPoints(exercise.getRawPoints() + 1500);
       }
       exercise.setTotalPoints(exercise.getTotalPoints() + 800);
-      exercise.setProgress(exercise.getProgress() + 10);
-      exercise.setQuota(exercise.getQuota() + 5);
       return of(new HttpResponse({status: 201, body: exercise}))
+        .pipe(
+          delay(1000)
+        );
+    } else if (request.url === (CURRENT_SPRINT_URL + '/exerciseStatistic')) {
+      return of(new HttpResponse({status: 200, body: ((exerciseStatistic) as any).default}))
         .pipe(
           delay(1000)
         );

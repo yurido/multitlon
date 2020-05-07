@@ -1,14 +1,16 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {SprintService} from '../services/sprint.service';
-import {SprintExercises} from '../models/sprintExercises';
+import {SprintExercises} from '../models/sprint.exercises';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
-import {SprintCalendar} from '../models/sprintCalendar';
+import {SprintCalendar} from '../models/sprint.calendar';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
 import {environment} from '../../environments/environment';
 import {isDefined} from '@angular/compiler/src/util';
+import {SprintExerciseStatisticCalendar} from '../models/sprint.exercise.statistic.calendar';
+import {ExerciseStatistic} from '../models/exercise.statistic';
 
 @Component({
   selector: 'app-sprint',
@@ -24,6 +26,7 @@ export class SprintComponent implements OnInit {
   error: any;
   loading: boolean;
   month: string;
+  sprintExerciseStatistic: ExerciseStatistic[];
 
   constructor(private sprintService: SprintService, private router: Router) {
   }
@@ -32,21 +35,24 @@ export class SprintComponent implements OnInit {
     this.loading = true;
     if (isDefined(history.state.isDataChanged) && !history.state.isDataChanged) {
       this.loadExercisesFromCash();
+      this.loadExerciseStatisticFromCache();
+      // TODO: update day; reread exercise stratistics from backend!
       this.loading = false;
     } else {
-      this.getExcercisesForCurrentSprint();
+      // TODO: update day; reread exercise stratistics from backend!
+      this.getExcercises();
     }
   }
 
-  getExcercisesForCurrentSprint(): void {
-    this.sprintService.getCurrentSprint()
+  private getExcercises(): void {
+    this.sprintService.getCurrentSprintExercises()
       .subscribe(data => {
           const sprintCalendar = new SprintCalendar().deserialize(data);
           this.sprintExercises = this.sprintService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
           const monthN = new Date(this.sprintExercises[0].getSprintDay().getSprintDate()).getMonth();
           this.month = environment.MONTHS.find(value => value.id === monthN).name;
           this.sprintService.setSprintCache(this.sprintExercises);
-          this.loading = false;
+          this.getStatistic();
         },
         error => {
           console.log('error here ', error);
@@ -55,11 +61,28 @@ export class SprintComponent implements OnInit {
         });
   }
 
+  private getStatistic(): void {
+    this.sprintService.getCurrentSprintExerciseStatistic()
+      .subscribe(data => {
+          const sprintExerciseStatisticCalendar = new SprintExerciseStatisticCalendar().deserialize(data);
+          this.sprintExerciseStatistic = sprintExerciseStatisticCalendar.getExerciseStatistic();
+          this.sprintService.setSprintExerciseStatisticCache(this.sprintExerciseStatistic);
+          this.loading = false;
+        },
+        error => {
+          console.log('error here ', error);
+          this.error = error;
+          this.loading = false;
+        });
+  }
+
   addExercise(): void {
+    // TODO: implement
   }
 
   openExercise(exercise: Exercise): void {
-    this.router.navigate(['/sprint/exercise'], {state: {data: exercise}});
+    const exerciseStatistic = this.sprintExerciseStatistic.find(ex => exercise.getSid() === ex.getSid());
+    this.router.navigate(['/sprint/exercise'], {state: {ex: exercise, statistic: exerciseStatistic}});
   }
 
   goBack(): void {
@@ -78,9 +101,15 @@ export class SprintComponent implements OnInit {
     return isDayOff ? 'sprint-day-dayoff' : 'sprint-day-training';
   }
 
+  // TODO: redo!
   private loadExercisesFromCash(): void {
     this.sprintExercises = this.sprintService.getSprintCache();
-    console.log('got sprint data from cache');
+    console.log('got sprint exercises from cache');
   }
 
+  // TODO: redo!
+  private loadExerciseStatisticFromCache(): void {
+    this.sprintExerciseStatistic = this.sprintService.getSprintExerciseStatisticCache();
+    console.log('got sprint exercise statistic from cache');
+  }
 }

@@ -3,20 +3,18 @@ import {Serializator} from './serializator';
 import {Reps} from './reps';
 
 export class Exercise implements Serializable<Exercise> {
-  private id: string;
+  private id: number;
   private sid: string;
   private date: number;
   private reps: Reps[] = [];
   private rawPoints: number;
   private totalPoints: number;
   private time: number;
-  private progress: number;
-  private quota: number;
 
   constructor() {
   }
 
-  public getId(): string {
+  public getId(): number {
     return this.id;
   }
 
@@ -44,14 +42,6 @@ export class Exercise implements Serializable<Exercise> {
     return this.time;
   }
 
-  public getProgress(): number {
-    return this.progress;
-  }
-
-  public getQuota(): number {
-    return this.quota;
-  }
-
   public setReps(reps: Reps[]): void {
     this.reps = reps;
   }
@@ -62,14 +52,6 @@ export class Exercise implements Serializable<Exercise> {
 
   public setTotalPoints(totalPoints: number): void {
     this.totalPoints = totalPoints;
-  }
-
-  public setProgress(progress: number): void {
-    this.progress = progress;
-  }
-
-  public setQuota(quota: number): void {
-    this.quota = quota;
   }
 
   deserialize(input): Exercise {
@@ -84,8 +66,6 @@ export class Exercise implements Serializable<Exercise> {
     this.rawPoints = serializator.getObjectProperty(input, 'rawPoints');
     this.totalPoints = serializator.getObjectProperty(input, 'totalPoints');
     this.time = serializator.getObjectProperty(input, 'time');
-    this.progress = serializator.getObjectProperty(input, 'progress');
-    this.quota = serializator.getObjectProperty(input, 'quota');
     return this;
   }
 }

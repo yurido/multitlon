@@ -12,7 +12,7 @@ import { AlertComponent } from './alert/alert.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ExerciseComponent } from './exercise/exercise.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [

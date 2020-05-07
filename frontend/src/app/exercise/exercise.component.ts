@@ -9,6 +9,7 @@ import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {Reps} from '../models/reps';
 import {SprintService} from '../services/sprint.service';
 import {RepsView} from '../models/reps.view';
+import {ExerciseStatistic} from '../models/exercise.statistic';
 
 @Component({
   selector: 'app-exercise',
@@ -23,6 +24,7 @@ export class ExerciseComponent implements OnInit {
   error: any;
   loading: boolean;
   exercise: Exercise;
+  statistic: ExerciseStatistic;
   isModified: boolean;
   inEditMode: boolean;
   reps: RepsView[] = [];
@@ -40,11 +42,12 @@ export class ExerciseComponent implements OnInit {
     this.exerciseSaved = false;
     this.inEditMode = false;
 
-    if (isUndefined(history.state.data)) {
+    if (isUndefined(history.state.ex)) {
       this.back();
       return;
     }
-    this.exercise = new Exercise().deserialize(history.state.data);
+    this.exercise = new Exercise().deserialize(history.state.ex);
+    this.statistic = new ExerciseStatistic().deserialize(history.state.statistic);
     this.initRepsView();
     this.rawPoints = '' + this.exercise.getRawPoints();
     this.config = environment.EXERCISES.find(value => value.sid === this.exercise.getSid());
@@ -52,7 +55,7 @@ export class ExerciseComponent implements OnInit {
   }
 
   back(): void {
-    this.router.navigate(['/sprint'], {state: {isDataChanged: this.exerciseSaved}});
+    this.router.navigate(['/sprint'], {state: {isDataChanged: this.exerciseSaved, exercise: this.exercise}});
   }
 
   edit(): void {
@@ -133,9 +136,9 @@ export class ExerciseComponent implements OnInit {
   }
 
   calcQuotaColor(): string {
-    if (this.exercise.getQuota() < 26) {
+    if (this.statistic.getQuota() < 26) {
       return 'quota-green';
-    } else if (this.exercise.getQuota() >= 26 && this.exercise.getQuota() < 31) {
+    } else if (this.statistic.getQuota() >= 26 && this.statistic.getQuota() < 31) {
       return 'quota-yellow';
     } else {
       return 'quota-red';

@@ -28,8 +28,8 @@
   <!-- body -->
   <div *ngIf="!loading" class="container exercise-body max-width" align="center">
     <!-- progress bar -->
-    <app-progress-bar [percent]="exercise.getProgress()" [striped]="true">
-      {{exercise.getProgress()}} %
+    <app-progress-bar [percent]="statistic.getProgress()" [striped]="true">
+      {{statistic.getProgress()}} %
     </app-progress-bar>
 
     <!-- points -->
@@ -53,7 +53,7 @@
       </div>
       <div class="col-4 text-center">
         <div class="container quota-style" [ngClass]="calcQuotaColor()">
-            {{exercise.getQuota()}} %
+            {{statistic.getQuota()}} %
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import {Serializator} from './serializator';
 export class SprintDay implements Serializable<SprintDay> {
   private date: number;
   private isWeekend: boolean;
-  private total: number
+  private total: number;
 
   constructor() {
   }

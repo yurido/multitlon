@@ -1,5 +1,5 @@
 import {Exercise} from './exercise';
-import {SprintDay} from './sprintDay';
+import {SprintDay} from './sprint.day';
 import {Serializable} from './serializable';
 import {Serializator} from './serializator';
 

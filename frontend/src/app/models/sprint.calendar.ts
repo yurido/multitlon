@@ -1,4 +1,4 @@
-import {SprintExercises} from './sprintExercises';
+import {SprintExercises} from './sprint.exercises';
 import {Serializable} from './serializable';
 import {Serializator} from './serializator';
 
