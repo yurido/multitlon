@@ -9,6 +9,7 @@ import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 export class ProgressBarComponent implements OnInit {
   @Input() percent: number;
   @Input() striped: boolean;
+  @Input() disable: boolean;
   color: string;
   ariaWidth: number;
 
@@ -16,6 +17,19 @@ export class ProgressBarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.calcColor();
+  }
+
+  calcClass(): string {
+    if (this.disable) {
+      return '';
+    } else {
+      this.calcColor();
+    }
+    return 'progress-bar ' + (this.striped ? 'progress-bar-striped ' : '') + this.color;
+  }
+
+  private calcColor(): void {
     if (this.percent <= 25) {
       this.color = 'bg-danger';
       this.ariaWidth = this.percent;
@@ -36,9 +50,4 @@ export class ProgressBarComponent implements OnInit {
       }
     }
   }
-
-  calcClass(): string {
-    return 'progress-bar ' + (this.striped ? 'progress-bar-striped ' : '') + this.color;
-  }
-
 }

@@ -10,6 +10,7 @@ import {Reps} from '../models/reps';
 import {SprintService} from '../services/sprint.service';
 import {RepsView} from '../models/reps.view';
 import {ExerciseStatistic} from '../models/exercise.statistic';
+import {MultiTError} from '../models/multiterror';
 
 @Component({
   selector: 'app-exercise',
@@ -22,26 +23,23 @@ export class ExerciseComponent implements OnInit {
   faTrash = faTrash;
   faPlus = faPlus;
   error: any;
-  loading: boolean;
   exercise: Exercise;
   statistic: ExerciseStatistic;
-  isModified: boolean;
-  inEditMode: boolean;
   reps: RepsView[] = [];
   config: any;
   rawPoints: string;
-  exerciseSaved: boolean;
+  conditions = {
+    loading: false,
+    isModified: false,
+    inEditMode: false,
+    exerciseSaved: false
+  };
 
   constructor(private router: Router, private sprintService: SprintService) {
   }
 
   ngOnInit(): void {
-    this.loading = true;
-
-    this.isModified = false;
-    this.exerciseSaved = false;
-    this.inEditMode = false;
-
+    this.conditions.loading = true;
     if (isUndefined(history.state.ex)) {
       this.back();
       return;
@@ -51,20 +49,20 @@ export class ExerciseComponent implements OnInit {
     this.initRepsView();
     this.rawPoints = '' + this.exercise.getRawPoints();
     this.config = environment.EXERCISES.find(value => value.sid === this.exercise.getSid());
-    this.loading = false;
+    this.conditions.loading = false;
   }
 
   back(): void {
-    this.router.navigate(['/sprint'], {state: {isDataChanged: this.exerciseSaved, exercise: this.exercise}});
+    this.router.navigate(['/sprint'], {state: {isDataChanged: this.conditions.exerciseSaved, exercise: this.exercise}});
   }
 
   edit(): void {
-    this.inEditMode = true;
+    this.conditions.inEditMode = true;
   }
 
   cancel(): void {
-    this.inEditMode = false;
-    this.isModified = false;
+    this.conditions.inEditMode = false;
+    this.conditions.isModified = false;
     this.reps = [];
     this.initRepsView();
     this.rawPoints = '' + this.exercise.getRawPoints();
@@ -75,10 +73,10 @@ export class ExerciseComponent implements OnInit {
   }
 
   save(): void {
-    this.inEditMode = false;
-    this.isModified = false;
-    this.exerciseSaved = true;
-    this.loading = true;
+    this.conditions.inEditMode = false;
+    this.conditions.isModified = false;
+    this.conditions.exerciseSaved = true;
+    this.conditions.loading = true;
 
     this.exercise.setReps([]);
     this.reps.forEach(rep => {
@@ -94,30 +92,29 @@ export class ExerciseComponent implements OnInit {
         this.exercise = new Exercise().deserialize(data);
         this.sprintService.getExerciseStatisticForCurrentSprint(this.exercise.getSid(), 'test')
           .subscribe(response => {
-            console.log('statistics=', response);
             this.statistic = new ExerciseStatistic().deserialize(response);
-            this.loading = false;
+            this.conditions.loading = false;
           }, error => {
             console.log('error here ', error);
-            this.loading = false;
+            this.conditions.loading = false;
           });
 
       }, error => {
         console.log('error here ', error);
-        this.loading = false;
-        this.error = 'It was an error during updating exercise, please try later';
+        this.conditions.loading = false;
+        this.error = new MultiTError('It was an error during updating exercise, please try later');
       });
   }
 
   addReps(): void {
     const rep = new RepsView('', '');
     this.reps.push(rep);
-    this.isModified = true;
+    this.conditions.isModified = true;
   }
 
   deleteReps(index: number): void {
     this.reps.splice(index, 1);
-    this.isModified = true;
+    this.conditions.isModified = true;
   }
 
   canAddMoreReps(): boolean {
@@ -139,12 +136,16 @@ export class ExerciseComponent implements OnInit {
 
   changeRawPoints($event): void {
     if (this.rawPoints !== $event.target.value) {
-      this.isModified = true;
+      this.conditions.isModified = true;
     }
     this.rawPoints = $event.target.value;
   }
 
   calcQuotaColor(): string {
+    if (this.conditions.loading) {
+      return 'quota-disabled';
+    }
+
     if (this.statistic.getQuota() < 26) {
       return 'quota-green';
     } else if (this.statistic.getQuota() >= 26 && this.statistic.getQuota() < 31) {
@@ -161,7 +162,7 @@ export class ExerciseComponent implements OnInit {
     } else {
       condis = this.sprintService.isStringContainsNumbers(this.rawPoints);
     }
-    return this.isModified && condis;
+    return this.conditions.isModified && condis;
   }
 
   addPostfix(postfix: string, $event): void {
@@ -184,7 +185,7 @@ export class ExerciseComponent implements OnInit {
 
   private modifyRepsElement(newValue: string, oldValue: string): string {
     if (oldValue !== newValue) {
-      this.isModified = true;
+      this.conditions.isModified = true;
     }
     const newNumberValue = this.sprintService.getNumberFromString(newValue);
     return (newNumberValue === 0 ? '' : '' + newNumberValue);

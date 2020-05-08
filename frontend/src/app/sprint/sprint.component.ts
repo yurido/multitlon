@@ -33,6 +33,8 @@ export class SprintComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+    // TODO: redoing of cache
+    /*
     if (isDefined(history.state.isDataChanged) && !history.state.isDataChanged) {
       this.loadExercisesFromCash();
       this.loadExerciseStatisticFromCache();
@@ -41,7 +43,9 @@ export class SprintComponent implements OnInit {
     } else {
       // TODO: update day; reread exercise stratistics from backend!
       this.getExcercises();
-    }
+    } */
+
+    this.getExcercises();
   }
 
   private getExcercises(): void {
@@ -50,7 +54,8 @@ export class SprintComponent implements OnInit {
           const sprintCalendar = new SprintCalendar().deserialize(data);
           this.sprintExercises = this.sprintService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
           const monthN = new Date(this.sprintExercises[0].getSprintDay().getSprintDate()).getMonth();
-          this.month = environment.MONTHS.find(value => value.id === monthN).name;
+          const monthObj = environment.MONTHS.find(value => value.id === monthN);
+          this.month = isDefined(monthObj) ? monthObj.name : '';
           this.sprintService.setSprintCache(this.sprintExercises);
           this.getStatistic();
         },
@@ -90,7 +95,8 @@ export class SprintComponent implements OnInit {
   }
 
   getExName(sid: string): string {
-    return environment.EXERCISES.find(value => value.sid === sid).name;
+    const exerciseObj = environment.EXERCISES.find(value => value.sid === sid);
+    return isDefined(exerciseObj) ? exerciseObj.name : '';
   }
 
   getExItem(sid: string): string {

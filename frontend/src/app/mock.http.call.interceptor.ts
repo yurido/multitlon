@@ -42,12 +42,12 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
         exercise.setRawPoints(exercise.getRawPoints() + 1500);
       }
       exercise.setTotalPoints(exercise.getTotalPoints() + 800);
-      /*
+
       return of(new HttpResponse({status: 201, body: exercise}))
         .pipe(
-          delay(1000)
-        ); */
-      this.throwError(request.headers, request.url);
+          delay(2000)
+        );
+      // this.throwError(request.headers, request.url);
     } else if (request.url === (STATISTICS_EXERCISES)) {
       return of(new HttpResponse({status: 200, body: ((exerciseStatistic) as any).default}))
         .pipe(

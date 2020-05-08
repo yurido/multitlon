@@ -3,18 +3,18 @@
   <div class="badge-dark sticky-top container max-width" align="center">
     <div class="row">
       <div class="col-2 text-left padding-left-0">
-        <button class="btn btn-dark margin-3px" (click)="back()" *ngIf="!inEditMode">
+        <button class="btn btn-dark margin-3px" (click)="back()" *ngIf="!conditions.inEditMode && !conditions.loading">
           <fa-icon [icon]="faChevronLeft"></fa-icon>
         </button>
-        <button class="btn btn-dark margin-3px" (click)="cancel()" *ngIf="inEditMode">
+        <button class="btn btn-dark margin-3px" (click)="cancel()" *ngIf="conditions.inEditMode">
           cancel
         </button>
       </div>
       <div class="col-8 text-center">
-        <span class="text-white header-text-style" *ngIf="!loading">{{config.name}}</span>
+        <span class="text-white header-text-style">{{config ? config.name : ''}}</span>
       </div>
       <div class="col-2 text-right header-rigth-column-style">
-        <button class="btn btn-dark margin-3px" *ngIf="inEditMode" (click)="delete()">
+        <button class="btn btn-dark margin-3px" *ngIf="conditions.inEditMode" (click)="delete()">
           <fa-icon [icon]="faTrash"></fa-icon>
         </button>
       </div>
@@ -23,29 +23,29 @@
 
   <app-alert [error]="error"></app-alert>
 
-  <app-spinner [loading]="loading"></app-spinner>
+  <app-spinner [loading]="conditions.loading"></app-spinner>
 
   <!-- body -->
-  <div *ngIf="!loading" class="container exercise-body max-width" align="center">
+  <div class="container exercise-body max-width" align="center" *ngIf="statistic && exercise && config">
     <!-- progress bar -->
-    <app-progress-bar [percent]="statistic.getProgress()" [striped]="true">
-      {{statistic.getProgress()}} %
+    <app-progress-bar [percent]="statistic.getProgress()" [striped]="true" [disable]="conditions.loading">
+      <span [class]="conditions.loading ? 'text-disabled': 'text-enabled'">{{statistic.getProgress()}} %</span>
     </app-progress-bar>
 
     <!-- points -->
-    <div class="row">
+    <div class="row" [class]="conditions.loading ? 'text-disabled': 'text-enabled'">
       <div class="col-4 text-center">
         raw
       </div>
       <div class="col-4 text-center">
-        total
+        points
       </div>
       <div class="col-4 text-center">
         quota
       </div>
     </div>
-    <div class="row">
-      <div class="col-4 text-center">
+    <div class="row" [class]="conditions.loading ? 'text-disabled': 'text-enabled'">
+      <div class="col-4 text-center" >
         {{exercise.getRawPoints()}} {{config.item}}
       </div>
       <div class="col-4 text-center">
@@ -53,7 +53,7 @@
       </div>
       <div class="col-4 text-center">
         <div class="container quota-style" [ngClass]="calcQuotaColor()">
-            {{statistic.getQuota()}} %
+          {{statistic.getQuota()}} %
         </div>
       </div>
     </div>
@@ -73,7 +73,7 @@
                      value="{{rep.getWeight()}}"
                      placeholder="weight"
                      required
-                     [disabled]="!inEditMode"
+                     [disabled]="!conditions.inEditMode"
                      (keyup)="changeWeight(i, $event)"
                      (focusin)="removePostfix($event)"
                      (focusout)="addPostfix('kg', $event)">
@@ -87,13 +87,13 @@
                      value="{{rep.getReps()}}"
                      (keyup)="changeReps(i, $event)"
                      placeholder="reps"
-                     [disabled]="!inEditMode"
+                     [disabled]="!conditions.inEditMode"
                      required>
             </div>
             <div class="col-2 text-left col-delete-reps">
               <button class="btn btn-light btn-delete-reps"
                       (click)="deleteReps(i)"
-                      *ngIf="inEditMode">
+                      *ngIf="conditions.inEditMode">
                 <fa-icon [icon]="faTrash"></fa-icon>
               </button>
             </div>
@@ -104,7 +104,7 @@
     </table>
 
     <!-- + button -->
-    <div class="container max-width-600" align="center" *ngIf="inEditMode && config.withReps">
+    <div class="container max-width-600" align="center" *ngIf="conditions.inEditMode && config.withReps">
       <div class="row">
         <div class="col-1" style="padding-left: 10px; padding-right: 0px"></div>
         <div class="col-4 padding-0"></div>
@@ -121,8 +121,8 @@
     <div class="container max-width-600" align="center" *ngIf="!config.withReps">
       <input class="text" class="exercise-input"
              value="{{rawPoints}}"
-             placeholder="{{config.item}}"
-             [disabled]="!inEditMode"
+             placeholder="{{config ? config.item: ''}}"
+             [disabled]="!conditions.inEditMode"
              required
              (keyup)="changeRawPoints($event)">
     </div>
@@ -130,13 +130,14 @@
   </div>
 
   <!-- footer -->
-  <div class="container max-width" align="center" style="padding: 5px" *ngIf="!loading">
-    <div class="max-width" align="center" style="left: 50%; margin-left: -15px; padding-bottom: 20px; padding-top: 10px;">
+  <div class="container max-width" align="center" style="padding: 5px">
+    <div class="max-width" align="center"
+         style="left: 50%; margin-left: -15px; padding-bottom: 20px; padding-top: 10px;">
       <button class="btn btn-light btn-exercise-operate" (click)="edit()"
-              *ngIf="!inEditMode">edit
+              *ngIf="!conditions.inEditMode">edit
       </button>
       <button class="btn btn-success btn-exercise-operate" (click)="save()"
-              *ngIf="inEditMode" [disabled]="!canSave()">save
+              *ngIf="conditions.inEditMode" [disabled]="!canSave()">save
       </button>
     </div>
   </div>

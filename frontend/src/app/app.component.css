@@ -32,3 +32,9 @@
 .btn-transparent {
   background-color: transparent;
 }
+.text-disabled {
+  color: #adb5bd;
+}
+.text-enabled {
+  color: black;
+}
