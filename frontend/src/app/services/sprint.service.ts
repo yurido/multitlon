@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {SprintExercises} from '../models/sprint.exercises';
 import {Observable, of} from 'rxjs';
 import {tap} from 'rxjs/operators';
@@ -7,15 +7,18 @@ import {Exercise} from '../models/exercise';
 import {ExerciseStatistic} from '../models/exercise.statistic';
 
 const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json'})
+  headers: new HttpHeaders({'Content-Type': 'application/json'}),
+  params: new HttpParams()
 };
 
 @Injectable({
   providedIn: 'root'
 })
 export class SprintService {
-  private CURRENT_SPRINT_URL = 'rest/currentSprint';
-  private EXERCISE_URL = 'rest/exercise';
+  private EXERCISES_URL = 'rest/exercises';
+  private SPRINT_EXERCISES_URL = this.EXERCISES_URL + '/sprint';
+  private STATISTICS_URL = 'rest/statistics';
+  private STATISTICS_EXERCISES_SPRINT_URL = this.STATISTICS_URL + '/sprintExercises';
   private SPRINT_EXERCISES_CACHE: SprintExercises[];
   private EXERCISE_STATISTIC_CACHE: ExerciseStatistic[];
 
@@ -25,24 +28,40 @@ export class SprintService {
   /**
    *  ************ REST ***************
    */
-  getCurrentSprintExercises(): Observable<SprintExercises[]> {
-    return this.http.get<SprintExercises[]>(this.CURRENT_SPRINT_URL, httpOptions)
+  getExercisesCurrentSprint(user: string): Observable<SprintExercises[]> {
+    return this.http.get<SprintExercises[]>(this.SPRINT_EXERCISES_URL, {
+      headers: httpOptions.headers,
+      params: httpOptions.params.set('date', new Date().getMilliseconds().toString()).set('user', user)
+    })
       .pipe(
-        tap(sprint => console.log('got currentSprint from backend: ', sprint))
+        tap(sprint => console.log('got exercises for current sprint from backend: ', sprint))
       );
   }
 
-  getCurrentSprintExerciseStatistic(): Observable<ExerciseStatistic[]> {
-    return this.http.get<ExerciseStatistic[]>(this.CURRENT_SPRINT_URL + '/exerciseStatistic', httpOptions)
+  getExerciseStatisticsForCurrentSprint(user: string): Observable<ExerciseStatistic[]> {
+    return this.http.get<ExerciseStatistic[]>(this.STATISTICS_EXERCISES_SPRINT_URL, {
+      headers: httpOptions.headers,
+      params: httpOptions.params.set('date', new Date().getMilliseconds().toString()).set('user', user)
+    })
       .pipe(
-        tap(exerciseStatistic => console.log('got currentSprint/exerciseStatistic from backend: ', exerciseStatistic))
+        tap(exerciseStatistic => console.log('got exercise statistics for current sprint from backend: ', exerciseStatistic))
       );
   }
 
   updateExercise(exercise: Exercise): Observable<Exercise> {
-    return this.http.put<Exercise>(this.EXERCISE_URL, exercise, httpOptions)
+    return this.http.put<Exercise>(this.SPRINT_EXERCISES_URL, exercise, {headers: httpOptions.headers})
       .pipe(
         tap(ex => console.log('exercise ' + exercise.getSid() + ' updated'))
+      );
+  }
+
+  getExerciseStatisticForCurrentSprint(sid: string, user: string): Observable<ExerciseStatistic> {
+    return this.http.get<ExerciseStatistic>(this.STATISTICS_EXERCISES_SPRINT_URL + '/' + sid, {
+      headers: httpOptions.headers,
+      params: httpOptions.params.set('date', new Date().getMilliseconds().toString()).set('user', user)
+    })
+      .pipe(
+        tap(ex => console.log('got statistic for exercise ' + sid))
       );
   }
 

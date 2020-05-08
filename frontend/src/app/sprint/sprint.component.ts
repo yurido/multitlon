@@ -45,7 +45,7 @@ export class SprintComponent implements OnInit {
   }
 
   private getExcercises(): void {
-    this.sprintService.getCurrentSprintExercises()
+    this.sprintService.getExercisesCurrentSprint('test')
       .subscribe(data => {
           const sprintCalendar = new SprintCalendar().deserialize(data);
           this.sprintExercises = this.sprintService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
@@ -62,7 +62,7 @@ export class SprintComponent implements OnInit {
   }
 
   private getStatistic(): void {
-    this.sprintService.getCurrentSprintExerciseStatistic()
+    this.sprintService.getExerciseStatisticsForCurrentSprint('test')
       .subscribe(data => {
           const sprintExerciseStatisticCalendar = new SprintExerciseStatisticCalendar().deserialize(data);
           this.sprintExerciseStatistic = sprintExerciseStatisticCalendar.getExerciseStatistic();

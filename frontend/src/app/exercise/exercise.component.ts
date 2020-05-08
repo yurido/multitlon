@@ -92,11 +92,20 @@ export class ExerciseComponent implements OnInit {
     this.sprintService.updateExercise(this.exercise)
       .subscribe(data => {
         this.exercise = new Exercise().deserialize(data);
-        this.initRepsView();
-        this.rawPoints = '' + this.exercise.getRawPoints();
-        this.loading = false;
+        this.sprintService.getExerciseStatisticForCurrentSprint(this.exercise.getSid(), 'test')
+          .subscribe(response => {
+            console.log('statistics=', response);
+            this.statistic = new ExerciseStatistic().deserialize(response);
+            this.loading = false;
+          }, error => {
+            console.log('error here ', error);
+            this.loading = false;
+          });
+
       }, error => {
+        console.log('error here ', error);
         this.loading = false;
+        this.error = 'It was an error during updating exercise, please try later';
       });
   }
 
