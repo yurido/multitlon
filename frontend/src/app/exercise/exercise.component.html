@@ -11,7 +11,7 @@
         </button>
       </div>
       <div class="col-8 text-center">
-        <span class="text-white header-text-style">{{config ? config.name : ''}}</span>
+        <span class="text-white header-text-style">{{config.name}}</span>
       </div>
       <div class="col-2 text-right header-rigth-column-style">
         <button class="btn btn-dark margin-3px" *ngIf="conditions.inEditMode" (click)="delete()">
@@ -70,6 +70,7 @@
             <div class="col-4 text-center padding-0">
               <input type="text"
                      class="exercise-input"
+                     [class]="conditions.loading ? 'exercise-input-disabled': 'exercise-input-enabled'"
                      value="{{rep.getWeight()}}"
                      placeholder="weight"
                      required
@@ -78,12 +79,13 @@
                      (focusin)="removePostfix($event)"
                      (focusout)="addPostfix('kg', $event)">
             </div>
-            <div class="col-1 text-center padding-0">
-              <p style="margin-top: 10px">X</p>
+            <div class="col-1 text-center padding-0" [class]="conditions.loading ? 'text-disabled': 'text-enabled'">
+              <p style="margin-top: 10px" >X</p>
             </div>
             <div class="col-4 text-center padding-0">
               <input type="text"
                      class="exercise-input"
+                     [class]="conditions.loading ? 'exercise-input-disabled': 'exercise-input-enabled'"
                      value="{{rep.getReps()}}"
                      (keyup)="changeReps(i, $event)"
                      placeholder="reps"
@@ -134,7 +136,7 @@
     <div class="max-width" align="center"
          style="left: 50%; margin-left: -15px; padding-bottom: 20px; padding-top: 10px;">
       <button class="btn btn-light btn-exercise-operate" (click)="edit()"
-              *ngIf="!conditions.inEditMode">edit
+              *ngIf="!conditions.inEditMode && !conditions.loading">edit
       </button>
       <button class="btn btn-success btn-exercise-operate" (click)="save()"
               *ngIf="conditions.inEditMode" [disabled]="!canSave()">save
