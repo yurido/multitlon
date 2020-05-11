@@ -40,7 +40,7 @@ export class ExerciseComponent implements OnInit {
 
   ngOnInit(): void {
     this.conditions.loading = true;
-    if (isUndefined(history.state.ex)) {
+    if (isUndefined(history.state.ex) || isUndefined(history.state.statistic)) {
       this.back();
       return;
     }

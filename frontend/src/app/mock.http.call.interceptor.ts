@@ -13,9 +13,11 @@ import {delay} from 'rxjs/operators';
 import {Exercise} from './models/exercise';
 import * as exerciseStatistic from './mock-data/sprint-statistic.json';
 import {ExerciseStatistic} from './models/exercise.statistic';
+import * as exerciseMetadata from './mock-data/exercise-metadata.json';
 
 const CURRENT_SPRINT_EXERCISES_URL = 'rest/exercises/sprint';
 const STATISTICS_EXERCISES = 'rest/statistics/sprintExercises';
+const EXERCISE_METADATA_URL = 'rest/exercises/metadata';
 
 @Injectable()
 export class MockHttpCalIInterceptor implements HttpInterceptor {
@@ -28,7 +30,7 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
       //    this.throwError(request.headers, request.url);
       // return of(new HttpResponse({status: 400, body: {}}));
 
-      return of(new HttpResponse({status: 200, body: ((sprintData) as any).default }))
+      return of(new HttpResponse({status: 200, body: ((sprintData) as any).default}))
         .pipe(
           delay(1000)
         );
@@ -64,6 +66,12 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
           delay(1000)
         );
       // this.throwError(request.headers, request.url);
+
+    } else if (request.url === EXERCISE_METADATA_URL) {
+      return of(new HttpResponse({status: 200, body: ((exerciseMetadata) as any).default}))
+        .pipe(
+          delay(1000)
+        );
 
     }
     return next.handle(request);

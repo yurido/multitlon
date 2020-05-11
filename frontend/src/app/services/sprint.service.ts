@@ -65,6 +65,8 @@ export class SprintService {
       );
   }
 
+  getExerciseMetadata():
+
   /**
    *  ************ SACOND-HAND METHODS ***************
    */

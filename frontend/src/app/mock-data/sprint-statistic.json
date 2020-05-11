@@ -98,6 +98,15 @@
       "averagePoints": 1020,
       "maxPonts": 1600,
       "quota": 1
+    },
+    {
+      "sid": "ABS",
+      "progress": 5,
+      "totalRaw": 200,
+      "totalPoints": 725,
+      "averagePoints": 1020,
+      "maxPonts": 18,
+      "quota": 1
     }
   ]
 }
