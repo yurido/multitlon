@@ -11,6 +11,7 @@ import {environment} from '../../environments/environment';
 import {isDefined} from '@angular/compiler/src/util';
 import {SprintExerciseStatisticCalendar} from '../models/sprint.exercise.statistic.calendar';
 import {ExerciseStatistic} from '../models/exercise.statistic';
+import {ExerciseMetadataList} from '../models/exercise.metadata.list';
 
 @Component({
   selector: 'app-sprint',
@@ -64,6 +65,19 @@ export class SprintComponent implements OnInit {
           this.loading = false;
           this.error = error;
         });
+  }
+
+  private getMetadata(): void {
+    this.sprintService.getExerciseMetadata().subscribe(
+      data => {
+        this.sprintService.setExerciseMetadata(new ExerciseMetadataList().deserialize(data));
+      },
+      error => {
+        console.log('error here ', error);
+        this.loading = false;
+        this.error = error;
+      }
+    );
   }
 
   private getStatistic(): void {

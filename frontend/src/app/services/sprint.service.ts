@@ -5,6 +5,9 @@ import {Observable, of} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {Exercise} from '../models/exercise';
 import {ExerciseStatistic} from '../models/exercise.statistic';
+import {ExerciseMetadata} from '../models/exercise.metadata';
+import {ExerciseMetadataList} from '../models/exercise.metadata.list';
+import {isUndefined} from "util";
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'}),
@@ -17,10 +20,12 @@ const httpOptions = {
 export class SprintService {
   private EXERCISES_URL = 'rest/exercises';
   private SPRINT_EXERCISES_URL = this.EXERCISES_URL + '/sprint';
+  private EXERCISE_METADATA_URL = this.EXERCISES_URL + '/metadata';
   private STATISTICS_URL = 'rest/statistics';
   private STATISTICS_EXERCISES_SPRINT_URL = this.STATISTICS_URL + '/sprintExercises';
   private SPRINT_EXERCISES_CACHE: SprintExercises[];
   private EXERCISE_STATISTIC_CACHE: ExerciseStatistic[];
+  private EXERCISE_CONFIG: ExerciseMetadataList;
 
   constructor(private http: HttpClient) {
   }
@@ -65,7 +70,19 @@ export class SprintService {
       );
   }
 
-  getExerciseMetadata():
+  // TODO: cache måste implementeras
+  getExerciseMetadata(): Observable<ExerciseMetadata[]> {
+    return this.http.get<ExerciseMetadata[]>(this.EXERCISE_METADATA_URL, {headers: httpOptions.headers})
+      .pipe(
+        tap(config => {
+            console.log('got exercise metadata');
+            if (isUndefined(this.EXERCISE_CONFIG)) {
+              this.EXERCISE_CONFIG = new ExerciseMetadataList().deserialize(config);
+            }
+          }
+        )
+      );
+  }
 
   /**
    *  ************ SACOND-HAND METHODS ***************
@@ -112,6 +129,10 @@ export class SprintService {
 
   getSprintExerciseStatisticCache(): ExerciseStatistic[] {
     return this.EXERCISE_STATISTIC_CACHE;
+  }
+
+  setExerciseMetadata(data: ExerciseMetadataList): void {
+    this.EXERCISE_CONFIG = data;
   }
 
   /**
