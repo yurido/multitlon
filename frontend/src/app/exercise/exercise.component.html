@@ -11,7 +11,7 @@
         </button>
       </div>
       <div class="col-8 text-center">
-        <span class="text-white header-text-style">{{config.name}}</span>
+        <span class="text-white header-text-style">{{config.getName()}}</span>
       </div>
       <div class="col-2 text-right header-rigth-column-style">
         <button class="btn btn-dark margin-3px" *ngIf="conditions.inEditMode" (click)="delete()">
@@ -46,7 +46,7 @@
     </div>
     <div class="row" [class]="conditions.loading ? 'text-disabled': 'text-enabled'">
       <div class="col-4 text-center" >
-        {{exercise.getRawPoints()}} {{config.item}}
+        {{exercise.getRawPoints()}} {{config.getItem()}}
       </div>
       <div class="col-4 text-center">
         {{exercise.getTotalPoints()}}
@@ -60,7 +60,7 @@
 
     <div class="padding-top-40"></div>
     <table class="table table-sm table-borderless max-width-600" align="center"
-           *ngIf="config.withReps && reps.length>0">
+           *ngIf="config.isWithReps() && reps.length>0">
       <tbody>
       <tr *ngFor="let rep of reps; let i = index">
         <td class="text-center padding-top-bottom-0">
@@ -106,7 +106,7 @@
     </table>
 
     <!-- + button -->
-    <div class="container max-width-600" align="center" *ngIf="conditions.inEditMode && config.withReps">
+    <div class="container max-width-600" align="center" *ngIf="conditions.inEditMode && config.isWithReps()">
       <div class="row">
         <div class="col-1" style="padding-left: 10px; padding-right: 0px"></div>
         <div class="col-4 padding-0"></div>
@@ -120,11 +120,11 @@
       </div>
     </div>
 
-    <div class="container max-width-600" align="center" *ngIf="!config.withReps">
+    <div class="container max-width-600" align="center" *ngIf="!config.isWithReps()">
       <input class="text" class="exercise-input"
              [class]="conditions.loading ? 'exercise-input-disabled': 'exercise-input-enabled'"
              value="{{rawPoints}}"
-             placeholder="{{config ? config.item: ''}}"
+             placeholder="{{config ? config.getItem(): ''}}"
              [disabled]="!conditions.inEditMode"
              required
              (keyup)="changeRawPoints($event)">

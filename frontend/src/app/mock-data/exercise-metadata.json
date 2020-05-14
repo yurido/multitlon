@@ -1,5 +1,5 @@
 {
-  "exercise-metadata": [
+  "exerciseMetadata": [
     {"sid": "PUSH-UPS", "name": "push-ups", "item": "kg", "withReps": true},
     {"sid": "PULL-UPS", "name": "pull-ups", "item": "kg", "withReps": true},
     {"sid": "BARS", "name": "bars", "item": "kg", "withReps": true},

@@ -72,7 +72,7 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
         .pipe(
           delay(1000)
         );
-
+      // this.throwError(request.headers, request.url);
     }
     return next.handle(request);
   }

@@ -3,9 +3,14 @@ import {ExerciseMetadata} from './exercise.metadata';
 import {Serializator} from './serializator';
 
 export class ExerciseMetadataList implements Serializable<ExerciseMetadataList> {
-  private exerciseMetadata: ExerciseMetadata[];
+  private exerciseMetadata: ExerciseMetadata[] = [];
 
-  constructor() {}
+  constructor() {
+  }
+
+  public getExerciseMetadata(): ExerciseMetadata[] {
+    return this.exerciseMetadata;
+  }
 
   public deserialize(input: object): ExerciseMetadataList {
     const serializator = new Serializator(ExerciseMetadataList.name);

@@ -1,13 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {SprintExercises} from '../models/sprint.exercises';
-import {Observable, of} from 'rxjs';
-import {tap} from 'rxjs/operators';
+import {EMPTY, Observable, of} from 'rxjs';
+import {catchError, shareReplay, tap} from 'rxjs/operators';
 import {Exercise} from '../models/exercise';
 import {ExerciseStatistic} from '../models/exercise.statistic';
 import {ExerciseMetadata} from '../models/exercise.metadata';
-import {ExerciseMetadataList} from '../models/exercise.metadata.list';
-import {isUndefined} from "util";
+import {isDefined} from '@angular/compiler/src/util';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'}),
@@ -25,9 +24,10 @@ export class SprintService {
   private STATISTICS_EXERCISES_SPRINT_URL = this.STATISTICS_URL + '/sprintExercises';
   private SPRINT_EXERCISES_CACHE: SprintExercises[];
   private EXERCISE_STATISTIC_CACHE: ExerciseStatistic[];
-  private EXERCISE_CONFIG: ExerciseMetadataList;
+  private EXERCISE_CONFIG_CACHE: Observable<ExerciseMetadata[]>;
 
   constructor(private http: HttpClient) {
+    this.getExerciseMetadata();
   }
 
   /**
@@ -39,7 +39,7 @@ export class SprintService {
       params: httpOptions.params.set('date', new Date().getMilliseconds().toString()).set('user', user)
     })
       .pipe(
-        tap(sprint => console.log('got exercises for current sprint from backend: ', sprint))
+        tap(sprint => console.log('got exercises for current sprint from server'))
       );
   }
 
@@ -49,7 +49,7 @@ export class SprintService {
       params: httpOptions.params.set('date', new Date().getMilliseconds().toString()).set('user', user)
     })
       .pipe(
-        tap(exerciseStatistic => console.log('got exercise statistics for current sprint from backend: ', exerciseStatistic))
+        tap(exerciseStatistic => console.log('got exercise statistics for current sprint from server'))
       );
   }
 
@@ -70,17 +70,15 @@ export class SprintService {
       );
   }
 
-  // TODO: cache måste implementeras
   getExerciseMetadata(): Observable<ExerciseMetadata[]> {
-    return this.http.get<ExerciseMetadata[]>(this.EXERCISE_METADATA_URL, {headers: httpOptions.headers})
+    if (isDefined(this.EXERCISE_CONFIG_CACHE)) {
+      console.log('got exercise metadata from cache');
+      return this.EXERCISE_CONFIG_CACHE;
+    }
+    console.log('getting exercise metadata from server');
+    this.EXERCISE_CONFIG_CACHE = this.http.get<ExerciseMetadata[]>(this.EXERCISE_METADATA_URL, {headers: httpOptions.headers})
       .pipe(
-        tap(config => {
-            console.log('got exercise metadata');
-            if (isUndefined(this.EXERCISE_CONFIG)) {
-              this.EXERCISE_CONFIG = new ExerciseMetadataList().deserialize(config);
-            }
-          }
-        )
+        shareReplay(1)
       );
   }
 
@@ -129,10 +127,6 @@ export class SprintService {
 
   getSprintExerciseStatisticCache(): ExerciseStatistic[] {
     return this.EXERCISE_STATISTIC_CACHE;
-  }
-
-  setExerciseMetadata(data: ExerciseMetadataList): void {
-    this.EXERCISE_CONFIG = data;
   }
 
   /**

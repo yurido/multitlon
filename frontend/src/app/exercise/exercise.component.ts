@@ -3,7 +3,6 @@ import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
 import {isUndefined} from 'util';
-import {environment} from '../../environments/environment';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {Reps} from '../models/reps';
@@ -11,6 +10,8 @@ import {SprintService} from '../services/sprint.service';
 import {RepsView} from '../models/reps.view';
 import {ExerciseStatistic} from '../models/exercise.statistic';
 import {MultiTError} from '../models/multiterror';
+import {ExerciseMetadata} from '../models/exercise.metadata';
+import {ExerciseMetadataList} from '../models/exercise.metadata.list';
 
 @Component({
   selector: 'app-exercise',
@@ -26,7 +27,7 @@ export class ExerciseComponent implements OnInit {
   exercise: Exercise;
   statistic: ExerciseStatistic;
   reps: RepsView[] = [];
-  config: any;
+  config: ExerciseMetadata;
   rawPoints: string;
   conditions = {
     loading: false,
@@ -48,7 +49,7 @@ export class ExerciseComponent implements OnInit {
     this.statistic = new ExerciseStatistic().deserialize(history.state.statistic);
     this.initRepsView();
     this.rawPoints = '' + this.exercise.getRawPoints();
-    this.config = environment.EXERCISES.find(value => value.sid === this.exercise.getSid());
+    this.loadMetadata();
     this.conditions.loading = false;
   }
 
@@ -157,7 +158,7 @@ export class ExerciseComponent implements OnInit {
 
   canSave(): boolean {
     let condis = false;
-    if (this.config.withReps) {
+    if (this.config.isWithReps()) {
       condis = (this.canAddMoreReps() && this.reps.length > 0);
     } else {
       condis = this.sprintService.isStringContainsNumbers(this.rawPoints);
@@ -189,5 +190,19 @@ export class ExerciseComponent implements OnInit {
     }
     const newNumberValue = this.sprintService.getNumberFromString(newValue);
     return (newNumberValue === 0 ? '' : '' + newNumberValue);
+  }
+
+  private loadMetadata(): void {
+    this.sprintService.getExerciseMetadata().subscribe(
+      data => {
+        const metaData = new ExerciseMetadataList().deserialize(data);
+        this.config = metaData.getExerciseMetadata().find(ex => ex.getSid() === this.exercise.getSid());
+      },
+      error => {
+        console.log('error here ', error);
+        this.conditions.loading = false;
+        this.error = error;
+      }
+    );
   }
 }

@@ -22,7 +22,7 @@
 
   <!-- body -->
   <app-spinner [loading]="loading"></app-spinner>
-  <table class="table table-sm" style="max-width: 1000px;" align="center" *ngIf="!loading">
+  <table class="table table-sm" style="max-width: 1000px;" align="center" *ngIf="!loading && exerciseConfig && sprintExercises">
     <tbody>
     <tr *ngFor="let sprintExercise of sprintExercises">
       <td class="text-center padding-0">

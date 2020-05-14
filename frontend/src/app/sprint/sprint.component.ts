@@ -12,6 +12,8 @@ import {isDefined} from '@angular/compiler/src/util';
 import {SprintExerciseStatisticCalendar} from '../models/sprint.exercise.statistic.calendar';
 import {ExerciseStatistic} from '../models/exercise.statistic';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list';
+import {ExerciseMetadata} from '../models/exercise.metadata';
+import {MultiTError} from "../models/multiterror";
 
 @Component({
   selector: 'app-sprint',
@@ -28,6 +30,7 @@ export class SprintComponent implements OnInit {
   loading: boolean;
   month: string;
   sprintExerciseStatistic: ExerciseStatistic[];
+  exerciseConfig: ExerciseMetadata[];
 
   constructor(private sprintService: SprintService, private router: Router) {
   }
@@ -45,7 +48,7 @@ export class SprintComponent implements OnInit {
       // TODO: update day; reread exercise stratistics from backend!
       this.getExcercises();
     } */
-
+    this.loadMetadata();
     this.getExcercises();
   }
 
@@ -57,7 +60,7 @@ export class SprintComponent implements OnInit {
           const monthN = new Date(this.sprintExercises[0].getSprintDay().getSprintDate()).getMonth();
           const monthObj = environment.MONTHS.find(value => value.id === monthN);
           this.month = isDefined(monthObj) ? monthObj.name : '';
-          this.sprintService.setSprintCache(this.sprintExercises);
+          // this.sprintService.setSprintCache(this.sprintExercises);
           this.getStatistic();
         },
         error => {
@@ -67,15 +70,16 @@ export class SprintComponent implements OnInit {
         });
   }
 
-  private getMetadata(): void {
+  private loadMetadata(): void {
     this.sprintService.getExerciseMetadata().subscribe(
       data => {
-        this.sprintService.setExerciseMetadata(new ExerciseMetadataList().deserialize(data));
+        const metaData = new ExerciseMetadataList().deserialize(data);
+        this.exerciseConfig = metaData.getExerciseMetadata();
       },
       error => {
         console.log('error here ', error);
         this.loading = false;
-        this.error = error;
+        this.error = new MultiTError('Exercise metadata not loaded');
       }
     );
   }
@@ -85,7 +89,7 @@ export class SprintComponent implements OnInit {
       .subscribe(data => {
           const sprintExerciseStatisticCalendar = new SprintExerciseStatisticCalendar().deserialize(data);
           this.sprintExerciseStatistic = sprintExerciseStatisticCalendar.getExerciseStatistic();
-          this.sprintService.setSprintExerciseStatisticCache(this.sprintExerciseStatistic);
+          // this.sprintService.setSprintExerciseStatisticCache(this.sprintExerciseStatistic);
           this.loading = false;
         },
         error => {
@@ -109,12 +113,13 @@ export class SprintComponent implements OnInit {
   }
 
   getExName(sid: string): string {
-    const exerciseObj = environment.EXERCISES.find(value => value.sid === sid);
-    return isDefined(exerciseObj) ? exerciseObj.name : '';
+    const exerciseObj = this.exerciseConfig.find(value => value.getSid() === sid);
+    return isDefined(exerciseObj) ? exerciseObj.getName() : '';
   }
 
   getExItem(sid: string): string {
-    return environment.EXERCISES.find(value => value.sid === sid).item;
+    const exerciseObj = this.exerciseConfig.find(value => value.getSid() === sid);
+    return isDefined(exerciseObj) ? exerciseObj.getItem() : '';
   }
 
   calcDayColor(isDayOff: boolean): string {
