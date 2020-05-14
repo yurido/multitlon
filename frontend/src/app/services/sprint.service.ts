@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {SprintExercises} from '../models/sprint.exercises';
-import {EMPTY, Observable, of} from 'rxjs';
-import {catchError, shareReplay, tap} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {shareReplay, tap} from 'rxjs/operators';
 import {Exercise} from '../models/exercise';
 import {ExerciseStatistic} from '../models/exercise.statistic';
 import {ExerciseMetadata} from '../models/exercise.metadata';
@@ -61,7 +61,7 @@ export class SprintService {
   }
 
   getExerciseStatisticForCurrentSprint(sid: string, user: string): Observable<ExerciseStatistic> {
-    return this.http.get<ExerciseStatistic>(this.STATISTICS_EXERCISES_SPRINT_URL + '/' + sid, {
+     return this.http.get<ExerciseStatistic>(this.STATISTICS_EXERCISES_SPRINT_URL + '/' + sid, {
       headers: httpOptions.headers,
       params: httpOptions.params.set('date', new Date().getMilliseconds().toString()).set('user', user)
     })
@@ -108,25 +108,6 @@ export class SprintService {
   getNumberFromString(str: string): number {
     const numberValue = str.match(/\d+/);
     return (numberValue !== null ? +numberValue[0] : 0);
-  }
-
-  /**
-   *  ************ CACHE ***************
-   */
-  getSprintCache(): SprintExercises[] {
-    return this.SPRINT_EXERCISES_CACHE;
-  }
-
-  setSprintCache(data: SprintExercises[]) {
-    this.SPRINT_EXERCISES_CACHE = data;
-  }
-
-  setSprintExerciseStatisticCache(exerciseStatistic: ExerciseStatistic[]): void {
-    this.EXERCISE_STATISTIC_CACHE = exerciseStatistic;
-  }
-
-  getSprintExerciseStatisticCache(): ExerciseStatistic[] {
-    return this.EXERCISE_STATISTIC_CACHE;
   }
 
   /**

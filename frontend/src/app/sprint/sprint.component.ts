@@ -13,7 +13,7 @@ import {SprintExerciseStatisticCalendar} from '../models/sprint.exercise.statist
 import {ExerciseStatistic} from '../models/exercise.statistic';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list';
 import {ExerciseMetadata} from '../models/exercise.metadata';
-import {MultiTError} from "../models/multiterror";
+import {MultiTError} from '../models/multiterror';
 
 @Component({
   selector: 'app-sprint',
