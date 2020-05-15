@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
@@ -45,6 +45,7 @@ export class ExerciseComponent implements OnInit {
       this.back();
       return;
     }
+    // get exercise and statistic from sprint component
     this.exercise = new Exercise().deserialize(history.state.ex);
     this.statistic = new ExerciseStatistic().deserialize(history.state.statistic);
     this.initRepsView();

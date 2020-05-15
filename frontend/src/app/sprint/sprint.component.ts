@@ -37,32 +37,43 @@ export class SprintComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    // TODO: redoing of cache
-    /*
-    if (isDefined(history.state.isDataChanged) && !history.state.isDataChanged) {
-      this.loadExercisesFromCash();
-      this.loadExerciseStatisticFromCache();
-      // TODO: update day; reread exercise stratistics from backend!
-      this.loading = false;
+    this.loadExerciseMetadata();
+
+    if (isDefined(history.state.isDataChanged) && history.state.isDataChanged) {
+      // TODO: update exercise in cache!
+      console.log('ska uppdatera exercise ' + history.state.exercise + ' in cache');
+      this.updateExerciseInCache(history.state.exercise);
+      this.loadExerciseStatistic(true);
     } else {
-      // TODO: update day; reread exercise stratistics from backend!
-      this.getExcercises();
-    } */
-    this.loadMetadata();
-    this.getExcercises();
+      this.loadExerciseStatistic(false);
+      this.getExcercises(false);
+    }
   }
 
-  private getExcercises(): void {
-    this.sprintService.getExercisesCurrentSprint('test')
-      .subscribe(data => {
-          const sprintCalendar = new SprintCalendar().deserialize(data);
-          this.sprintExercises = this.sprintService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
-          const monthN = new Date(this.sprintExercises[0].getSprintDay().getSprintDate()).getMonth();
-          const monthObj = environment.MONTHS.find(value => value.id === monthN);
-          this.month = isDefined(monthObj) ? monthObj.name : '';
-          // this.sprintService.setSprintCache(this.sprintExercises);
-          this.getStatistic();
-        },
+  private subscribeExercises(data: SprintCalendar): void {
+    const sprintCalendar = new SprintCalendar().deserialize(data);
+    this.sprintExercises = this.sprintService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
+    const monthN = new Date(this.sprintExercises[0].getSprintDay().getSprintDate()).getMonth();
+    const monthObj = environment.MONTHS.find(value => value.id === monthN);
+    this.month = isDefined(monthObj) ? monthObj.name : '';
+    this.loading = false;
+  }
+
+  // TODO: check that exercise updated!
+  private updateExerciseInCache(exercise: Exercise): void {
+    this.sprintService.updateExerciseInCache(exercise).subscribe(
+      data => this.subscribeExercises(data),
+      error => {
+        console.log('error here ', error);
+        this.loading = false;
+        this.error = error;
+      }
+    );
+  }
+
+  private getExcercises(forceCallServer: boolean): void {
+    this.sprintService.getExercisesCurrentSprint('test', forceCallServer)
+      .subscribe(data => this.subscribeExercises(data),
         error => {
           console.log('error here ', error);
           this.loading = false;
@@ -70,11 +81,12 @@ export class SprintComponent implements OnInit {
         });
   }
 
-  private loadMetadata(): void {
+  private loadExerciseMetadata(): void {
     this.sprintService.getExerciseMetadata().subscribe(
       data => {
         const metaData = new ExerciseMetadataList().deserialize(data);
         this.exerciseConfig = metaData.getExerciseMetadata();
+        this.loading = false;
       },
       error => {
         console.log('error here ', error);
@@ -84,12 +96,11 @@ export class SprintComponent implements OnInit {
     );
   }
 
-  private getStatistic(): void {
-    this.sprintService.getExerciseStatisticsForCurrentSprint('test')
+  private loadExerciseStatistic(forceCallServer: boolean): void {
+    this.sprintService.getExerciseStatisticsForCurrentSprint('test', forceCallServer)
       .subscribe(data => {
           const sprintExerciseStatisticCalendar = new SprintExerciseStatisticCalendar().deserialize(data);
           this.sprintExerciseStatistic = sprintExerciseStatisticCalendar.getExerciseStatistic();
-          // this.sprintService.setSprintExerciseStatisticCache(this.sprintExerciseStatistic);
           this.loading = false;
         },
         error => {
@@ -126,15 +137,4 @@ export class SprintComponent implements OnInit {
     return isDayOff ? 'sprint-day-dayoff' : 'sprint-day-training';
   }
 
-  // TODO: redo!
-  private loadExercisesFromCash(): void {
-    this.sprintExercises = this.sprintService.getSprintCache();
-    console.log('got sprint exercises from cache');
-  }
-
-  // TODO: redo!
-  private loadExerciseStatisticFromCache(): void {
-    this.sprintExerciseStatistic = this.sprintService.getSprintExerciseStatisticCache();
-    console.log('got sprint exercise statistic from cache');
-  }
 }
