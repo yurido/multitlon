@@ -123,9 +123,32 @@ export class SprintService {
     this.SPRINT_EXERCISES_CACHE.subscribe(
       data => {
         const sprintCalendar = new SprintCalendar().deserialize(data);
-        const sprintExercises = sprintCalendar.getSprintExercises();
+        let isExerciseReplaced = false;
         // TODO: update exercise
-        console.log('exercis ' + exercise + ' updated in cache');
+        /* sprintCalendar.getSprintExercises()
+          .find(exerciseDay => new Date(exerciseDay.getSprintDay().getSprintDate()).getDate() === new Date(exercise.getDate()).getDate())
+          .getExercises()
+          .find(ex => ex.getId() === exercise.getId()); */
+        console.log('vill replace exercise ', exercise.getId(), ', ', exercise.getSid());
+
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < sprintCalendar.getSprintExercises().length; i++) {
+          if (new Date(sprintCalendar.getSprintExercises()[i].getSprintDay().getSprintDate()).getDate() === new Date(exercise.getDate()).getDate()) {
+            console.log('exercise date matched!');
+            for (let j = 0; j < sprintCalendar.getSprintExercises()[i].getExercises().length; j++) {
+              if (sprintCalendar.getSprintExercises()[i].getExercises()[j].getId() === exercise.getId()) {
+                console.log('exercise id matched!');
+                sprintCalendar.getSprintExercises()[i].getExercises().splice(j, 1, exercise); // replace exercise
+                isExerciseReplaced = true;
+                break;
+              }
+            }
+            if (isExerciseReplaced) {
+              break;
+            }
+          }
+        }
+        console.log('exercise ', exercise.getSid(), ' updated in cache');
         updatedSprint = of(sprintCalendar);
       }
     );

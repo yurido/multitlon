@@ -42,7 +42,7 @@ export class SprintComponent implements OnInit {
     if (isDefined(history.state.isDataChanged) && history.state.isDataChanged) {
       // TODO: update exercise in cache!
       console.log('ska uppdatera exercise ' + history.state.exercise + ' in cache');
-      this.updateExerciseInCache(history.state.exercise);
+      this.updateExerciseInCache(new Exercise().deserialize(history.state.exercise));
       this.loadExerciseStatistic(true);
     } else {
       this.loadExerciseStatistic(false);
