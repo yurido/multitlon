@@ -40,7 +40,6 @@ export class SprintComponent implements OnInit {
     this.loadExerciseMetadata();
 
     if (isDefined(history.state.isDataChanged) && history.state.isDataChanged) {
-      // TODO: update exercise in cache!
       console.log('ska uppdatera exercise ' + history.state.exercise + ' in cache');
       this.updateExerciseInCache(new Exercise().deserialize(history.state.exercise));
       this.loadExerciseStatistic(true);
@@ -59,26 +58,25 @@ export class SprintComponent implements OnInit {
     this.loading = false;
   }
 
-  // TODO: check that exercise updated!
   private updateExerciseInCache(exercise: Exercise): void {
     this.sprintService.updateExerciseInCache(exercise).subscribe(
       data => this.subscribeExercises(data),
-      error => {
-        console.log('error here ', error);
-        this.loading = false;
-        this.error = error;
-      }
+      error => this.handleError(error)
     );
+  }
+
+  private handleError(error: any): void {
+    console.log('error here ', error);
+    this.loading = false;
+    this.error = error;
   }
 
   private getExcercises(forceCallServer: boolean): void {
     this.sprintService.getExercisesCurrentSprint('test', forceCallServer)
-      .subscribe(data => this.subscribeExercises(data),
-        error => {
-          console.log('error here ', error);
-          this.loading = false;
-          this.error = error;
-        });
+      .subscribe(
+        data => this.subscribeExercises(data),
+        error => this.handleError(error)
+      );
   }
 
   private loadExerciseMetadata(): void {
@@ -88,12 +86,8 @@ export class SprintComponent implements OnInit {
         this.exerciseConfig = metaData.getExerciseMetadata();
         this.loading = false;
       },
-      error => {
-        console.log('error here ', error);
-        this.loading = false;
-        this.error = new MultiTError('Exercise metadata not loaded');
-      }
-    );
+      error => this.handleError(new MultiTError('Exercise metadata not loaded'))
+      );
   }
 
   private loadExerciseStatistic(forceCallServer: boolean): void {
@@ -103,11 +97,8 @@ export class SprintComponent implements OnInit {
           this.sprintExerciseStatistic = sprintExerciseStatisticCalendar.getExerciseStatistic();
           this.loading = false;
         },
-        error => {
-          console.log('error here ', error);
-          this.error = error;
-          this.loading = false;
-        });
+        error => this.handleError(error)
+      );
   }
 
   addExercise(): void {

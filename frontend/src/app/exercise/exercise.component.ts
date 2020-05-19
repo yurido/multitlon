@@ -96,16 +96,11 @@ export class ExerciseComponent implements OnInit {
           .subscribe(response => {
             this.statistic = new ExerciseStatistic().deserialize(response);
             this.conditions.loading = false;
-          }, error => {
-            console.log('error here ', error);
-            this.conditions.loading = false;
-          });
+          }, error => this.handleError(error)
+          );
 
-      }, error => {
-        console.log('error here ', error);
-        this.conditions.loading = false;
-        this.error = new MultiTError('It was an error during updating exercise, please try later');
-      });
+      }, error => this.handleError(new MultiTError('It was an error during updating exercise, please try later'))
+      );
   }
 
   addReps(): void {
@@ -199,11 +194,13 @@ export class ExerciseComponent implements OnInit {
         const metaData = new ExerciseMetadataList().deserialize(data);
         this.config = metaData.getExerciseMetadata().find(ex => ex.getSid() === this.exercise.getSid());
       },
-      error => {
-        console.log('error here ', error);
-        this.conditions.loading = false;
-        this.error = error;
-      }
+      error => this.handleError(error)
     );
+  }
+
+  private handleError(error: any): void {
+    console.log('error here ', error);
+    this.conditions.loading = false;
+    this.error = error;
   }
 }

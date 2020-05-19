@@ -21,6 +21,10 @@ export class SprintDay implements Serializable<SprintDay> {
     return this.total;
   }
 
+  public setTotal(total: number): void {
+    this.total = total;
+  }
+
   deserialize(input): SprintDay {
     const serializator = new Serializator(SprintDay.name);
     this.date = serializator.getObjectProperty(input, 'date');

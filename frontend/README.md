@@ -1,13 +1,6 @@
 ## Multitlon - Frontend
 
 ### TODO:
- - got exercise metadata from cache - why 2 times after exercise updasted?!
- - sprint exercises sorted from 1 to 30, should be latest up!
- 
- 
- 
-  
-
 
 ### Prerequisites
 1. Run `npm install`
