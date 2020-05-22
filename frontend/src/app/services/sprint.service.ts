@@ -31,6 +31,10 @@ export class SprintService {
   constructor(private http: HttpClient) {
   }
 
+  getExercisMetadataURL(): string {
+    return this.EXERCISE_METADATA_URL;
+  }
+
   /**
    *  ************ REST ***************
    */

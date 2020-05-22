@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MainComponent } from './main.component';
+import {delay} from 'rxjs/operators';
 
 describe('MainComponent', () => {
   let component: MainComponent;
@@ -19,7 +20,8 @@ describe('MainComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should be created', () => {
     expect(component).toBeTruthy();
+    // delay(1000);
   });
 });

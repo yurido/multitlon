@@ -4,6 +4,10 @@ import {SprintComponent} from './sprint.component';
 import {SprintService} from '../services/sprint.service';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 import {Router} from '@angular/router';
+import * as exerciseStatistic from '../mock-data/sprint-statistic.json';
+import * as sprintData from '../mock-data/sprint.json';
+import * as exerciseMetadata from '../mock-data/exercise-metadata.json';
+import {delay} from 'rxjs/operators';
 
 describe('SprintComponent', () => {
   let component: SprintComponent;
@@ -11,18 +15,25 @@ describe('SprintComponent', () => {
 
   beforeEach(async(() => {
 
-    const spySprintService = jasmine.createSpyObj('SprintService', ['getCurrentSprintExercises', 'getCurrentSprintExerciseStatistic']);
-    spySprintService.getCurrentSprintExercises.and.returnValue({
+    const spySprintService = jasmine.createSpyObj('SprintService', ['getExercisesCurrentSprint', 'getExerciseStatisticsForCurrentSprint', 'getExerciseMetadata']);
+    spySprintService.getExercisesCurrentSprint.and.returnValue({
       subscribe: () => {
-        return '{"sprintExercises": []}';
+        return sprintData;
       }
     });
-    spySprintService.getCurrentSprintExerciseStatistic.and.returnValue({
+    spySprintService.getExerciseStatisticsForCurrentSprint.and.returnValue({
       subscribe: () => {
-        return '{"exerciseStatistic": []}';
+        return exerciseStatistic;
+      }
+    });
+    spySprintService.getExerciseMetadata.and.returnValue({
+      subscribe: () => {
+        return exerciseMetadata;
       }
     });
     const spyRouter = jasmine.createSpyObj('Router', ['navigate']);
+    const state = {isDataChanged: false};
+    history.pushState(state, 'ingen');
 
     TestBed.configureTestingModule({
       declarations: [SprintComponent],
@@ -36,7 +47,8 @@ describe('SprintComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should be created', () => {
     expect(component).toBeTruthy();
+    // delay(1000);
   });
 });

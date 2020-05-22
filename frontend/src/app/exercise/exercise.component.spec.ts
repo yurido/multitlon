@@ -1,9 +1,9 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {ExerciseComponent} from './exercise.component';
-import {SprintService} from "../services/sprint.service";
-import {Router} from "@angular/router";
-import {HttpClient, HttpHandler} from "@angular/common/http";
+import {SprintService} from '../services/sprint.service';
+import {Router} from '@angular/router';
+import {HttpClient, HttpHandler} from '@angular/common/http';
 
 describe('ExerciseComponent', () => {
   let component: ExerciseComponent;
