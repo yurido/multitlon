@@ -35,6 +35,10 @@ export class SprintService {
     return this.EXERCISE_METADATA_URL;
   }
 
+  getExerciseStatisticsCurrentSprintURL(): string {
+    return this.STATISTICS_EXERCISES_SPRINT_URL;
+  }
+
   /**
    *  ************ REST ***************
    */
@@ -87,10 +91,17 @@ export class SprintService {
       );
   }
 
+  /**
+   * method returns sprint statistic for sid exercise
+   * @param sid exercise
+   * @param user user
+   */
   getExerciseStatisticForCurrentSprint(sid: string, user: string): Observable<ExerciseStatistic> {
     return this.http.get<ExerciseStatistic>(this.STATISTICS_EXERCISES_SPRINT_URL + '/' + sid, {
       headers: httpOptions.headers,
-      params: httpOptions.params.set('date', new Date().getMilliseconds().toString()).set('user', user)
+      params: httpOptions.params
+        .set('date', new Date().getTime().toString())
+        .set('user', user)
     })
       .pipe(
         tap(ex => console.log('got statistic for exercise ' + sid))
