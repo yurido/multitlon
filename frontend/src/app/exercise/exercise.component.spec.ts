@@ -12,12 +12,14 @@ describe('ExerciseComponent', () => {
   beforeEach(async(() => {
     const spySprintService = jasmine.createSpyObj('SprintService', ['getNumberFromString', 'getFloatFromString', 'updateExercise', 'isStringContainsNumbers']);
     const spyRouter = jasmine.createSpyObj('Router', ['navigate']);
+    // TODO: fix state!
+    const state = {isDataChanged: false};
+    history.pushState(state, 'ingen');
 
     TestBed.configureTestingModule({
       declarations: [ExerciseComponent],
       providers: [{provide: SprintService, useValue: spySprintService}, {provide: Router, useValue: spyRouter}, HttpClient, HttpHandler]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

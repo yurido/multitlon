@@ -14,28 +14,24 @@ import {Exercise} from './models/exercise';
 import * as exerciseStatistic from './mock-data/sprint-statistic.json';
 import {ExerciseStatistic} from './models/exercise.statistic';
 import * as exerciseMetadata from './mock-data/exercise-metadata.json';
-
-const CURRENT_SPRINT_EXERCISES_URL = 'rest/exercises/sprint';
-const STATISTICS_EXERCISES = 'rest/statistics/sprintExercises';
-const EXERCISE_METADATA_URL = 'rest/exercises/metadata';
+import {SprintService} from './services/sprint.service';
 
 @Injectable()
 export class MockHttpCalIInterceptor implements HttpInterceptor {
-  constructor(private injector: Injector) {
+  constructor(private injector: Injector, private sprintService: SprintService) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     console.log('request: ' + request.url + ', method ' + request.method);
-    if (request.url === CURRENT_SPRINT_EXERCISES_URL && request.method === 'GET') {
+    if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'GET') {
       //    this.throwError(request.headers, request.url);
       // return of(new HttpResponse({status: 400, body: {}}));
-
       return of(new HttpResponse({status: 200, body: ((sprintData) as any).default}))
         .pipe(
           delay(1000)
         );
 
-    } else if (request.url === CURRENT_SPRINT_EXERCISES_URL && request.method === 'PUT') {
+    } else if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'PUT') {
       const exercise = new Exercise().deserialize(request.body);
       /* console.log('raw = ', exercise.getRawPoints());
       console.log('reps = ', exercise.getReps()); */
@@ -50,13 +46,13 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
           delay(2000)
         );
       // this.throwError(request.headers, request.url);
-    } else if (request.url === (STATISTICS_EXERCISES)) {
+    } else if (request.url === (this.sprintService.getExerciseStatisticsCurrentSprintURL())) {
       return of(new HttpResponse({status: 200, body: ((exerciseStatistic) as any).default}))
         .pipe(
           delay(1000)
         );
-    } else if (request.url.indexOf(STATISTICS_EXERCISES + '/') >= 0) {
-      const sidPos = request.url.indexOf(STATISTICS_EXERCISES + '/') + (STATISTICS_EXERCISES + '/').length;
+    } else if (request.url.indexOf(this.sprintService.getExerciseStatisticsCurrentSprintURL() + '/') >= 0) {
+      const sidPos = request.url.indexOf(this.sprintService.getExerciseStatisticsCurrentSprintURL() + '/') + (this.sprintService.getExerciseStatisticsCurrentSprintURL() + '/').length;
       const sid = request.url.substr(sidPos, request.url.length - sidPos);
       const json = JSON.parse('{"sid": "' + sid + '", "progress": 44, "totalRaw": 123, "totalPoints": 1500, "averagePoints": 45, "maxPonts": 500, "quota": 16}');
       const statistic = new ExerciseStatistic().deserialize(json);
@@ -67,7 +63,7 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
         );
       // this.throwError(request.headers, request.url);
 
-    } else if (request.url === EXERCISE_METADATA_URL) {
+    } else if (request.url === this.sprintService.getExercisMetadataURL()) {
       return of(new HttpResponse({status: 200, body: ((exerciseMetadata) as any).default}))
         .pipe(
           delay(1000)

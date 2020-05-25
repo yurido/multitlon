@@ -39,11 +39,15 @@ export class SprintService {
     return this.STATISTICS_EXERCISES_SPRINT_URL;
   }
 
+  getSprintExercisesURL(): string {
+    return this.SPRINT_EXERCISES_URL;
+  }
+
   /**
    *  ************ REST ***************
    */
   /**
-   * Get user exercises for current sprint from server or cache
+   * method returns user sprint exercises for current sprint from server or cache
    * @param user - user
    * @param forceCallServer - force to read from server
    */
@@ -55,7 +59,9 @@ export class SprintService {
     console.log('getting exercises from server');
     this.SPRINT_EXERCISES_CACHE = this.http.get<SprintCalendar>(this.SPRINT_EXERCISES_URL, {
       headers: httpOptions.headers,
-      params: httpOptions.params.set('date', new Date().getMilliseconds().toString()).set('user', user)
+      params: httpOptions.params
+        .set('date', new Date().getTime().toString())
+        .set('user', user)
     })
       .pipe(
         shareReplay(1)
@@ -64,7 +70,7 @@ export class SprintService {
   }
 
   /**
-   * Get user exercise results and progress for current sprint from server or cache
+   * method returns user sprint exercise statistics for current sprint from server or cache
    * @param user - user
    * @param forceCallServer - force to read from server
    */
@@ -76,7 +82,9 @@ export class SprintService {
     console.log('getting statistic from server');
     this.EXERCISE_STATISTIC_CACHE = this.http.get<SprintExerciseStatisticCalendar>(this.STATISTICS_EXERCISES_SPRINT_URL, {
       headers: httpOptions.headers,
-      params: httpOptions.params.set('date', new Date().getMilliseconds().toString()).set('user', user)
+      params: httpOptions.params
+        .set('date', new Date().getTime().toString())
+        .set('user', user)
     })
       .pipe(
         shareReplay(1)
@@ -84,6 +92,10 @@ export class SprintService {
     return this.EXERCISE_STATISTIC_CACHE;
   }
 
+  /**
+   * method updates sprint exercise on server and return updated object
+   * @param exercise - exercise to be updated
+   */
   updateExercise(exercise: Exercise): Observable<Exercise> {
     return this.http.put<Exercise>(this.SPRINT_EXERCISES_URL, exercise, {headers: httpOptions.headers})
       .pipe(
@@ -92,7 +104,7 @@ export class SprintService {
   }
 
   /**
-   * method returns sprint statistic for sid exercise
+   * method returns sprint statistic for sprint exercise sid
    * @param sid exercise
    * @param user user
    */
@@ -109,7 +121,7 @@ export class SprintService {
   }
 
   /**
-   * Get exercise metadata from server or cache
+   * method returns exercise global metadata from server or cache
    */
   getExerciseMetadata(): Observable<ExerciseMetadataList> {
     if (isDefined(this.EXERCISE_CONFIG_CACHE) && this.EXERCISE_CONFIG_CACHE !== EMPTY) {
@@ -134,6 +146,10 @@ export class SprintService {
     return list;
   }
 
+  /**
+   * method updates spint exercise in cache
+   * @param exercise - sprint exercise
+   */
   updateExerciseInCache(exercise: Exercise): Observable<SprintCalendar> {
     let updatedSprint: Observable<SprintCalendar> = EMPTY;
     this.SPRINT_EXERCISES_CACHE.subscribe(
@@ -153,6 +169,7 @@ export class SprintService {
                 }
                 sprintCalendar.getSprintExercises()[i].getSprintDay().setTotal(total); // update total points for the day
                 isExerciseReplaced = true;
+                console.log(`exercise ${exercise.getSid()} updated in cache`);
                 break;
               }
             }
@@ -161,7 +178,6 @@ export class SprintService {
             }
           }
         }
-        console.log('exercise ', exercise.getSid(), 'updated in cache');
         updatedSprint = of(sprintCalendar);
       }
     );
