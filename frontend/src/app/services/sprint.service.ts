@@ -150,7 +150,11 @@ export class SprintService {
    * method updates spint exercise in cache
    * @param exercise - sprint exercise
    */
-  updateExerciseInCache(exercise: Exercise): Observable<SprintCalendar> {
+  updateExerciseInCache(user: string, exercise: Exercise): Observable<SprintCalendar> {
+    if (this.SPRINT_EXERCISES_CACHE === EMPTY) {
+      console.log('SPRINT_EXERCISES_CACHE is empty, getting from server');
+      return this.getExercisesCurrentSprint(user, true);
+    }
     let updatedSprint: Observable<SprintCalendar> = EMPTY;
     this.SPRINT_EXERCISES_CACHE.subscribe(
       data => {
@@ -159,6 +163,8 @@ export class SprintService {
 
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < sprintCalendar.getSprintExercises().length; i++) {
+          // filter on date
+          // tslint:disable-next-line:max-line-length
           if (new Date(sprintCalendar.getSprintExercises()[i].getSprintDay().getSprintDate()).getDate() === new Date(exercise.getDate()).getDate()) {
             for (let j = 0; j < sprintCalendar.getSprintExercises()[i].getExercises().length; j++) {
               if (sprintCalendar.getSprintExercises()[i].getExercises()[j].getId() === exercise.getId()) {
@@ -182,7 +188,7 @@ export class SprintService {
       }
     );
     this.SPRINT_EXERCISES_CACHE = updatedSprint;
-    return updatedSprint;
+    return this.SPRINT_EXERCISES_CACHE;
   }
 
   /**

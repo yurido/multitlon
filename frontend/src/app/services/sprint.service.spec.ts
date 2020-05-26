@@ -95,6 +95,7 @@ describe('SprintService', () => {
   });
 
   it('should return updated exercise "SHOULDERS"', () => {
+    // tslint:disable-next-line:max-line-length
     const json = JSON.parse('{"id": 1, "sid": "SHOULDERS", "date": 1581289200000, "reps": [], "rawPoints": 1500, "totalPoints": 1320, "time": 0}');
     const exercise = new Exercise().deserialize(json);
     service.updateExercise(exercise).subscribe(data => {
@@ -110,7 +111,8 @@ describe('SprintService', () => {
 
   // SHOULDERS exercise should be present in ../mock-data/sprint.json!
   it('should update exercise "SHOULDERS" with id "12345678998" in cache', () => {
-    const jsonEx = JSON.parse('{"id": 12345678998, "sid": "SHOULDERS", "date": 1581289200000, "reps": [{"weight":600, "reps":500}], "rawPoints": 1500, "totalPoints": 1320, "time": 0}');
+    // tslint:disable-next-line:max-line-length
+    const jsonEx = JSON.parse('{"id": 12345678998, "sid": "SHOULDERS", "date": 1580511600000, "reps": [{"weight":600, "reps":500}], "rawPoints": 1500, "totalPoints": 1320, "time": 0}');
     const exerciseShoulders = new Exercise().deserialize(jsonEx);
 
     const exercises = new SprintCalendar().deserialize(((sprintData) as any).default);
@@ -122,7 +124,7 @@ describe('SprintService', () => {
     expect(request.request.method).toBe('GET');
     request.flush(exercises);
 
-    service.updateExerciseInCache(exerciseShoulders).subscribe(data => {
+    service.updateExerciseInCache('test', exerciseShoulders).subscribe(data => {
       data.getSprintExercises().forEach(day => {
         day.getExercises().forEach(exercise => {
           if (exercise.getId() === exerciseShoulders.getId()) {
@@ -136,13 +138,47 @@ describe('SprintService', () => {
   });
 
   it('should replace object A with Z in array', () => {
-    let listOfObjects: { id: number, name: string }[] = [
+    const listOfObjects: { id: number, name: string }[] = [
       {id: 0, name: 'A'},
       {id: 1, name: 'B'},
       {id: 2, name: 'C'}
     ];
     const objZ = {id: 3, name: 'Z'};
-    listOfObjects = listOfObjects.splice(0, 1, objZ);
+    listOfObjects.splice(0, 1, objZ);
     expect(listOfObjects[0].id).toEqual(objZ.id);
+    expect(listOfObjects[0].name).toEqual(objZ.name);
+
+    const listOfObj2: { day: { day: number }, exercises: { id: number, name: string }[] }[] = [{
+      day: {day: 1},
+      exercises: [{id: 1, name: 'A'}, {id: 2, name: 'B'}]
+    }, {
+      day: {day: 2},
+      exercises: [{id: 3, name: 'C'}, {id: 4, name: 'A'}]
+    },
+    ];
+
+    listOfObj2[1].exercises.splice(1, 1, objZ);
+    expect(listOfObj2[1].exercises[1].id).toEqual(objZ.id);
+    expect(listOfObj2[1].exercises[1].name).toEqual(objZ.name);
+
+    // date test
+    const date = new Date(1580511600000).getDate();
+    const date2 = new Date(1580511601000).getDate();
+    expect(date).toEqual(date2);
+  });
+
+  it('should not update exercise in empty cache', () => {
+    // tslint:disable-next-line:max-line-length
+    const exerciseShoulders = new Exercise();
+    const exercises = new SprintCalendar().deserialize(((sprintData) as any).default);
+
+    service.updateExerciseInCache('test', exerciseShoulders).subscribe(data => {
+      expect(data).toEqual(exercises);
+    });
+
+    const request = httpTestingController.expectOne((req: any) =>
+      req.url.indexOf(service.getSprintExercisesURL()) > -1);
+    expect(request.request.method).toBe('GET');
+    request.flush(exercises);
   });
 });
