@@ -91,15 +91,15 @@ export class ExerciseComponent implements OnInit {
     this.exercise.setRawPoints(this.sprintService.getFloatFromString(this.rawPoints));
     this.sprintService.updateExercise(this.exercise)
       .subscribe(data => {
-        this.exercise = new Exercise().deserialize(data);
-        this.sprintService.getExerciseStatisticForCurrentSprint(this.exercise.getSid(), 'test')
-          .subscribe(response => {
-            this.statistic = new ExerciseStatistic().deserialize(response);
-            this.conditions.loading = false;
-          }, error => this.handleError(error)
-          );
+          this.exercise = new Exercise().deserialize(data);
+          this.sprintService.getExerciseStatisticForCurrentSprint(this.exercise.getSid(), 'test')
+            .subscribe(response => {
+                this.statistic = new ExerciseStatistic().deserialize(response);
+                this.conditions.loading = false;
+              }, error => this.handleError(error)
+            );
 
-      }, error => this.handleError(new MultiTError('It was an error during updating exercise, please try later'))
+        }, error => this.handleError(new MultiTError('It was an error during updating exercise, please try later'))
       );
   }
 
