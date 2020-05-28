@@ -7,7 +7,7 @@ import {HttpClient, HttpHandler} from '@angular/common/http';
 import {Exercise} from '../models/exercise';
 import {ExerciseStatistic} from '../models/exercise.statistic';
 import * as exerciseMetadata from '../mock-data/exercise-metadata.json';
-import { By } from '@angular/platform-browser';
+import {By} from '@angular/platform-browser';
 import {DebugElement} from '@angular/core';
 import {of} from 'rxjs';
 
@@ -50,15 +50,33 @@ describe('ExerciseComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should contain button "edit"', () => {
+  it('should contain button "edit", title "shouldres", and call the exercise statistics from server/cache', () => {
     fixture.detectChanges();
 
-    const footer: DebugElement = fixture.debugElement;
-    const editButtonDebugg = footer.query(By.css('[class="btn btn-light btn-exercise-operate"]'));
+    // button edit exists and clickable
+    const page: DebugElement = fixture.debugElement;
+    const editButtonDebugg = page.query(By.css('[class="btn btn-light btn-exercise-operate"]'));
     const buttonEdit: HTMLElement = editButtonDebugg.nativeElement;
     expect(buttonEdit.textContent).toContain('edit');
     expect(buttonEdit.attributes.getNamedItem('disabled')).toBe(null);
 
+    // exercise metadata is called
     expect(metadata.calls.any()).toBe(true, 'exercise metadata called');
+
+    // title is present
+    const headerDebugg = page.query(By.css('[class="badge-dark sticky-top container max-width"]'));
+    const header: HTMLElement = headerDebugg.nativeElement;
+    const span = header.querySelector('span');
+    expect(span.textContent).toBe('shoulders');
+
+    // button back is present
+    const buttonBackDebugg = page.query(By.css('[class="btn btn-dark margin-3px"]'));
+    expect(buttonBackDebugg).toBeTruthy();
+
+    // button cancel is not present
+    const cancel: HTMLElement = buttonBackDebugg.nativeElement;
+    expect(cancel.textContent.indexOf('cancel')).toBe(-1);
+
+    // button delete is not present ?!
   });
 });
