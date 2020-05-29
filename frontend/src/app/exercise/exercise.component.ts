@@ -194,7 +194,7 @@ export class ExerciseComponent implements OnInit {
         const metaData = new ExerciseMetadataList().deserialize(data);
         this.config = metaData.getExerciseMetadata().find(ex => ex.getSid() === this.exercise.getSid());
       },
-      error => this.handleError(error)
+      error => this.handleError(new MultiTError('Exercise metadata not loaded'))
     );
   }
 
