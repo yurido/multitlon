@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
 
 import {ExerciseComponent} from './exercise.component';
 import {SprintService} from '../services/sprint.service';
@@ -9,16 +9,20 @@ import {ExerciseStatistic} from '../models/exercise.statistic';
 import * as exerciseMetadata from '../mock-data/exercise-metadata.json';
 import {By} from '@angular/platform-browser';
 import {DebugElement} from '@angular/core';
-import {of} from 'rxjs';
+import {of, throwError} from 'rxjs';
+import {tick} from '@angular/core/testing';
+import {MultiTError} from '../models/multiterror';
+import {browser} from 'protractor';
 
 describe('ExerciseComponent', () => {
   let component: ExerciseComponent;
   let fixture: ComponentFixture<ExerciseComponent>;
   let metadata;
+  let spySprintService;
 
   beforeEach(async(() => {
     // tslint:disable-next-line:max-line-length
-    const spySprintService = jasmine.createSpyObj('SprintService', ['getNumberFromString', 'getFloatFromString', 'updateExercise', 'isStringContainsNumbers', 'getExerciseMetadata']);
+    spySprintService = jasmine.createSpyObj('SprintService', ['getNumberFromString', 'getFloatFromString', 'updateExercise', 'isStringContainsNumbers', 'getExerciseMetadata']);
     metadata = spySprintService.getExerciseMetadata.and.returnValue(of(((exerciseMetadata) as any).default));
 
     const spyRouter = jasmine.createSpyObj('Router', ['navigate']);
@@ -51,7 +55,7 @@ describe('ExerciseComponent', () => {
   });
 
   it('should contain button "edit", title "shouldres", and call the exercise statistics from server/cache', () => {
-    fixture.detectChanges();
+    // fixture.detectChanges();
 
     // button edit exists and clickable
     const page: DebugElement = fixture.debugElement;
@@ -77,6 +81,21 @@ describe('ExerciseComponent', () => {
     const cancel: HTMLElement = buttonBackDebugg.nativeElement;
     expect(cancel.textContent.indexOf('cancel')).toBe(-1);
 
-    // button delete is not present ?!
+    // button delete is not present - how?!
   });
+
+  it('should click button "edit" and change values', () => {
+    // how?
+  });
+
+  // Does not work!
+  it('should display error', fakeAsync(() => {
+    spySprintService.getExerciseMetadata.and.returnValue(throwError('No metadata found!!!'));
+    // setTimeout(() => 2000);
+    fixture.detectChanges();
+    const page: DebugElement = fixture.debugElement;
+    const errorDebugg = page.query(By.css('[class="alert alert-danger"]'));
+    const error: HTMLElement = errorDebugg.nativeElement;
+    expect(error.textContent).toBe('No metadata found!!!');
+  }));
 });
