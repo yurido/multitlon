@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
 
 import {ExerciseComponent} from './exercise.component';
 import {SprintService} from '../services/sprint.service';
@@ -22,7 +22,7 @@ describe('ExerciseComponent', () => {
 
   beforeEach(async(() => {
     // tslint:disable-next-line:max-line-length
-    spySprintService = jasmine.createSpyObj('SprintService', ['getNumberFromString', 'getFloatFromString', 'updateExercise', 'isStringContainsNumbers', 'getExerciseMetadata']);
+    spySprintService = jasmine.createSpyObj('SprintService', ['getExerciseMetadata']);
     metadata = spySprintService.getExerciseMetadata.and.returnValue(of(((exerciseMetadata) as any).default));
     // spySprintService.getExerciseMetadata.and.returnValue(throwError(new MultiTError('No metadata found!!!')));
 
@@ -85,9 +85,25 @@ describe('ExerciseComponent', () => {
     // button delete is not present - how?!
   });
 
-  it('should click button "edit" and change values', () => {
-    // how?
-  });
+  it('should click button "edit" and add values', fakeAsync(() => {
+    spyOn(component, 'edit');
+    const page: DebugElement = fixture.debugElement;
+    const editButtonDebugg = page.query(By.css('[class="btn btn-light btn-exercise-operate"]'));
+    const buttonEdit: HTMLElement = editButtonDebugg.nativeElement;
+    buttonEdit.click();
+    tick();
+    expect(component.edit).toHaveBeenCalled();
+    /* does not work!
+    const plusButtonDebugg = page.query(By.css('[class="btn btn-light btn-transparent"]'));
+    const buttonPlus: HTMLElement = plusButtonDebugg.nativeElement;
+    expect(buttonPlus).toBeTruthy();
+
+    spyOn(component, 'addReps');
+    buttonPlus.click();
+    tick();
+    expect(component.addReps).toHaveBeenCalled();
+    */
+  }));
 
   // Does not work!
   /*
