@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SpinnerComponent } from './spinner.component';
+import {DebugElement} from '@angular/core';
+import {By} from '@angular/platform-browser';
 
 describe('SpinnerComponent', () => {
   let component: SpinnerComponent;
@@ -19,7 +21,12 @@ describe('SpinnerComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should be created', () => {
     expect(component).toBeTruthy();
+    component.loading = true;
+    fixture.detectChanges();
+    const page: DebugElement = fixture.debugElement;
+    const spinnerDebugg = page.query(By.css('[class="spinner"]'));
+    expect(spinnerDebugg).toBeTruthy();
   });
 });

@@ -7,11 +7,10 @@ import {Router} from '@angular/router';
 import * as exerciseStatistic from '../mock-data/sprint-statistic.json';
 import * as sprintData from '../mock-data/sprint.json';
 import * as exerciseMetadata from '../mock-data/exercise-metadata.json';
-import {delay} from 'rxjs/operators';
 import {of} from 'rxjs';
 import {SprintCalendar} from '../models/sprint.calendar';
-import {DebugElement} from "@angular/core";
-import {By} from "@angular/platform-browser";
+import {DebugElement} from '@angular/core';
+import {By} from '@angular/platform-browser';
 
 describe('SprintComponent', () => {
   let component: SprintComponent;
@@ -57,5 +56,12 @@ describe('SprintComponent', () => {
     const span = header.querySelector('span');
     expect(span.textContent).toBe('february');
 
+    const tableDebugg = page.query(By.css('[class="table table-sm"]'));
+    expect(tableDebugg).toBeTruthy();
+    const table: HTMLElement = tableDebugg.nativeElement;
+    expect(table.textContent.indexOf('swim')).toBeGreaterThan(-1);
+    expect(table.textContent.indexOf('squats')).toBeGreaterThan(-1);
+    expect(table.textContent.indexOf('run')).toBeGreaterThan(-1);
+    expect(table.textContent.indexOf('2000 kg')).toBeGreaterThan(-1);
   });
 });
