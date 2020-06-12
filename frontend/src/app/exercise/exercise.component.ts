@@ -72,6 +72,7 @@ export class ExerciseComponent implements OnInit {
 
   delete(): void {
     // TODO: delete exercise
+    // TODO: show alert window
   }
 
   save(): void {
