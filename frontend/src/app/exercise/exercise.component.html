@@ -1,5 +1,11 @@
+<app-modal id="custom-modal-1">
+  <h1>Are you sure?</h1>
+  <button (click)="onModalCancel()">no</button>
+  <button (click)="onModalYes()">yes</button>
+</app-modal>
+
 <div class="container-fluid container-fluid-styling">
-  <!-- header -->
+   <!-- header -->
   <div class="badge-dark sticky-top container max-width" align="center" *ngIf="statistic && exercise && config">
     <div class="row">
       <div class="col-2 text-left padding-left-0">
@@ -22,8 +28,6 @@
   </div>
 
   <app-alert [error]="error"></app-alert>
-  <app-modal [text]="'Are you sure?'" [onYesF]="" [onCancelF]="" *ngIf=""></app-modal>
-
   <app-spinner [loading]="conditions.loading"></app-spinner>
 
   <!-- body -->

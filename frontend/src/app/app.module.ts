@@ -13,7 +13,7 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { ExerciseComponent } from './exercise/exercise.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import {FormsModule} from '@angular/forms';
-import { ModalComponent } from './modal/modal.component';
+import { ModalModule } from './modal';
 
 @NgModule({
   declarations: [
@@ -23,15 +23,15 @@ import { ModalComponent } from './modal/modal.component';
     AlertComponent,
     SpinnerComponent,
     ExerciseComponent,
-    ProgressBarComponent,
-    ModalComponent
+    ProgressBarComponent
   ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
         FontAwesomeModule,
-        FormsModule
+        FormsModule,
+        ModalModule
     ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

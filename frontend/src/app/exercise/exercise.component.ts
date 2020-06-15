@@ -12,6 +12,7 @@ import {ExerciseStatistic} from '../models/exercise.statistic';
 import {MultiTError} from '../models/multiterror';
 import {ExerciseMetadata} from '../models/exercise.metadata';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list';
+import {ModalService} from '../modal';
 
 @Component({
   selector: 'app-exercise',
@@ -36,7 +37,7 @@ export class ExerciseComponent implements OnInit {
     exerciseSaved: false
   };
 
-  constructor(private router: Router, private sprintService: SprintService) {
+  constructor(private router: Router, private sprintService: SprintService, private modalService: ModalService) {
   }
 
   ngOnInit(): void {
@@ -71,8 +72,15 @@ export class ExerciseComponent implements OnInit {
   }
 
   delete(): void {
-    // TODO: delete exercise
-    // TODO: show alert window
+    this.modalService.open('custom-modal-1');
+  }
+
+  onModalCancel(): void {
+    this.modalService.close('custom-modal-1');
+  }
+
+  onModalYes(): void {
+    this.modalService.close('custom-modal-1');
   }
 
   save(): void {

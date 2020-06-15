@@ -1,9 +1,6 @@
-<div class="modal-content">
-  <div class="modal-body">
-    <p>{{text}}</p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="onYes()">yes</button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onCancel()">cancel</button>
+﻿<div class="jw-modal">
+  <div class="jw-modal-body">
+    <ng-content></ng-content>
   </div>
 </div>
+<div class="jw-modal-background"></div>
