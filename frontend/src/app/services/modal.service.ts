@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
 import {ModalConfig} from '../models/modal.config';
 
+// TODO: subscription should be deleted when subscriber dies!
 @Injectable({
   providedIn: 'root'
 })
@@ -15,16 +16,16 @@ export class ModalService {
   constructor() {
   }
 
-  openModal(modalConfig: ModalConfig): void {
+  sendMessageToModalWindow(modalConfig: ModalConfig): void {
     this.modalConfig = modalConfig;
-    this.modalOpenEmitter.next(modalConfig);
+    this.modalOpenEmitter.next(this.modalConfig);
   }
 
-  modalOpenSubscriber(): Subject<ModalConfig> {
+  onMessageToModalWindow(): Subject<ModalConfig> {
     return this.modalOpenEmitter;
   }
 
-  modalCloseSubscriber(): Subject<ModalConfig> {
+  onModalWindowResponse(): Subject<ModalConfig> {
     return this.modalCloseEmitter;
   }
 

@@ -39,13 +39,19 @@ export class SprintComponent implements OnInit {
     this.loading = true;
     this.loadExerciseMetadata();
 
-    if (isDefined(history.state.isDataChanged) && history.state.isDataChanged) {
-      console.log('ska uppdatera exercise ' + history.state.exercise + ' in cache');
-      this.updateExerciseInCache('test', new Exercise().deserialize(history.state.exercise));
+    if (isDefined(history.state.isExerciseDeleted) && history.state.isExerciseDeleted) {
+      console.log('will DELETE exercise ' + history.state.exercise.sid + ' from cache');
+      this.deleteSprintExerciseInCache('test', new Exercise().deserialize(history.state.exercise));
       this.loadExerciseStatistic(true);
+      history.replaceState({state: {}}, 'nothing', '/sprint');
+    } else if (isDefined(history.state.isExerciseModified) && history.state.isExerciseModified) {
+      console.log('will UPDATE exercise ' + history.state.exercise.sid + ' in cache');
+      this.updateSprintExerciseInCache('test', new Exercise().deserialize(history.state.exercise));
+      this.loadExerciseStatistic(true);
+      history.replaceState({state: {}}, 'nothing', '/sprint');
     } else {
       this.loadExerciseStatistic(false);
-      this.getExcercises(false);
+      this.getSprintExcercises(false);
     }
   }
 
@@ -58,8 +64,15 @@ export class SprintComponent implements OnInit {
     this.loading = false;
   }
 
-  private updateExerciseInCache(user: string, exercise: Exercise): void {
-    this.sprintService.updateExerciseInCache(user, exercise).subscribe(
+  private updateSprintExerciseInCache(user: string, exercise: Exercise): void {
+    this.sprintService.updateSprintExerciseInCache(user, exercise).subscribe(
+      data => this.subscribeExercises(data),
+      error => this.handleError(error)
+    );
+  }
+
+  private deleteSprintExerciseInCache(user: string, exercise: Exercise): void {
+    this.sprintService.deleteSprintExerciseInCache(user, exercise).subscribe(
       data => this.subscribeExercises(data),
       error => this.handleError(error)
     );
@@ -71,7 +84,7 @@ export class SprintComponent implements OnInit {
     this.error = error;
   }
 
-  private getExcercises(forceCallServer: boolean): void {
+  private getSprintExcercises(forceCallServer: boolean): void {
     this.sprintService.getExercisesCurrentSprint('test', forceCallServer)
       .subscribe(
         data => this.subscribeExercises(data),

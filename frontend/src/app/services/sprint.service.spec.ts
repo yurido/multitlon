@@ -124,7 +124,7 @@ describe('SprintService', () => {
     expect(request.request.method).toBe('GET');
     request.flush(exercises);
 
-    service.updateExerciseInCache('test', exerciseShoulders).subscribe(data => {
+    service.updateSprintExerciseInCache('test', exerciseShoulders).subscribe(data => {
       data.getSprintExercises().forEach(day => {
         day.getExercises().forEach(exercise => {
           if (exercise.getId() === exerciseShoulders.getId()) {
@@ -172,7 +172,7 @@ describe('SprintService', () => {
     const exerciseShoulders = new Exercise();
     const exercises = new SprintCalendar().deserialize(((sprintData) as any).default);
 
-    service.updateExerciseInCache('test', exerciseShoulders).subscribe(data => {
+    service.updateSprintExerciseInCache('test', exerciseShoulders).subscribe(data => {
       expect(data).toEqual(exercises);
     });
 

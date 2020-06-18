@@ -69,6 +69,11 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
           delay(1000)
         );
       // this.throwError(request.headers, request.url);
+    } else if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'DELETE') {
+      return of(new HttpResponse({status: 200}))
+        .pipe(
+          delay(2000)
+        );
     }
     return next.handle(request);
   }

@@ -1,5 +1,6 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {ModalService} from './services/modal.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -7,16 +8,18 @@ import {ModalService} from './services/modal.service';
   styleUrls: ['./app.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   modalText: string;
   modalCancelButton: string;
   modalAcceptButton: string;
+  private modalWindowSubscription: Subscription;
 
   constructor(private modalService: ModalService) {
   }
 
   ngOnInit(): void {
-    this.modalService.modalOpenSubscriber().subscribe(modalConfig => {
+    this.modalService.onMessageToModalWindow().subscribe(modalConfig => {
+      console.log('Modal Window getting new message: ', modalConfig.getId());
       this.modalText = modalConfig.getText();
       this.modalCancelButton = modalConfig.getCanceButtonText();
       this.modalAcceptButton = modalConfig.getAcceptButtonText();
@@ -29,5 +32,9 @@ export class AppComponent implements OnInit {
 
   onModalAccept(): void {
     this.modalService.modalAccept();
+  }
+
+  ngOnDestroy(): void {
+    this.modalWindowSubscription.unsubscribe();
   }
 }

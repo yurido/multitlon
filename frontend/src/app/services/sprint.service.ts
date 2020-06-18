@@ -136,6 +136,17 @@ export class SprintService {
     return this.EXERCISE_CONFIG_CACHE;
   }
 
+  deleteSprintExercise(id: number, user: string): Observable<any> {
+    return this.http.delete(this.SPRINT_EXERCISES_URL, {
+      headers: httpOptions.headers,
+      params: httpOptions.params
+        .set('user', user)
+    })
+      .pipe(
+        tap(ex => console.log('exercise ' + id + ' deleted permanently'))
+      );
+  }
+
   /**
    *  ************ SACOND-HAND METHODS ***************
    */
@@ -150,45 +161,24 @@ export class SprintService {
    * method updates spint exercise in cache
    * @param exercise - sprint exercise
    */
-  updateExerciseInCache(user: string, exercise: Exercise): Observable<SprintCalendar> {
+  updateSprintExerciseInCache(user: string, exercise: Exercise): Observable<SprintCalendar> {
     if (this.SPRINT_EXERCISES_CACHE === EMPTY) {
-      console.log('SPRINT_EXERCISES_CACHE is empty, getting from server');
+      console.log('SPRINT_EXERCISES_CACHE is empty, getting it from the server');
       return this.getExercisesCurrentSprint(user, true);
     }
-    let updatedSprint: Observable<SprintCalendar> = EMPTY;
-    this.SPRINT_EXERCISES_CACHE.subscribe(
-      data => {
-        const sprintCalendar = new SprintCalendar().deserialize(data);
-        let isExerciseReplaced = false;
+    return this.modifiedSprintExerciseInCache(exercise, false);
+  }
 
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < sprintCalendar.getSprintExercises().length; i++) {
-          // filter on date
-          // tslint:disable-next-line:max-line-length
-          if (new Date(sprintCalendar.getSprintExercises()[i].getSprintDay().getSprintDate()).getDate() === new Date(exercise.getDate()).getDate()) {
-            for (let j = 0; j < sprintCalendar.getSprintExercises()[i].getExercises().length; j++) {
-              if (sprintCalendar.getSprintExercises()[i].getExercises()[j].getId() === exercise.getId()) {
-                sprintCalendar.getSprintExercises()[i].getExercises().splice(j, 1, exercise); // replace exercise
-                let total = 0;
-                for (const index in sprintCalendar.getSprintExercises()[i].getExercises()) {
-                  total = total + sprintCalendar.getSprintExercises()[i].getExercises()[index].getTotalPoints();
-                }
-                sprintCalendar.getSprintExercises()[i].getSprintDay().setTotal(total); // update total points for the day
-                isExerciseReplaced = true;
-                console.log(`exercise ${exercise.getSid()} updated in cache`);
-                break;
-              }
-            }
-            if (isExerciseReplaced) {
-              break;
-            }
-          }
-        }
-        updatedSprint = of(sprintCalendar);
-      }
-    );
-    this.SPRINT_EXERCISES_CACHE = updatedSprint;
-    return this.SPRINT_EXERCISES_CACHE;
+  /**
+   * method deletes spint exercise from cache
+   * @param exercise - sprint exercise
+   */
+  deleteSprintExerciseInCache(user: string, exercise: Exercise): Observable<SprintCalendar> {
+    if (this.SPRINT_EXERCISES_CACHE === EMPTY) {
+      console.log('SPRINT_EXERCISES_CACHE is empty, getting it from the server');
+      return this.getExercisesCurrentSprint(user, true);
+    }
+    return this.modifiedSprintExerciseInCache(exercise, true);
   }
 
   /**
@@ -212,6 +202,59 @@ export class SprintService {
   /**
    *  ************ PRIVATE ***************
    */
+  /**
+   * method modifieds current sprint
+   * @param exercise - exercise to be modified/removed
+   * @param isDeleted - true if removed, false if modified
+   */
+  private modifiedSprintExerciseInCache(exercise: Exercise, isDeleted: boolean): Observable<SprintCalendar> {
+    let updatedSprint: Observable<SprintCalendar> = EMPTY;
+    this.SPRINT_EXERCISES_CACHE.subscribe(
+      data => {
+        const sprintCalendar = new SprintCalendar().deserialize(data);
+        let isSprintModified = false;
+
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < sprintCalendar.getSprintExercises().length; i++) {
+          // filter by date
+          // tslint:disable-next-line:max-line-length
+          if (new Date(sprintCalendar.getSprintExercises()[i].getSprintDay().getSprintDate()).getDate() === new Date(exercise.getDate()).getDate()) {
+            for (let j = 0; j < sprintCalendar.getSprintExercises()[i].getExercises().length; j++) {
+              if (sprintCalendar.getSprintExercises()[i].getExercises()[j].getId() === exercise.getId()) {
+                if (isDeleted) {
+                  sprintCalendar.getSprintExercises()[i].getExercises().splice(j, 1); // delete exercise
+                } else {
+                  sprintCalendar.getSprintExercises()[i].getExercises().splice(j, 1, exercise); // replace exercise
+                }
+                // now we need to recalc days total points
+                let total = 0;
+                for (const index in sprintCalendar.getSprintExercises()[i].getExercises()) {
+                  total = total + sprintCalendar.getSprintExercises()[i].getExercises()[index].getTotalPoints();
+                }
+                sprintCalendar.getSprintExercises()[i].getSprintDay().setTotal(total); // update days total points
+                isSprintModified = true;
+                let logText = '';
+                if (isDeleted) {
+                  logText = 'deleted from';
+                } else {
+                  logText = 'updated in';
+                }
+                console.log(`exercise ${exercise.getSid()} ${logText} cache`);
+                break;
+              }
+            }
+            if (isSprintModified) {
+              break;
+            }
+          }
+        }
+        updatedSprint = of(sprintCalendar);
+      }
+    );
+    this.SPRINT_EXERCISES_CACHE = updatedSprint;
+    return this.SPRINT_EXERCISES_CACHE;
+  }
+
   /*  TODO: saved for backend!
   private createExerciseListSortedByDate(excercises) {
     const sortedExList = this.sortExerciseListByDate(excercises);

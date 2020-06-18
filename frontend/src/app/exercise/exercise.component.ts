@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
@@ -14,6 +14,7 @@ import {ExerciseMetadata} from '../models/exercise.metadata';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list';
 import {ModalService} from '../services/modal.service';
 import {ModalConfig} from '../models/modal.config';
+import {Subscription} from 'rxjs'; // TODO: should not be here!
 
 @Component({
   selector: 'app-exercise',
@@ -21,7 +22,7 @@ import {ModalConfig} from '../models/modal.config';
   styleUrls: ['./exercise.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class ExerciseComponent implements OnInit {
+export class ExerciseComponent implements OnInit, OnDestroy {
   faChevronLeft = faChevronLeft;
   faTrash = faTrash;
   faPlus = faPlus;
@@ -33,10 +34,12 @@ export class ExerciseComponent implements OnInit {
   rawPoints: string;
   conditions = {
     loading: false,
-    isModified: false,
+    isModifiedButNotsaved: false,
     inEditMode: false,
-    exerciseSaved: false
+    isModifiedAndsaved: false,
+    isDeleted: false
   };
+  private modalWindowSubscription: Subscription;
 
   constructor(private router: Router, private sprintService: SprintService, private modalService: ModalService) {
   }
@@ -50,16 +53,44 @@ export class ExerciseComponent implements OnInit {
     // get exercise and statistic from sprint component
     this.exercise = new Exercise().deserialize(history.state.ex);
     this.statistic = new ExerciseStatistic().deserialize(history.state.statistic);
+    console.log('...exercise from sprint: ', this.exercise.getSid(), ' ', this.exercise.getId(), ', statistic from sprint:', this.statistic.getSid());
+
     this.initRepsView();
     this.rawPoints = '' + this.exercise.getRawPoints();
     this.loadMetadata();
     this.conditions.loading = false;
 
-    this.modalService.modalCloseSubscriber().subscribe(config => this.onModalClose(config));
+    this.modalWindowSubscription = this.modalService.onModalWindowResponse().subscribe(config => {
+        console.log('.. ExerciseComponent getting new message from Modal Winndow: accepted=', config.isAccepted, ', this.exercise.id=', this.exercise.getId());
+        if (config.getId() === ModalService.DELETE_EXERCISE_ID && config.isAccepted) {
+          this.conditions.loading = true;
+          this.sprintService.deleteSprintExercise(this.exercise.getId(), 'test').subscribe(data => {
+              this.conditions.isDeleted = true;
+              this.conditions.isModifiedAndsaved = false;
+              this.back();
+            },
+            error =>
+              this.handleError(new MultiTError('It was an error during deleting of exercise, please try later'))
+          );
+        }
+      });
+  }
+
+  // TODO: should not be here!
+  ngOnDestroy(): void {
+    this.modalWindowSubscription.unsubscribe();
   }
 
   back(): void {
-    this.router.navigate(['/sprint'], {state: {isDataChanged: this.conditions.exerciseSaved, exercise: this.exercise}});
+    // tslint:disable-next-line:max-line-length
+    const state = {
+      state: {
+        isExerciseModified: this.conditions.isModifiedAndsaved,
+        isExerciseDeleted: this.conditions.isDeleted,
+        exercise: this.exercise
+      }
+    };
+    this.router.navigate(['/sprint'], state);
   }
 
   edit(): void {
@@ -68,26 +99,20 @@ export class ExerciseComponent implements OnInit {
 
   cancel(): void {
     this.conditions.inEditMode = false;
-    this.conditions.isModified = false;
+    this.conditions.isModifiedButNotsaved = false;
     this.reps = [];
     this.initRepsView();
     this.rawPoints = '' + this.exercise.getRawPoints();
   }
 
   delete(): void {
-    this.modalService.openModal(new ModalConfig(ModalService.DELETE_EXERCISE_ID, 'Are you sure?', 'no', 'yes'));
-  }
-
-  private onModalClose(config: ModalConfig): void {
-    if (config.getId() === ModalService.DELETE_EXERCISE_ID) {
-      console.log('close modal: ', config.getId(), ', accepted? ', config.isAccepted);
-    }
+    this.modalService.sendMessageToModalWindow(new ModalConfig(ModalService.DELETE_EXERCISE_ID, 'Are you sure?', 'no', 'yes'));
   }
 
   save(): void {
     this.conditions.inEditMode = false;
-    this.conditions.isModified = false;
-    this.conditions.exerciseSaved = true;
+    this.conditions.isModifiedButNotsaved = false;
+    this.conditions.isModifiedAndsaved = true;
     this.conditions.loading = true;
 
     this.exercise.setReps([]);
@@ -109,19 +134,20 @@ export class ExerciseComponent implements OnInit {
               }, error => this.handleError(error)
             );
 
-        }, error => this.handleError(new MultiTError('It was an error during updating exercise, please try later'))
+        }, error =>
+          this.handleError(new MultiTError('It was an error during updating exercise, please try later'))
       );
   }
 
   addReps(): void {
     const rep = new RepsView('', '');
     this.reps.push(rep);
-    this.conditions.isModified = true;
+    this.conditions.isModifiedButNotsaved = true;
   }
 
   deleteReps(index: number): void {
     this.reps.splice(index, 1);
-    this.conditions.isModified = true;
+    this.conditions.isModifiedButNotsaved = true;
   }
 
   canAddMoreReps(): boolean {
@@ -143,7 +169,7 @@ export class ExerciseComponent implements OnInit {
 
   changeRawPoints($event): void {
     if (this.rawPoints !== $event.target.value) {
-      this.conditions.isModified = true;
+      this.conditions.isModifiedButNotsaved = true;
     }
     this.rawPoints = $event.target.value;
   }
@@ -169,7 +195,7 @@ export class ExerciseComponent implements OnInit {
     } else {
       condis = this.sprintService.isStringContainsNumbers(this.rawPoints);
     }
-    return this.conditions.isModified && condis;
+    return this.conditions.isModifiedButNotsaved && condis;
   }
 
   addPostfix(postfix: string, $event): void {
@@ -192,7 +218,7 @@ export class ExerciseComponent implements OnInit {
 
   private modifyRepsElement(newValue: string, oldValue: string): string {
     if (oldValue !== newValue) {
-      this.conditions.isModified = true;
+      this.conditions.isModifiedButNotsaved = true;
     }
     const newNumberValue = this.sprintService.getNumberFromString(newValue);
     return (newNumberValue === 0 ? '' : '' + newNumberValue);
