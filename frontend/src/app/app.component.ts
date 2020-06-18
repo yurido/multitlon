@@ -8,7 +8,6 @@ import {ModalService} from './services/modal.service';
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit {
-  openModal: boolean;
   modalText: string;
   modalCancelButton: string;
   modalAcceptButton: string;
@@ -17,8 +16,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.modalService.modalSubscriber().subscribe(modalConfig => {
-      this.openModal = true;
+    this.modalService.modalOpenSubscriber().subscribe(modalConfig => {
       this.modalText = modalConfig.getText();
       this.modalCancelButton = modalConfig.getCanceButtonText();
       this.modalAcceptButton = modalConfig.getAcceptButtonText();
@@ -26,12 +24,10 @@ export class AppComponent implements OnInit {
   }
 
   onModalClose(): void {
-    this.openModal = false;
     this.modalService.modalCancel();
   }
 
   onModalAccept(): void {
-    this.openModal = false;
     this.modalService.modalAccept();
   }
 }

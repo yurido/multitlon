@@ -55,8 +55,7 @@ export class ExerciseComponent implements OnInit {
     this.loadMetadata();
     this.conditions.loading = false;
 
-    this.modalService.cancelSubscriber().subscribe(config => this.onModalClose(config));
-    this.modalService.acceptSubscriber().subscribe(config => this.onModalClose(config));
+    this.modalService.modalCloseSubscriber().subscribe(config => this.onModalClose(config));
   }
 
   back(): void {

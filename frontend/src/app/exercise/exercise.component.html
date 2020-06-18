@@ -14,7 +14,7 @@
         <span class="text-white header-text-style">{{config.getName()}}</span>
       </div>
       <div class="col-2 text-right header-rigth-column-style">
-        <button class="btn btn-dark margin-3px" *ngIf="conditions.inEditMode" (click)="delete()">
+        <button class="btn btn-dark margin-3px" *ngIf="conditions.inEditMode" (click)="delete()" data-toggle="modal" data-target="#modalDialog">
           <fa-icon [icon]="faTrash"></fa-icon>
         </button>
       </div>

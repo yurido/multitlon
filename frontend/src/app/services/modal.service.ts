@@ -9,37 +9,32 @@ export class ModalService {
   public static DELETE_EXERCISE_ID = 'delete-exercise';
 
   private modalConfig: ModalConfig;
-  private modalEmitter = new Subject<ModalConfig>();
-  private modalCancelEmitter = new Subject<ModalConfig>();
-  private modalAcceptEmitter = new Subject<ModalConfig>();
+  private modalOpenEmitter = new Subject<ModalConfig>();
+  private modalCloseEmitter = new Subject<ModalConfig>();
 
   constructor() {
   }
 
   openModal(modalConfig: ModalConfig): void {
     this.modalConfig = modalConfig;
-    this.modalEmitter.next(modalConfig);
+    this.modalOpenEmitter.next(modalConfig);
   }
 
-  modalSubscriber(): Subject<ModalConfig> {
-    return this.modalEmitter;
+  modalOpenSubscriber(): Subject<ModalConfig> {
+    return this.modalOpenEmitter;
   }
 
-  cancelSubscriber(): Subject<ModalConfig> {
-    return this.modalCancelEmitter;
-  }
-
-  acceptSubscriber(): Subject<ModalConfig> {
-    return this.modalAcceptEmitter;
+  modalCloseSubscriber(): Subject<ModalConfig> {
+    return this.modalCloseEmitter;
   }
 
   modalCancel(): void {
     this.modalConfig.isAccepted = false;
-    this.modalCancelEmitter.next(this.modalConfig);
+    this.modalCloseEmitter.next(this.modalConfig);
   }
 
   modalAccept(): void {
     this.modalConfig.isAccepted = true;
-    this.modalCancelEmitter.next(this.modalConfig);
+    this.modalCloseEmitter.next(this.modalConfig);
   }
 }
