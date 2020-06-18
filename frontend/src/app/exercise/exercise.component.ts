@@ -12,7 +12,8 @@ import {ExerciseStatistic} from '../models/exercise.statistic';
 import {MultiTError} from '../models/multiterror';
 import {ExerciseMetadata} from '../models/exercise.metadata';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list';
-import {ModalService} from '../modal';
+import {ModalService} from '../services/modal.service';
+import {ModalConfig} from '../models/modal.config';
 
 @Component({
   selector: 'app-exercise',
@@ -53,6 +54,9 @@ export class ExerciseComponent implements OnInit {
     this.rawPoints = '' + this.exercise.getRawPoints();
     this.loadMetadata();
     this.conditions.loading = false;
+
+    this.modalService.cancelSubscriber().subscribe(config => this.onModalClose(config));
+    this.modalService.acceptSubscriber().subscribe(config => this.onModalClose(config));
   }
 
   back(): void {
@@ -72,15 +76,13 @@ export class ExerciseComponent implements OnInit {
   }
 
   delete(): void {
-    this.modalService.open('custom-modal-1');
+    this.modalService.openModal(new ModalConfig(ModalService.DELETE_EXERCISE_ID, 'Are you sure?', 'no', 'yes'));
   }
 
-  onModalCancel(): void {
-    this.modalService.close('custom-modal-1');
-  }
-
-  onModalYes(): void {
-    this.modalService.close('custom-modal-1');
+  private onModalClose(config: ModalConfig): void {
+    if (config.getId() === ModalService.DELETE_EXERCISE_ID) {
+      console.log('close modal: ', config.getId(), ', accepted? ', config.isAccepted);
+    }
   }
 
   save(): void {

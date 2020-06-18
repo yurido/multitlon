@@ -1,4 +1,9 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div>
+  <div class="modal-window text-center" *ngIf="openModal">
+    <p>{{modalText}}</p>
+    <button class="btn btn-secondary" (click)="onModalClose()">{{modalCancelButton}}</button>
+    <button class="btn btn-primary" (click)="onModalAccept()">{{modalAcceptButton}}</button>
+  </div>
   <router-outlet></router-outlet>
 </div>

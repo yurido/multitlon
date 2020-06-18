@@ -13,7 +13,6 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { ExerciseComponent } from './exercise/exercise.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import {FormsModule} from '@angular/forms';
-import { ModalModule } from './modal';
 
 @NgModule({
   declarations: [
@@ -30,8 +29,7 @@ import { ModalModule } from './modal';
         AppRoutingModule,
         HttpClientModule,
         FontAwesomeModule,
-        FormsModule,
-        ModalModule
+        FormsModule
     ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
