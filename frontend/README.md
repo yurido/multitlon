@@ -1,17 +1,26 @@
 ## Multitlon - Frontend
 
-### TODO:
-
 ### Prerequisites
-1. Run `npm install`
-1. Angular CLI: `npm install --save-dev @angular/cli@latest`
+1. `npm install`
+2. Angular CLI: `npm install --save-dev @angular/cli@latest`
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli)
+this project was generated with [Angular CLI](https://github.com/angular/angular-cli)
 
 ### Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+`npm run-script build` to build the project. The build artifacts will be stored in the `dist/` directory.
+
+`npm run-script prod` to build project for poduction. The build artifacts will be stored in the `dist/` directory.
 
 ### To start dev server
 
-Run `ng serve --open` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+`npm start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+### Deploy to prod
+1 build for prod
+
+2 copy all files from `dist/` to `multitlon/docs`
+
+3 commit and push to remote repo
+
+4 navigate to `https://yurido.github.io/multitlon`
