@@ -1,9 +1,24 @@
-<div class="container-fluid" style="padding: 0px;text-align:center">
-  <h1>
-    {{ title }}
-  </h1>
-  <img alt="logo" src="assets/multitlon-logo.jpg" style="width: 100%; height: auto; max-width: 1010px">
-  <nav>
-    <a routerLink="/sprint" routerLinkActive="active">to sprint</a>
-  </nav>
+<div class="container-fluid container-fluid-styling max-width">
+    <div class="container max-width" align="center" style="background-image: url(assets/main-32148-660x413.jpg); height: 410px;">
+      <div class="container" align="center" style="height: 140px"></div>
+      <input type="text"
+             class="login-style"
+             value="{{username}}"
+             placeholder="username">
+      <br>
+      <input type="text"
+             class="login-style"
+             value="{{password}}"
+             placeholder="password">
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <button class="btn btn-light login-style" style="width: 180px;"
+              (click)="login()">login
+      </button>
+    </div>
+    <div style="background: rgba(20,11,9,0.92); width:100%; height: 100%; position: fixed; left: 0; top: 0; z-index: -1"></div>
 </div>

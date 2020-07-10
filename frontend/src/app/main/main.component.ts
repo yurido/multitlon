@@ -1,4 +1,5 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -8,9 +9,15 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 })
 export class MainComponent implements OnInit {
   title = 'multitlon';
+  username: string;
+  password: string;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
+  }
+
+  login(): void {
+    this.router.navigate(['/sprint']);
   }
 }

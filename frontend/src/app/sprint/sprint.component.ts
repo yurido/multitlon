@@ -124,7 +124,7 @@ export class SprintComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/main']);
+    // this.router.navigate(['/main']);
   }
 
   getExName(sid: string): string {
