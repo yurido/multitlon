@@ -42,21 +42,19 @@
           <tr *ngFor="let exercise of sprintExercise.getExercises()">
             <td>
               <div class="row" style="padding: 6px;">
-                <div class="col-2 text-left max-width-100 min-width-100">
+                <div class="col-4 text-left" style="padding-right: 0px">
                   {{getExName(exercise.getSid())}}
                 </div>
-                <div class="col-4 text-left max-width-100">
+                <div class="col-4 text-left max-width-100" style="padding-right: 0px">
                   {{exercise.getRawPoints()}} {{getExItem(exercise.getSid())}}
                 </div>
-                <div class="col-2 text-left">
+                <div class="col-4 text-left" style="padding-right: 0px">
                   {{exercise.getTotalPoints()}}
-                </div>
-                <div class="col-4">
                 </div>
               </div>
             </td>
             <td style="text-align: right;">
-              <button class="btn btn-link btn-open-exercise" (click)="openExercise(exercise)">
+              <button class="btn btn-link btn-open-exercise text-right" (click)="openExercise(exercise)" style="min-width: 40px; padding-left: 0px; padding-right: 4px;">
                 <fa-icon [icon]="faChevronRight"></fa-icon>
               </button>
             </td>

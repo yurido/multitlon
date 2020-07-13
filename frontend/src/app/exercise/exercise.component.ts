@@ -106,7 +106,7 @@ export class ExerciseComponent implements OnInit, OnDestroy {
   }
 
   delete(): void {
-    this.modalService.sendMessageToModalWindow(new ModalConfig(ModalService.DELETE_EXERCISE_ID, 'Are you sure?', 'no', 'yes'));
+    this.modalService.sendMessageToModalWindow(new ModalConfig(ModalService.DELETE_EXERCISE_ID, 'Do you want to delete?', 'no', 'yes'));
   }
 
   save(): void {
