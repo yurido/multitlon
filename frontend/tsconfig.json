@@ -9,8 +9,6 @@
     "module": "esnext",
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "module": "esnext",
-    "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
     "typeRoots": [
@@ -21,5 +19,6 @@
       "dom"
     ],
     "resolveJsonModule": true
-  }
+  },
+  "exclude": ["node_modules"]
 }

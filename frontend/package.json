@@ -1,6 +1,10 @@
 {
   "name": "frontend",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "author": "Yury Dorofeev",
+  "license": "ISC",
+  "description": "Frontend part of the multitlone app",
+  "main": "index.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.config.json",
@@ -8,7 +12,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prod": "ng build --prod --base-href /multitlon/ --output-hashing=none"
+    "prod": "ng build --prod --base-href /multitlon/ --output-hashing=none",
+    "webpack": "webpack --mode development"
   },
   "private": true,
   "dependencies": {
@@ -24,21 +29,23 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "bootstrap": "^4.4.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.1",
     "popper.js": "^1.16.1",
     "rxjs": "~6.5.4",
     "tslib": "^1.9.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.900.3",
+    "@angular-builders/custom-webpack": "^9.2.0",
+    "@angular-devkit/build-angular": "^0.1000.2",
     "@angular/cli": "^9.0.3",
     "@angular/compiler-cli": "~9.0.2",
     "@angular/language-service": "~9.0.2",
     "@types/jasmine": "~3.3.16",
     "@types/jasminewd2": "~2.0.8",
-    "@types/node": "^8.10.59",
+    "@types/node": "~10.12",
     "codelyzer": "^5.0.0",
+    "html-webpack-plugin": "^4.3.0",
     "jasmine-core": "^3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
@@ -49,6 +56,8 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
-    "typescript": "~3.6.5"
+    "typescript": "~3.6.5",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2"
   }
 }
