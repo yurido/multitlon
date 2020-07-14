@@ -59,7 +59,6 @@ export class ExerciseComponent implements OnInit, OnDestroy {
     this.conditions.loading = false;
 
     this.modalWindowSubscription = this.modalService.onModalWindowResponse().subscribe(config => {
-        // console.log('.. ExerciseComponent getting new message from Modal Winndow: accepted=', config.isAccepted, ', this.exercise.id=', this.exercise.getId());
         if (config.getId() === ModalService.DELETE_EXERCISE_ID && config.isAccepted) {
           this.conditions.loading = true;
           this.sprintService.deleteSprintExercise(this.exercise.getId(), 'test').subscribe(data => {
@@ -124,13 +123,13 @@ export class ExerciseComponent implements OnInit, OnDestroy {
       .subscribe(data => {
         this.conditions.isModifiedAndsaved = true;
         this.exercise = new Exercise().deserialize(data);
-          this.sprintService.getExerciseStatisticForCurrentSprint(this.exercise.getSid(), 'test')
+        this.sprintService.getExerciseStatisticForCurrentSprint(this.exercise.getSid(), 'test')
             .subscribe(response => {
                 this.statistic = new ExerciseStatistic().deserialize(response);
                 this.conditions.loading = false;
               }, error => this.handleError(error)
             );
-          this.sprintService.updateSprintExerciseInCache('test', this.exercise);
+        this.sprintService.updateSprintExerciseInCache('test', this.exercise);
         }, error =>
           this.handleError(new MultiTError('It was an error during updating exercise, please try later'))
       );
