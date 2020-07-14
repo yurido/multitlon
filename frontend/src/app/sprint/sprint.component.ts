@@ -39,20 +39,13 @@ export class SprintComponent implements OnInit {
     this.loading = true;
     this.loadExerciseMetadata();
 
-    if (isDefined(history.state.isExerciseDeleted) && history.state.isExerciseDeleted) {
-      console.log('will DELETE exercise ' + history.state.exercise.sid + ' from cache');
-      this.deleteSprintExerciseInCache('test', new Exercise().deserialize(history.state.exercise));
-      this.loadExerciseStatistic(true);
-      history.replaceState({state: {}}, 'nothing', '/sprint');
-    } else if (isDefined(history.state.isExerciseModified) && history.state.isExerciseModified) {
-      console.log('will UPDATE exercise ' + history.state.exercise.sid + ' in cache');
-      this.updateSprintExerciseInCache('test', new Exercise().deserialize(history.state.exercise));
+    if (isDefined(history.state.isExerciseModified) && history.state.isExerciseModified) {
       this.loadExerciseStatistic(true);
       history.replaceState({state: {}}, 'nothing', '/sprint');
     } else {
       this.loadExerciseStatistic(false);
-      this.getSprintExcercises(false);
     }
+    this.getSprintExcercises(false);
   }
 
   private subscribeExercises(data: SprintCalendar): void {

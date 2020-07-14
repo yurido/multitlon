@@ -3,11 +3,11 @@ import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.css'],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class MainComponent implements OnInit {
+export class LoginComponent implements OnInit {
   title = 'multitlon';
   username: string;
   password: string;

@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { SprintComponent } from './sprint/sprint.component';
-import { MainComponent } from './main/main.component';
+import { LoginComponent } from './login/login.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {MockHttpCalIInterceptor} from './mock.http.call.interceptor';
 import { AlertComponent } from './alert/alert.component';
@@ -18,7 +18,7 @@ import {FormsModule} from '@angular/forms';
   declarations: [
     AppComponent,
     SprintComponent,
-    MainComponent,
+    LoginComponent,
     AlertComponent,
     SpinnerComponent,
     ExerciseComponent,

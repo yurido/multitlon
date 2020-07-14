@@ -36,8 +36,7 @@ export class ExerciseComponent implements OnInit, OnDestroy {
     loading: false,
     isModifiedButNotsaved: false,
     inEditMode: false,
-    isModifiedAndsaved: false,
-    isDeleted: false
+    isModifiedAndsaved: false
   };
   private modalWindowSubscription: Subscription;
 
@@ -50,10 +49,9 @@ export class ExerciseComponent implements OnInit, OnDestroy {
       this.back();
       return;
     }
-    // get exercise and statistic from sprint component
+    // getting exercise and statistic from sprint component
     this.exercise = new Exercise().deserialize(history.state.ex);
     this.statistic = new ExerciseStatistic().deserialize(history.state.statistic);
-    console.log('...exercise from sprint: ', this.exercise.getSid(), ' ', this.exercise.getId(), ', statistic from sprint:', this.statistic.getSid());
 
     this.initRepsView();
     this.rawPoints = '' + this.exercise.getRawPoints();
@@ -61,12 +59,12 @@ export class ExerciseComponent implements OnInit, OnDestroy {
     this.conditions.loading = false;
 
     this.modalWindowSubscription = this.modalService.onModalWindowResponse().subscribe(config => {
-        console.log('.. ExerciseComponent getting new message from Modal Winndow: accepted=', config.isAccepted, ', this.exercise.id=', this.exercise.getId());
+        // console.log('.. ExerciseComponent getting new message from Modal Winndow: accepted=', config.isAccepted, ', this.exercise.id=', this.exercise.getId());
         if (config.getId() === ModalService.DELETE_EXERCISE_ID && config.isAccepted) {
           this.conditions.loading = true;
           this.sprintService.deleteSprintExercise(this.exercise.getId(), 'test').subscribe(data => {
-              this.conditions.isDeleted = true;
-              this.conditions.isModifiedAndsaved = false;
+              this.conditions.isModifiedAndsaved = true;
+              this.sprintService.deleteSprintExerciseInCache('test', this.exercise);
               this.back();
             },
             error =>
@@ -86,7 +84,6 @@ export class ExerciseComponent implements OnInit, OnDestroy {
     const state = {
       state: {
         isExerciseModified: this.conditions.isModifiedAndsaved,
-        isExerciseDeleted: this.conditions.isDeleted,
         exercise: this.exercise
       }
     };
@@ -112,7 +109,6 @@ export class ExerciseComponent implements OnInit, OnDestroy {
   save(): void {
     this.conditions.inEditMode = false;
     this.conditions.isModifiedButNotsaved = false;
-    this.conditions.isModifiedAndsaved = true;
     this.conditions.loading = true;
 
     this.exercise.setReps([]);
@@ -126,14 +122,15 @@ export class ExerciseComponent implements OnInit, OnDestroy {
     this.exercise.setRawPoints(this.sprintService.getFloatFromString(this.rawPoints));
     this.sprintService.updateExercise(this.exercise)
       .subscribe(data => {
-          this.exercise = new Exercise().deserialize(data);
+        this.conditions.isModifiedAndsaved = true;
+        this.exercise = new Exercise().deserialize(data);
           this.sprintService.getExerciseStatisticForCurrentSprint(this.exercise.getSid(), 'test')
             .subscribe(response => {
                 this.statistic = new ExerciseStatistic().deserialize(response);
                 this.conditions.loading = false;
               }, error => this.handleError(error)
             );
-
+          this.sprintService.updateSprintExerciseInCache('test', this.exercise);
         }, error =>
           this.handleError(new MultiTError('It was an error during updating exercise, please try later'))
       );
