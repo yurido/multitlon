@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
-import {isUndefined} from 'util';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {Reps} from '../models/reps';
@@ -45,7 +44,7 @@ export class ExerciseComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.conditions.loading = true;
-    if (isUndefined(history.state.ex) || isUndefined(history.state.statistic)) {
+    if ((history.state.ex === undefined || history.state.ex === null) || (history.state.statistic === undefined || history.state.statistic === null)) {
       this.back();
       return;
     }

@@ -4,7 +4,6 @@
   "author": "Yury Dorofeev",
   "license": "ISC",
   "description": "Frontend part of the multitlone app",
-  "main": "index.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.config.json",
@@ -12,8 +11,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prod": "ng build --prod --base-href /multitlon/ --output-hashing=none",
-    "webpack": "webpack --mode development"
+    "prod": "ng build --prod --base-href /multitlon/ --output-hashing=none"
   },
   "private": true,
   "dependencies": {
@@ -44,6 +42,7 @@
     "@types/jasmine": "~3.3.16",
     "@types/jasminewd2": "~2.0.8",
     "@types/node": "~10.12",
+    "clean-webpack-plugin": "^3.0.0",
     "codelyzer": "^5.0.0",
     "html-webpack-plugin": "^4.3.0",
     "jasmine-core": "^3.5.0",
@@ -58,6 +57,6 @@
     "tslint": "~5.15.0",
     "typescript": "~3.6.5",
     "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.3.12"
   }
 }

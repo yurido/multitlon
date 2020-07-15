@@ -8,7 +8,6 @@ import {SprintCalendar} from '../models/sprint.calendar';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
 import {environment} from '../../environments/environment';
-import {isDefined} from '@angular/compiler/src/util';
 import {SprintExerciseStatisticCalendar} from '../models/sprint.exercise.statistic.calendar';
 import {ExerciseStatistic} from '../models/exercise.statistic';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list';
@@ -39,7 +38,7 @@ export class SprintComponent implements OnInit {
     this.loading = true;
     this.loadExerciseMetadata();
 
-    if (isDefined(history.state.isExerciseModified) && history.state.isExerciseModified) {
+    if (history.state.isExerciseModified !== undefined && history.state.isExerciseModified !== null && history.state.isExerciseModified) {
       this.loadExerciseStatistic(true);
       history.replaceState({state: {}}, 'nothing', '/sprint');
     } else {
@@ -53,7 +52,7 @@ export class SprintComponent implements OnInit {
     this.sprintExercises = this.sprintService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
     const monthN = new Date(this.sprintExercises[0].getSprintDay().getSprintDate()).getMonth();
     const monthObj = environment.MONTHS.find(value => value.id === monthN);
-    this.month = isDefined(monthObj) ? monthObj.name : '';
+    this.month = (monthObj !== undefined && monthObj !==  null) ? monthObj.name : '';
     this.loading = false;
   }
 
@@ -122,12 +121,12 @@ export class SprintComponent implements OnInit {
 
   getExName(sid: string): string {
     const exerciseObj = this.exerciseConfig.find(value => value.getSid() === sid);
-    return isDefined(exerciseObj) ? exerciseObj.getName() : '';
+    return (exerciseObj !== undefined && exerciseObj !== null) ? exerciseObj.getName() : '';
   }
 
   getExItem(sid: string): string {
     const exerciseObj = this.exerciseConfig.find(value => value.getSid() === sid);
-    return isDefined(exerciseObj) ? exerciseObj.getItem() : '';
+    return (exerciseObj !== undefined && exerciseObj !== null) ? exerciseObj.getItem() : '';
   }
 
   calcDayColor(isDayOff: boolean): string {

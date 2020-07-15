@@ -5,7 +5,6 @@ import {EMPTY, Observable, of} from 'rxjs';
 import {shareReplay, tap} from 'rxjs/operators';
 import {Exercise} from '../models/exercise';
 import {ExerciseStatistic} from '../models/exercise.statistic';
-import {isDefined} from '@angular/compiler/src/util';
 import {SprintCalendar} from '../models/sprint.calendar';
 import {SprintExerciseStatisticCalendar} from '../models/sprint.exercise.statistic.calendar';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list'; // TODO: rename class!
@@ -52,7 +51,8 @@ export class SprintService {
    * @param forceCallServer - force to read from server
    */
   getExercisesCurrentSprint(user: string, forceCallServer: boolean): Observable<SprintCalendar> {
-    if (isDefined(this.SPRINT_EXERCISES_CACHE) && this.SPRINT_EXERCISES_CACHE !== EMPTY && !forceCallServer) {
+    // tslint:disable-next-line:max-line-length
+    if ((this.SPRINT_EXERCISES_CACHE !== undefined && this.SPRINT_EXERCISES_CACHE !== null) && this.SPRINT_EXERCISES_CACHE !== EMPTY && !forceCallServer) {
       console.log('got exercises from cache');
       return this.SPRINT_EXERCISES_CACHE;
     }
@@ -75,7 +75,8 @@ export class SprintService {
    * @param forceCallServer - force to read from server
    */
   getExerciseStatisticsForCurrentSprint(user: string, forceCallServer: boolean): Observable<SprintExerciseStatisticCalendar> {
-    if (isDefined(this.EXERCISE_STATISTIC_CACHE) && this.EXERCISE_STATISTIC_CACHE !== EMPTY && !forceCallServer) {
+    // tslint:disable-next-line:max-line-length
+    if ((this.EXERCISE_STATISTIC_CACHE !== undefined && this.EXERCISE_STATISTIC_CACHE !== null) && this.EXERCISE_STATISTIC_CACHE !== EMPTY && !forceCallServer) {
       console.log('got statistic from cache');
       return this.EXERCISE_STATISTIC_CACHE;
     }
@@ -124,7 +125,7 @@ export class SprintService {
    * method returns exercise global metadata from server or cache
    */
   getExerciseMetadata(): Observable<ExerciseMetadataList> {
-    if (isDefined(this.EXERCISE_CONFIG_CACHE) && this.EXERCISE_CONFIG_CACHE !== EMPTY) {
+    if ((this.EXERCISE_CONFIG_CACHE !== undefined && this.EXERCISE_CONFIG_CACHE !== null) && this.EXERCISE_CONFIG_CACHE !== EMPTY) {
       console.log('got metadata from cache');
       return this.EXERCISE_CONFIG_CACHE;
     }
