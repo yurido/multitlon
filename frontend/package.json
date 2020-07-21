@@ -11,7 +11,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prod": "ng build --prod --base-href /multitlon/ --output-hashing=none"
+    "prod": "ng build --prod --base-href /multitlon/ --output-hashing=none",
+    "postinstall": "ngcc"
   },
   "private": true,
   "dependencies": {
