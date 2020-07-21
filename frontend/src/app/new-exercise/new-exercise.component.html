@@ -1,0 +1,36 @@
+<div class="container-fluid container-fluid-styling">
+  <!-- header -->
+  <div class="badge-dark container sticky-top max-width">
+    <div class="row">
+      <div class="col-2 text-left padding-left-0">
+        <button class="btn btn-dark margin-3px" (click)="cancel()">
+          cancel
+        </button>
+      </div>
+      <div class="col-8 text-center">
+        <span class="text-white header-text-style">add exercise</span>
+      </div>
+      <div class="col-2 text-right header-rigth-column-style">
+      </div>
+    </div>
+  </div>
+
+  <app-alert [error]="error"></app-alert>
+  <app-spinner [loading]="conditions.loading"></app-spinner>
+
+  <!-- body -->
+  <div class="container exercise-body max-width">
+    <!-- date picker -->
+    <!-- exercise list -->
+    <!-- reps table -->
+    <!-- no reps, raw points register -->
+    <!-- footer -->
+    <div class="container max-width" align="center" style="padding: 5px">
+      <div class="max-width" align="center"
+           style="left: 50%; margin-left: -15px; padding-bottom: 20px; padding-top: 10px;">
+        <button class="btn btn-success btn-exercise-operate" (click)="save()" [disabled]="!canSave()">save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -44,6 +44,7 @@ export class ExerciseComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.conditions.loading = true;
+    // tslint:disable-next-line:max-line-length
     if ((history.state.ex === undefined || history.state.ex === null) || (history.state.statistic === undefined || history.state.statistic === null)) {
       this.back();
       return;
@@ -81,8 +82,7 @@ export class ExerciseComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line:max-line-length
     const state = {
       state: {
-        isExerciseModified: this.conditions.isModifiedAndsaved,
-        exercise: this.exercise
+        isExerciseModified: this.conditions.isModifiedAndsaved
       }
     };
     this.router.navigate(['/sprint'], state);

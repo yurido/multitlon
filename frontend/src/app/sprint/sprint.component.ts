@@ -107,7 +107,7 @@ export class SprintComponent implements OnInit {
   }
 
   addExercise(): void {
-    // TODO: implement
+    this.router.navigate(['/sprint/newExercise']);
   }
 
   openExercise(exercise: Exercise): void {

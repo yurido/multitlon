@@ -13,6 +13,7 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { ExerciseComponent } from './exercise/exercise.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import {FormsModule} from '@angular/forms';
+import { NewExerciseComponent } from './new-exercise/new-exercise.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {FormsModule} from '@angular/forms';
     AlertComponent,
     SpinnerComponent,
     ExerciseComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    NewExerciseComponent
   ],
     imports: [
         BrowserModule,
