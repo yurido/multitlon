@@ -14,6 +14,11 @@ import { ExerciseComponent } from './exercise/exercise.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import {FormsModule} from '@angular/forms';
 import { NewExerciseComponent } from './new-exercise/new-exercise.component';
+import {MatInputModule} from '@angular/material/input';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -26,13 +31,18 @@ import { NewExerciseComponent } from './new-exercise/new-exercise.component';
     ProgressBarComponent,
     NewExerciseComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        HttpClientModule,
-        FontAwesomeModule,
-        FormsModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FontAwesomeModule,
+    FormsModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatMomentDateModule,
+    BrowserAnimationsModule
+  ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: MockHttpCalIInterceptor,
