@@ -20,6 +20,7 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
+import {CalendarHeaderComponent} from './new-exercise/new-exercise.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
     SpinnerComponent,
     ExerciseComponent,
     ProgressBarComponent,
-    NewExerciseComponent
+    NewExerciseComponent,
+    CalendarHeaderComponent
   ],
   imports: [
     BrowserModule,
