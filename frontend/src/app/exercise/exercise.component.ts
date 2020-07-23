@@ -18,7 +18,7 @@ import {Subscription} from 'rxjs'; // TODO: should not be here!
 @Component({
   selector: 'app-exercise',
   templateUrl: './exercise.component.html',
-  styleUrls: ['./exercise.component.css'],
+  styleUrls: ['./exercise.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class ExerciseComponent implements OnInit, OnDestroy {

@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "1.0.0",
   "author": "Yury Dorofeev",
-  "license": "ISC",
+  "license": "MIT",
   "description": "Frontend part of the multitlone app",
   "scripts": {
     "ng": "ng",
@@ -40,14 +40,14 @@
     "moment": "^2.27.0"
   },
   "devDependencies": {
-    "@angular-builders/custom-webpack": "^9.2.0",
-    "@angular-devkit/build-angular": "^0.1000.3",
-    "@angular/cli": "^10.0.3",
-    "@angular/compiler-cli": "~10.0.4",
+    "@angular-builders/custom-webpack": "^10.0.0",
+    "@angular-devkit/build-angular": "^0.1000.4",
+    "@angular/cli": "^10.0.4",
+    "@angular/compiler-cli": "~10.0.5",
     "@angular/language-service": "~10.0.4",
     "@types/jasmine": "~3.3.16",
     "@types/jasminewd2": "~2.0.8",
-    "@types/node": "~10.12",
+    "@types/node": "~12.11.1",
     "clean-webpack-plugin": "^3.0.0",
     "codelyzer": "^6.0.0",
     "html-webpack-plugin": "^4.3.0",

@@ -4,7 +4,7 @@ import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-alert',
   templateUrl: './alert.component.html',
-  styleUrls: ['./alert.component.css'],
+  styleUrls: ['./alert.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class AlertComponent implements OnInit {

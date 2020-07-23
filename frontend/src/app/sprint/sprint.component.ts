@@ -17,7 +17,7 @@ import {MultiTError} from '../models/multiterror';
 @Component({
   selector: 'app-sprint',
   templateUrl: './sprint.component.html',
-  styleUrls: ['./sprint.component.css'],
+  styleUrls: ['./sprint.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class SprintComponent implements OnInit {

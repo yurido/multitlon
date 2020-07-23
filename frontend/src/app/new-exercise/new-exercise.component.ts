@@ -5,7 +5,7 @@ import {SprintService} from '../services/sprint.service';
 @Component({
   selector: 'app-new-exercise',
   templateUrl: './new-exercise.component.html',
-  styleUrls: ['./new-exercise.component.css'],
+  styleUrls: ['./new-exercise.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class NewExerciseComponent implements OnInit, OnDestroy {
