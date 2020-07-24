@@ -19,8 +19,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
-import {CalendarHeaderComponent} from './new-exercise/new-exercise.component';
+import {SprintCalendarHeaderComponent} from './sprint-calendar/sprint-calendar.component';
+import {SprintCalendarComponent} from './sprint-calendar/sprint-calendar.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +32,8 @@ import {CalendarHeaderComponent} from './new-exercise/new-exercise.component';
     ExerciseComponent,
     ProgressBarComponent,
     NewExerciseComponent,
-    CalendarHeaderComponent
+    SprintCalendarHeaderComponent,
+    SprintCalendarComponent
   ],
   imports: [
     BrowserModule,
@@ -47,13 +48,13 @@ import {CalendarHeaderComponent} from './new-exercise/new-exercise.component';
     BrowserAnimationsModule,
     ReactiveFormsModule
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: MockHttpCalIInterceptor,
-    multi: true
-  }, {
-    provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'}
-  }],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MockHttpCalIInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

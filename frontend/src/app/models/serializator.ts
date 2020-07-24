@@ -1,4 +1,3 @@
-import {isUndefined} from 'util';
 
 export class Serializator {
   private childClassName: string;
@@ -8,9 +7,11 @@ export class Serializator {
   }
 
   public getObjectProperty(input: object, propertyName: string): any {
-    if (!input.hasOwnProperty(propertyName) || isUndefined(input[propertyName])) {
+    // @ts-ignore
+    if (!input.hasOwnProperty(propertyName) || input[propertyName] === undefined || input[propertyName] === null) {
       throw SyntaxError(`${this.childClassName} deserialization, property "${propertyName}" is undefined`);
     }
+    // @ts-ignore
     return input[propertyName];
   }
 }

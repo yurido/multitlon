@@ -52,6 +52,7 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
           delay(1000)
         );
     } else if (request.url.indexOf(this.sprintService.getExerciseStatisticsCurrentSprintURL() + '/') >= 0) {
+      // tslint:disable-next-line:max-line-length
       const sidPos = request.url.indexOf(this.sprintService.getExerciseStatisticsCurrentSprintURL() + '/') + (this.sprintService.getExerciseStatisticsCurrentSprintURL() + '/').length;
       const sid = request.url.substr(sidPos, request.url.length - sidPos);
       const json = JSON.parse('{"sid": "' + sid + '", "progress": 44, "totalRaw": 123, "totalPoints": 1500, "averagePoints": 45, "maxPonts": 500, "quota": 16}');
@@ -78,13 +79,13 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
     return next.handle(request);
   }
 
-  private throwError(headers, url) {
+  private throwError(headers: any, url: any) {
     throw new HttpErrorResponse({
       error: 'your error',
-      headers: headers,
+      headers,
       status: 500,
       statusText: 'Error',
-      url: url
+      url
     });
   }
 }

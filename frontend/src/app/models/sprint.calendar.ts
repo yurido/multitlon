@@ -12,7 +12,7 @@ export class SprintCalendar implements Serializable<SprintCalendar> {
     return this.sprintExercises;
   }
 
-  public deserialize(input): SprintCalendar {
+  public deserialize(input: object): SprintCalendar {
     const serializator = new Serializator(SprintCalendar.name);
     const sprintExercises = serializator.getObjectProperty(input, 'sprintExercises');
 

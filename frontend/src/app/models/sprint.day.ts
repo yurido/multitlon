@@ -25,7 +25,7 @@ export class SprintDay implements Serializable<SprintDay> {
     this.total = total;
   }
 
-  deserialize(input): SprintDay {
+  deserialize(input: object): SprintDay {
     const serializator = new Serializator(SprintDay.name);
     this.date = serializator.getObjectProperty(input, 'date');
     this.isWeekend = serializator.getObjectProperty(input, 'isWeekend');

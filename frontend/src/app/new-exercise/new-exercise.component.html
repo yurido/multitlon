@@ -3,7 +3,7 @@
   <div class="badge-dark container sticky-top max-width">
     <div class="row">
       <div class="col-2 text-left padding-left-0">
-        <button class="btn btn-dark margin-3px" (click)="cancel()">
+        <button class="btn btn-dark margin-3px" (click)="cancel()" [disabled]="conditions.cancelDisabled">
           cancel
         </button>
       </div>
@@ -21,12 +21,7 @@
   <!-- body -->
   <div class="container exercise-body max-width">
     <!-- date picker -->
-    <mat-form-field appearance="fill">
-      <mat-label>Choose a date</mat-label>
-      <input matInput [matDatepicker]="picker">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker [calendarHeaderComponent]="calendarHeader" [dateClass]="dateClass"></mat-datepicker>
-    </mat-form-field>
+    <app-sprint-calendar (choosenDay)="onNewDate($event)" (calendarOpened)="onCalendarOpen($event)"></app-sprint-calendar>
     <!-- exercise list -->
     <!-- reps table -->
     <!-- no reps, raw points register -->

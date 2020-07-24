@@ -29,7 +29,7 @@ export class ExerciseComponent implements OnInit, OnDestroy {
   exercise: Exercise;
   statistic: ExerciseStatistic;
   reps: RepsView[] = [];
-  config: ExerciseMetadata;
+  config: ExerciseMetadata | undefined;
   rawPoints: string;
   conditions = {
     loading: false,
@@ -150,19 +150,19 @@ export class ExerciseComponent implements OnInit, OnDestroy {
     return emptyElements === -1;
   }
 
-  changeWeight(index: number, $event): void {
+  changeWeight(index: number, $event: any): void {
     const newValue = this.modifyRepsElement($event.target.value, this.reps[index].getWeight());
     this.reps[index].setWeight(newValue);
     $event.target.value = newValue;
   }
 
-  changeReps(index: number, $event): void {
+  changeReps(index: number, $event: any): void {
     const newValue = this.modifyRepsElement($event.target.value, this.reps[index].getReps());
     this.reps[index].setReps(newValue);
     $event.target.value = newValue;
   }
 
-  changeRawPoints($event): void {
+  changeRawPoints($event: any): void {
     if (this.rawPoints !== $event.target.value) {
       this.conditions.isModifiedButNotsaved = true;
     }
@@ -185,7 +185,7 @@ export class ExerciseComponent implements OnInit, OnDestroy {
 
   canSave(): boolean {
     let condis = false;
-    if (this.config.isWithReps()) {
+    if (this.config !== undefined && this.config.isWithReps()) {
       condis = (this.canAddMoreReps() && this.reps.length > 0);
     } else {
       condis = this.sprintService.isStringContainsNumbers(this.rawPoints);
@@ -193,11 +193,11 @@ export class ExerciseComponent implements OnInit, OnDestroy {
     return this.conditions.isModifiedButNotsaved && condis;
   }
 
-  addPostfix(postfix: string, $event): void {
+  addPostfix(postfix: string, $event: any): void {
     $event.target.value = $event.target.value + ($event.target.value.length > 0 ? postfix : '');
   }
 
-  removePostfix($event): void {
+  removePostfix($event: any): void {
     if ($event.target.value.length > 0) {
       $event.target.value = this.sprintService.getNumberFromString($event.target.value);
     }

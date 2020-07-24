@@ -23,7 +23,7 @@ export class Reps implements Serializable<Reps> {
     this.weight = weight;
   }
 
-  deserialize(input): Reps {
+  deserialize(input: object): Reps {
     const serializator = new Serializator(Reps.name);
     this.weight = serializator.getObjectProperty(input, 'weight');
     this.reps = serializator.getObjectProperty(input, 'reps');

@@ -12,7 +12,7 @@ export class SprintExerciseStatisticCalendar implements Serializable<SprintExerc
     return this.exerciseStatistic;
   }
 
-  deserialize(input): SprintExerciseStatisticCalendar {
+  deserialize(input: object): SprintExerciseStatisticCalendar {
     const serializator = new Serializator(SprintExerciseStatisticCalendar.name);
     const exerciseStatistic = serializator.getObjectProperty(input, 'exerciseStatistic');
 

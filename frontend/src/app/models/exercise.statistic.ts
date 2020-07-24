@@ -41,7 +41,7 @@ export class ExerciseStatistic implements Serializable<ExerciseStatistic> {
     return this.quota;
   }
 
-  deserialize(input): ExerciseStatistic {
+  deserialize(input: object): ExerciseStatistic {
     const serializator = new Serializator(ExerciseStatistic.name);
     this.sid = serializator.getObjectProperty(input, 'sid');
     this.progress = serializator.getObjectProperty(input, 'progress');

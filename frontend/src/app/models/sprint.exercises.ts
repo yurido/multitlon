@@ -18,7 +18,7 @@ export class SprintExercises implements Serializable<SprintExercises> {
     return this.exercises;
   }
 
-  deserialize(input): SprintExercises {
+  deserialize(input: object): SprintExercises {
     const serializator = new Serializator(SprintExercises.name);
     const sprintDay = serializator.getObjectProperty(input, 'sprintDay');
     this.sprintDay = new SprintDay().deserialize(sprintDay);

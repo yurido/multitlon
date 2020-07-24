@@ -54,7 +54,7 @@ export class Exercise implements Serializable<Exercise> {
     this.totalPoints = totalPoints;
   }
 
-  deserialize(input): Exercise {
+  deserialize(input: object): Exercise {
     const serializator = new Serializator(Exercise.name);
     this.id = serializator.getObjectProperty(input, 'id');
     this.sid = serializator.getObjectProperty(input, 'sid');

@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {Router} from '@angular/router';
 import {SprintService} from '../services/sprint.service';
-import {MatCalendarCellCssClasses} from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-new-exercise',
@@ -13,16 +12,10 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   error: any;
   conditions = {
     isAdded: false,
-    loading: false
+    loading: false,
+    cancelDisabled: false
   };
-  calendarHeader = CalendarHeaderComponent;
-  dateClass = (d: Date): MatCalendarCellCssClasses => {
-    console.log('date=', d);
-    const date = d.getDate();
-
-    // Highlight the 1st and 20th day of each month.
-    return (date === 1 || date === 20) ? 'day-off-class' : '';
-  }
+  date: any;
 
   constructor(private router: Router, private sprintService: SprintService) {
   }
@@ -45,10 +38,11 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
 
   save(): void {
     // TODO: implement
+    console.log('date=', this.date);
   }
 
   canSave(): boolean {
-    let condis = false;
+    let condis = true;
     /* if (this.config.isWithReps()) {
       condis = (this.canAddMoreReps() && this.reps.length > 0);
     } else {
@@ -56,12 +50,13 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
     } */
     return condis;
   }
-}
 
-@Component({
-  selector: 'app-calendar-header',
-  template: '<div><br></div>',
-  encapsulation: ViewEncapsulation.None
-})
-export class CalendarHeaderComponent {
+  onNewDate(date: Date): void {
+    console.log('choosen day=', date);
+    this.date = date;
+  }
+
+  onCalendarOpen(opened: boolean): void {
+    this.conditions.cancelDisabled = opened;
+  }
 }
