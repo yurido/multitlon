@@ -21,7 +21,9 @@
   <!-- body -->
   <div class="container exercise-body max-width">
     <!-- date picker -->
-    <app-sprint-calendar (choosenDay)="onNewDate($event)" (calendarOpened)="onCalendarOpen($event)"></app-sprint-calendar>
+    <div class="container max-width" align="center" style="padding: 5px">
+      <app-sprint-calendar (choosenDay)="onNewDate($event)" (calendarOpened)="onCalendarOpen($event)"></app-sprint-calendar>
+    </div>
     <!-- exercise list -->
     <!-- reps table -->
     <!-- no reps, raw points register -->

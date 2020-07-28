@@ -46,16 +46,19 @@ export class SprintCalendarComponent implements OnInit {
   date: any; // choosen day
   @Output() choosenDay = new EventEmitter<Date>(); // choosen day API
   @Output() calendarOpened = new EventEmitter<boolean>(); // calendar open/close state API
+  today: any;
 
   constructor() {
   }
 
   ngOnInit(): void {
     this.date = new FormControl(moment()).value;
+    this.today = new Date();
+
     if (moment.isMoment(this.date)) {
       const date = moment(this.date).toDate().getDate();
       if (this.isDayOff(date)) {
-        // this.date = undefined; // no default date
+        this.date = undefined; // no default date
         console.log('day off!');
       }
     }
@@ -68,7 +71,7 @@ export class SprintCalendarComponent implements OnInit {
   weekendFilter = (d: Date | null): boolean => {
     if (moment.isMoment(d)) {
       const date = moment(d).toDate().getDate();
-      return !this.isDayOff(date) && (date <= new Date().getDate());
+      return !this.isDayOff(date) && (date <= this.today.getDate());
     }
     return false;
   }
@@ -104,7 +107,7 @@ export class SprintCalendarComponent implements OnInit {
   }
 
   private isDayOff(date: number): boolean {
-    if (date === 4 || date === 5 || date === 11 || date === 12 || date === 18 || date === 24) {
+    if (date === 4 || date === 5 || date === 11 || date === 12 || date === 18 || date === 28) {
       return true;
     }
     return false;
