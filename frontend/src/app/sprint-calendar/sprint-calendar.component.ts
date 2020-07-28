@@ -64,11 +64,11 @@ export class SprintCalendarComponent implements OnInit {
     this.dateChanged(event);
   }
 
-  // prevent days-off from being selected
+  // prevent days-off and future days from being selected
   weekendFilter = (d: Date | null): boolean => {
     if (moment.isMoment(d)) {
       const date = moment(d).toDate().getDate();
-      return this.isDayOff(date);
+      return !this.isDayOff(date) && (date <= new Date().getDate());
     }
     return false;
   }
@@ -93,7 +93,6 @@ export class SprintCalendarComponent implements OnInit {
   }
 
   dateChanged($event: any): void {
-    console.log('dateChanged=', $event.target.value);
     if (moment.isMoment($event.target.value)) {
       const date = moment($event.target.value).toDate();
       this.choosenDay.emit(date);
