@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output, ViewEncapsulation} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {MatCalendarCellCssClasses} from '@angular/material/datepicker';
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
@@ -8,6 +8,7 @@ import * as _moment from 'moment';
 // @ts-ignore
 import {default as _rollupMoment} from 'moment';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
+import {Observable} from 'rxjs';
 
 const moment = _rollupMoment || _moment;
 
@@ -46,6 +47,8 @@ export class SprintCalendarComponent implements OnInit {
   date: any; // choosen day
   @Output() choosenDay = new EventEmitter<Date>(); // choosen day API
   @Output() calendarOpened = new EventEmitter<boolean>(); // calendar open/close state API
+  @Input() dayOffList: Date[] = [];
+  @Input() trainingDayList: Date[] = [];
   today: any;
 
   constructor() {
@@ -56,9 +59,9 @@ export class SprintCalendarComponent implements OnInit {
     this.today = new Date();
 
     if (moment.isMoment(this.date)) {
-      const date = moment(this.date).toDate().getDate();
+      const date = moment(this.date).toDate();
       if (this.isDayOff(date)) {
-        this.date = undefined; // no default date
+        this.date = undefined; // default date can't be day-off
         console.log('day off!');
       }
     }
@@ -70,26 +73,29 @@ export class SprintCalendarComponent implements OnInit {
   // prevent days-off and future days from being selected
   weekendFilter = (d: Date | null): boolean => {
     if (moment.isMoment(d)) {
-      const date = moment(d).toDate().getDate();
-      return !this.isDayOff(date) && (date <= this.today.getDate());
+      const date = moment(d).toDate();
+      return !this.isDayOff(date) && (date.getDate() <= this.today.getDate());
     }
     return false;
   }
 
   dateClass = (d: Date): MatCalendarCellCssClasses => {
     if (moment.isMoment(d)) {
-      const date = moment(d).toDate().getDate();
+      const date = moment(d).toDate();
       // highlight days-off
       if (this.isDayOff(date)) {
         return 'day-off-class';
       }
       // fill days after 24 with grey
-      if (date > 24) {
+      // TODO: should be input parameter
+      if (date.getDate() > 24) {
         return 'grey-day-class';
       }
-      // fill days with exercises with green
-      if (date === 1 || date === 2 || date === 3 || date === 6 || date === 8 || date === 9 || date === 20 || date === 21) {
-        return 'days-with-exercises-class';
+      // fill trainings days with green
+      for (const trainingDay of this.trainingDayList) {
+        if (date.getDate() === trainingDay.getDate() && trainingDay.getMonth() === date.getMonth()) {
+          return 'days-with-exercises-class';
+        }
       }
     }
     return '';
@@ -106,9 +112,11 @@ export class SprintCalendarComponent implements OnInit {
     this.calendarOpened.emit(isOpend);
   }
 
-  private isDayOff(date: number): boolean {
-    if (date === 4 || date === 5 || date === 11 || date === 12 || date === 18 || date === 28) {
-      return true;
+  private isDayOff(date: Date): boolean {
+    for (const dayOff of this.dayOffList) {
+      if (date.getDate() === dayOff.getDate() && date.getMonth() === dayOff.getMonth()) {
+        return true;
+      }
     }
     return false;
   }

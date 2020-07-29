@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {Router} from '@angular/router';
 import {SprintService} from '../services/sprint.service';
+import {SprintCalendar} from '../models/sprint.calendar';
 
 @Component({
   selector: 'app-new-exercise',
@@ -16,11 +17,33 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
     cancelDisabled: false
   };
   date: any;
+  daysOff: Date[] = [];
+  trainingDays: Date[] = [];
 
   constructor(private router: Router, private sprintService: SprintService) {
   }
 
   ngOnInit(): void {
+    this.conditions.loading = true;
+    this.sprintService.getExercisesCurrentSprint('test', false)
+      .subscribe(
+        data => {
+          const sprintExerciseList = new SprintCalendar().deserialize(data);
+          // tslint:disable-next-line:max-line-length
+          if (sprintExerciseList.getSprintExercises() !== undefined && sprintExerciseList.getSprintExercises() !== null && sprintExerciseList.getSprintExercises().length > 0) {
+            for (const sprintDay of sprintExerciseList.getSprintExercises()) {
+              if (sprintDay.getSprintDay().getIsWeekend()) {
+                this.daysOff.push(new Date(sprintDay.getSprintDay().getSprintDate()));
+                // tslint:disable-next-line:max-line-length
+              } else if (!sprintDay.getSprintDay().getIsWeekend() && sprintDay.getExercises() !== null && sprintDay.getExercises().length > 0) {
+                this.trainingDays.push(new Date(sprintDay.getSprintDay().getSprintDate()));
+              }
+            }
+          }
+          this.conditions.loading = false;
+        },
+        error => this.handleError(error)
+      );
   }
 
   ngOnDestroy(): void {
@@ -42,12 +65,7 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   }
 
   canSave(): boolean {
-    let condis = true;
-    /* if (this.config.isWithReps()) {
-      condis = (this.canAddMoreReps() && this.reps.length > 0);
-    } else {
-      condis = this.sprintService.isStringContainsNumbers(this.rawPoints);
-    } */
+    const condis = true;
     return condis;
   }
 
@@ -58,5 +76,11 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
 
   onCalendarOpen(opened: boolean): void {
     this.conditions.cancelDisabled = opened;
+  }
+
+  private handleError(error: any): void {
+    console.log('error here ', error);
+    this.conditions.loading = false;
+    this.error = error;
   }
 }

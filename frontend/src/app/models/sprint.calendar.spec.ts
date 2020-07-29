@@ -14,6 +14,7 @@ describe('SprintCalendar', () => {
   });
 
   it('should deserialize calendar without exercises', () => {
+    // tslint:disable-next-line:max-line-length
     const json = JSON.parse('{"sprintExercises": [{"sprintDay": {"date": 1581289200000, "isWeekend": true, "total": 500}, "exercises":[]}]}');
     const calendar = new SprintCalendar().deserialize(json);
 

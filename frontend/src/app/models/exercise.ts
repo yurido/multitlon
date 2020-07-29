@@ -54,6 +54,10 @@ export class Exercise implements Serializable<Exercise> {
     this.totalPoints = totalPoints;
   }
 
+  public setDate(date: number): void {
+    this.date = date;
+  }
+
   deserialize(input: object): Exercise {
     const serializator = new Serializator(Exercise.name);
     this.id = serializator.getObjectProperty(input, 'id');

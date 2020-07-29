@@ -19,10 +19,14 @@
   <app-spinner [loading]="conditions.loading"></app-spinner>
 
   <!-- body -->
-  <div class="container exercise-body max-width">
+  <div class="container exercise-body max-width" *ngIf="!conditions.loading">
     <!-- date picker -->
     <div class="container max-width" align="center" style="padding: 5px">
-      <app-sprint-calendar (choosenDay)="onNewDate($event)" (calendarOpened)="onCalendarOpen($event)"></app-sprint-calendar>
+      <app-sprint-calendar [dayOffList]="daysOff"
+                           [trainingDayList]="trainingDays"
+                           (choosenDay)="onNewDate($event)"
+                           (calendarOpened)="onCalendarOpen($event)">
+      </app-sprint-calendar>
     </div>
     <!-- exercise list -->
     <!-- reps table -->
