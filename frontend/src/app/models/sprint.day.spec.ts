@@ -15,7 +15,7 @@ describe('SprintDay', () => {
   });
 
   it('should throw exception when deserialize not json object', () => {
-    expect(() => new SprintDay().deserialize('blablanblawq wrgsfdg sd hgtery ewtr yewrt ygfdhdfsfda asfd asrgf asfd'))
+    expect(() => new SprintDay().deserialize({'bla': 'blablanblawq wrgsfdg sd hgtery ewtr yewrt ygfdhdfsfda asfd asrgf asfd'}))
       .toThrow(new SyntaxError('SprintDay deserialization, property "date" is undefined'));
   });
 });

@@ -7,7 +7,7 @@ import * as exerciseStatistic from '../mock-data/sprint-statistic.json';
 import * as sprintData from '../mock-data/sprint.json';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list';
 import {SprintExerciseStatisticCalendar} from '../models/sprint.exercise.statistic.calendar';
-import {SprintCalendar} from '../models/sprint.calendar';
+import {SprintExerciseList} from '../models/sprint.exercise.list';
 import {Exercise} from '../models/exercise';
 
 describe('SprintService', () => {
@@ -60,6 +60,7 @@ describe('SprintService', () => {
     expect(request.request.headers.get('Content-Type')).toEqual('application/json');
     expect(request.request.params.get('user')).toEqual('test');
     expect(request.request.params.get('date')).toBeGreaterThan(0);
+    // @ts-ignore
     request.flush(shouldersStat);
   });
 
@@ -80,8 +81,8 @@ describe('SprintService', () => {
   });
 
   it('should return all the exercises for user "test" for current sprint', () => {
-    const exercises = new SprintCalendar().deserialize(((sprintData) as any).default);
-    service.getExercisesCurrentSprint('test', false).subscribe(data => {
+    const exercises = new SprintExerciseList().deserialize(((sprintData) as any).default);
+    service.getExercisesForCurrentSprint('test', false).subscribe(data => {
       expect(data.getSprintExercises().length).toBeGreaterThan(5);
       expect(data).toEqual(exercises);
     });
@@ -115,8 +116,8 @@ describe('SprintService', () => {
     const jsonEx = JSON.parse('{"id": 12345678998, "sid": "SHOULDERS", "date": 1580511600000, "reps": [{"weight":600, "reps":500}], "rawPoints": 1500, "totalPoints": 1320, "time": 0}');
     const exerciseShoulders = new Exercise().deserialize(jsonEx);
 
-    const exercises = new SprintCalendar().deserialize(((sprintData) as any).default);
-    service.getExercisesCurrentSprint('test', false).subscribe(data => {
+    const exercises = new SprintExerciseList().deserialize(((sprintData) as any).default);
+    service.getExercisesForCurrentSprint('test', false).subscribe(data => {
       expect(data).toEqual(exercises);
     });
     const request = httpTestingController.expectOne((req: any) =>
@@ -170,7 +171,7 @@ describe('SprintService', () => {
   it('should not update exercise in empty cache', () => {
     // tslint:disable-next-line:max-line-length
     const exerciseShoulders = new Exercise();
-    const exercises = new SprintCalendar().deserialize(((sprintData) as any).default);
+    const exercises = new SprintExerciseList().deserialize(((sprintData) as any).default);
 
     service.updateSprintExerciseInCache('test', exerciseShoulders).subscribe(data => {
       expect(data).toEqual(exercises);

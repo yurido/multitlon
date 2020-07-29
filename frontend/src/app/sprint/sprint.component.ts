@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {SprintService} from '../services/sprint.service';
-import {SprintExercises} from '../models/sprint.exercises';
+import {SprintExercise} from '../models/sprint.exercise';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
-import {SprintCalendar} from '../models/sprint.calendar';
+import {SprintExerciseList} from '../models/sprint.exercise.list';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
 import {environment} from '../../environments/environment';
@@ -21,7 +21,7 @@ import {MultiTError} from '../models/multiterror';
   encapsulation: ViewEncapsulation.None
 })
 export class SprintComponent implements OnInit {
-  sprintExercises: SprintExercises[];
+  sprintExercises: SprintExercise[];
   faChevronLeft = faChevronLeft;
   faPlus = faPlus;
   faChevronRight = faChevronRight;
@@ -47,8 +47,8 @@ export class SprintComponent implements OnInit {
     this.getSprintExcercises(false);
   }
 
-  private subscribeExercises(data: SprintCalendar): void {
-    const sprintCalendar = new SprintCalendar().deserialize(data);
+  private subscribeExercises(data: SprintExerciseList): void {
+    const sprintCalendar = new SprintExerciseList().deserialize(data);
     this.sprintExercises = this.sprintService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
     const monthN = new Date(this.sprintExercises[0].getSprintDay().getSprintDate()).getMonth();
     const monthObj = environment.MONTHS.find(value => value.id === monthN);
@@ -77,7 +77,7 @@ export class SprintComponent implements OnInit {
   }
 
   private getSprintExcercises(forceCallServer: boolean): void {
-    this.sprintService.getExercisesCurrentSprint('test', forceCallServer)
+    this.sprintService.getExercisesForCurrentSprint('test', forceCallServer)
       .subscribe(
         data => this.subscribeExercises(data),
         error => this.handleError(error)

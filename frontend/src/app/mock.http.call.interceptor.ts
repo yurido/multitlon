@@ -15,7 +15,7 @@ import * as exerciseStatistic from './mock-data/sprint-statistic.json';
 import {ExerciseStatistic} from './models/exercise.statistic';
 import * as exerciseMetadata from './mock-data/exercise-metadata.json';
 import {SprintService} from './services/sprint.service';
-import {SprintCalendar} from './models/sprint.calendar';
+import {SprintExerciseList} from './models/sprint.exercise.list';
 
 @Injectable()
 export class MockHttpCalIInterceptor implements HttpInterceptor {
@@ -27,7 +27,7 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
     if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'GET') {
       //    this.throwError(request.headers, request.url);
       // return of(new HttpResponse({status: 400, body: {}}));
-      const sprintExerciseList = new SprintCalendar().deserialize( ((sprintData) as any).default);
+      const sprintExerciseList = new SprintExerciseList().deserialize( ((sprintData) as any).default);
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < sprintExerciseList.getSprintExercises().length; i++) {
         const date = new Date(sprintExerciseList.getSprintExercises()[i].getSprintDay().getSprintDate());

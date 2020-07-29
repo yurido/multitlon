@@ -8,7 +8,7 @@ import * as exerciseStatistic from '../mock-data/sprint-statistic.json';
 import * as sprintData from '../mock-data/sprint.json';
 import * as exerciseMetadata from '../mock-data/exercise-metadata.json';
 import {of} from 'rxjs';
-import {SprintCalendar} from '../models/sprint.calendar';
+import {SprintExerciseList} from '../models/sprint.exercise.list';
 import {DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
 
@@ -19,11 +19,11 @@ describe('SprintComponent', () => {
   beforeEach(async(() => {
 
     // tslint:disable-next-line:max-line-length
-    const spySprintService = jasmine.createSpyObj('SprintService', ['getExercisesCurrentSprint', 'getExerciseStatisticsForCurrentSprint', 'getExerciseMetadata', 'sortSprintExercisesByDate']);
-    spySprintService.getExercisesCurrentSprint.and.returnValue(of(((sprintData) as any).default));
+    const spySprintService = jasmine.createSpyObj('SprintService', ['getExercisesForCurrentSprint', 'getExerciseStatisticsForCurrentSprint', 'getExerciseMetadata', 'sortSprintExercisesByDate']);
+    spySprintService.getExercisesForCurrentSprint.and.returnValue(of(((sprintData) as any).default));
     spySprintService.getExerciseStatisticsForCurrentSprint.and.returnValue(of(((exerciseStatistic) as any).default));
     spySprintService.getExerciseMetadata.and.returnValue(of(((exerciseMetadata) as any).default));
-    const exercises = new SprintCalendar().deserialize((((sprintData) as any).default));
+    const exercises = new SprintExerciseList().deserialize((((sprintData) as any).default));
     spySprintService.sortSprintExercisesByDate.and.returnValue(exercises.getSprintExercises());
     const spyRouter = jasmine.createSpyObj('Router', ['navigate']);
     const state = {isDataChanged: false};
@@ -54,14 +54,18 @@ describe('SprintComponent', () => {
     const headerDebugg = page.query(By.css('[class="badge-dark container sticky-top max-width"]'));
     const header: HTMLElement = headerDebugg.nativeElement;
     const span = header.querySelector('span');
-    expect(span.textContent).toBe('february');
+    if (span !== null) {
+      expect(span.textContent).toBe('february');
+    }
 
     const tableDebugg = page.query(By.css('[class="table table-sm"]'));
     expect(tableDebugg).toBeTruthy();
     const table: HTMLElement = tableDebugg.nativeElement;
-    expect(table.textContent.indexOf('swim')).toBeGreaterThan(-1);
-    expect(table.textContent.indexOf('squats')).toBeGreaterThan(-1);
-    expect(table.textContent.indexOf('run')).toBeGreaterThan(-1);
-    expect(table.textContent.indexOf('2000 kg')).toBeGreaterThan(-1);
+    if (table !== null && table.textContent !== null) {
+      expect(table.textContent.indexOf('swim')).toBeGreaterThan(-1);
+      expect(table.textContent.indexOf('squats')).toBeGreaterThan(-1);
+      expect(table.textContent.indexOf('run')).toBeGreaterThan(-1);
+      expect(table.textContent.indexOf('2000 kg')).toBeGreaterThan(-1);
+    }
   });
 });

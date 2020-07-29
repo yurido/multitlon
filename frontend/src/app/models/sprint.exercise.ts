@@ -3,7 +3,7 @@ import {SprintDay} from './sprint.day';
 import {Serializable} from './serializable';
 import {Serializator} from './serializator';
 
-export class SprintExercises implements Serializable<SprintExercises> {
+export class SprintExercise implements Serializable<SprintExercise> {
   private sprintDay: SprintDay;
   private exercises: Exercise[] = [];
 
@@ -18,8 +18,8 @@ export class SprintExercises implements Serializable<SprintExercises> {
     return this.exercises;
   }
 
-  deserialize(input: object): SprintExercises {
-    const serializator = new Serializator(SprintExercises.name);
+  deserialize(input: object): SprintExercise {
+    const serializator = new Serializator(SprintExercise.name);
     const sprintDay = serializator.getObjectProperty(input, 'sprintDay');
     this.sprintDay = new SprintDay().deserialize(sprintDay);
     const exercises = serializator.getObjectProperty(input, 'exercises');

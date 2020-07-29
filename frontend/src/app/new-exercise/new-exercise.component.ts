@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {Router} from '@angular/router';
 import {SprintService} from '../services/sprint.service';
-import {SprintCalendar} from '../models/sprint.calendar';
+import {SprintExerciseList} from '../models/sprint.exercise.list';
 
 @Component({
   selector: 'app-new-exercise',
@@ -25,10 +25,10 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.conditions.loading = true;
-    this.sprintService.getExercisesCurrentSprint('test', false)
+    this.sprintService.getExercisesForCurrentSprint('test', false)
       .subscribe(
         data => {
-          const sprintExerciseList = new SprintCalendar().deserialize(data);
+          const sprintExerciseList = new SprintExerciseList().deserialize(data);
           // tslint:disable-next-line:max-line-length
           if (sprintExerciseList.getSprintExercises() !== undefined && sprintExerciseList.getSprintExercises() !== null && sprintExerciseList.getSprintExercises().length > 0) {
             for (const sprintDay of sprintExerciseList.getSprintExercises()) {

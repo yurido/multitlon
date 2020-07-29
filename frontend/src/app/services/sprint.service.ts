@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {SprintExercises} from '../models/sprint.exercises';
+import {SprintExercise} from '../models/sprint.exercise';
 import {EMPTY, Observable, of} from 'rxjs';
 import {shareReplay, tap} from 'rxjs/operators';
 import {Exercise} from '../models/exercise';
 import {ExerciseStatistic} from '../models/exercise.statistic';
-import {SprintCalendar} from '../models/sprint.calendar';
+import {SprintExerciseList} from '../models/sprint.exercise.list';
 import {SprintExerciseStatisticCalendar} from '../models/sprint.exercise.statistic.calendar';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list'; // TODO: rename class!
 
@@ -23,7 +23,7 @@ export class SprintService {
   private EXERCISE_METADATA_URL = this.EXERCISES_URL + '/metadata';
   private STATISTICS_URL = 'rest/statistics';
   private STATISTICS_EXERCISES_SPRINT_URL = this.STATISTICS_URL + '/sprintExercises';
-  private SPRINT_EXERCISES_CACHE: Observable<SprintCalendar> = EMPTY;
+  private SPRINT_EXERCISES_CACHE: Observable<SprintExerciseList> = EMPTY;
   private EXERCISE_STATISTIC_CACHE: Observable<SprintExerciseStatisticCalendar> = EMPTY;
   private EXERCISE_CONFIG_CACHE: Observable<ExerciseMetadataList> = EMPTY;
 
@@ -50,14 +50,14 @@ export class SprintService {
    * @param user - user
    * @param forceCallServer - force to read from server
    */
-  getExercisesCurrentSprint(user: string, forceCallServer: boolean): Observable<SprintCalendar> {
+  getExercisesForCurrentSprint(user: string, forceCallServer: boolean): Observable<SprintExerciseList> {
     // tslint:disable-next-line:max-line-length
     if ((this.SPRINT_EXERCISES_CACHE !== undefined && this.SPRINT_EXERCISES_CACHE !== null) && this.SPRINT_EXERCISES_CACHE !== EMPTY && !forceCallServer) {
       console.log('got exercises from cache');
       return this.SPRINT_EXERCISES_CACHE;
     }
     console.log('getting exercises from server');
-    this.SPRINT_EXERCISES_CACHE = this.http.get<SprintCalendar>(this.SPRINT_EXERCISES_URL, {
+    this.SPRINT_EXERCISES_CACHE = this.http.get<SprintExerciseList>(this.SPRINT_EXERCISES_URL, {
       headers: httpOptions.headers,
       params: httpOptions.params
         .set('date', new Date().getTime().toString())
@@ -151,8 +151,8 @@ export class SprintService {
   /**
    *  ************ SACOND-HAND METHODS ***************
    */
-  sortSprintExercisesByDate(list: SprintExercises[]): SprintExercises[] {
-    list.sort((a: SprintExercises, b: SprintExercises) => {
+  sortSprintExercisesByDate(list: SprintExercise[]): SprintExercise[] {
+    list.sort((a: SprintExercise, b: SprintExercise) => {
       return (a.getSprintDay().getSprintDate() - b.getSprintDay().getSprintDate());
     }).reverse();
     return list;
@@ -162,10 +162,10 @@ export class SprintService {
    * method updates spint exercise in cache
    * @param exercise - sprint exercise
    */
-  updateSprintExerciseInCache(user: string, exercise: Exercise): Observable<SprintCalendar> {
+  updateSprintExerciseInCache(user: string, exercise: Exercise): Observable<SprintExerciseList> {
     if (this.SPRINT_EXERCISES_CACHE === EMPTY) {
       console.log('SPRINT_EXERCISES_CACHE is empty, getting it from the server');
-      return this.getExercisesCurrentSprint(user, true);
+      return this.getExercisesForCurrentSprint(user, true);
     }
     return this.modifiedSprintExerciseInCache(exercise, false);
   }
@@ -174,10 +174,10 @@ export class SprintService {
    * method deletes spint exercise from cache
    * @param exercise - sprint exercise
    */
-  deleteSprintExerciseInCache(user: string, exercise: Exercise): Observable<SprintCalendar> {
+  deleteSprintExerciseInCache(user: string, exercise: Exercise): Observable<SprintExerciseList> {
     if (this.SPRINT_EXERCISES_CACHE === EMPTY) {
       console.log('SPRINT_EXERCISES_CACHE is empty, getting it from the server');
-      return this.getExercisesCurrentSprint(user, true);
+      return this.getExercisesForCurrentSprint(user, true);
     }
     return this.modifiedSprintExerciseInCache(exercise, true);
   }
@@ -208,11 +208,11 @@ export class SprintService {
    * @param exercise - exercise to be modified/removed
    * @param isDeleted - true if removed, false if modified
    */
-  private modifiedSprintExerciseInCache(exercise: Exercise, isDeleted: boolean): Observable<SprintCalendar> {
-    let updatedSprint: Observable<SprintCalendar> = EMPTY;
+  private modifiedSprintExerciseInCache(exercise: Exercise, isDeleted: boolean): Observable<SprintExerciseList> {
+    let updatedSprint: Observable<SprintExerciseList> = EMPTY;
     this.SPRINT_EXERCISES_CACHE.subscribe(
       data => {
-        const sprintCalendar = new SprintCalendar().deserialize(data);
+        const sprintCalendar = new SprintExerciseList().deserialize(data);
         let isSprintModified = false;
 
         // tslint:disable-next-line:prefer-for-of
