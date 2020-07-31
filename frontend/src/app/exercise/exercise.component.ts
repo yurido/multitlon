@@ -13,7 +13,7 @@ import {ExerciseMetadata} from '../models/exercise.metadata';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list';
 import {ModalService} from '../services/modal.service';
 import {ModalConfig} from '../models/modal.config';
-import {Subscription} from 'rxjs'; // TODO: should not be here!
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-exercise',
@@ -59,18 +59,19 @@ export class ExerciseComponent implements OnInit, OnDestroy {
     this.conditions.loading = false;
 
     this.modalWindowSubscription = this.modalService.onModalWindowResponse().subscribe(config => {
-        if (config.getId() === ModalService.DELETE_EXERCISE_ID && config.isAccepted) {
-          this.conditions.loading = true;
-          this.sprintService.deleteSprintExercise(this.exercise.getId(), 'test').subscribe(data => {
-              this.conditions.isModifiedAndsaved = true;
-              this.sprintService.deleteSprintExerciseInCache('test', this.exercise);
-              this.back();
-            },
-            error =>
-              this.handleError(new MultiTError('It was an error during deleting of exercise, please try later'))
-          );
-        }
-      });
+      if (config.getId() === ModalService.DELETE_EXERCISE_ID && config.isAccepted) {
+        this.conditions.loading = true;
+        this.sprintService.deleteSprintExercise(this.exercise.getId()).subscribe(
+          data => {
+            this.conditions.isModifiedAndsaved = true;
+            this.sprintService.deleteSprintExerciseInCache(this.exercise);
+            this.back();
+          },
+          error =>
+            this.handleError(new MultiTError('It was an error during deleting of exercise, please try later'))
+        );
+      }
+    });
   }
 
   // TODO: should not be here!
@@ -120,15 +121,15 @@ export class ExerciseComponent implements OnInit, OnDestroy {
     this.exercise.setRawPoints(this.sprintService.getFloatFromString(this.rawPoints));
     this.sprintService.updateExercise(this.exercise)
       .subscribe(data => {
-        this.conditions.isModifiedAndsaved = true;
-        this.exercise = new Exercise().deserialize(data);
-        this.sprintService.getExerciseStatisticForCurrentSprint(this.exercise.getSid(), 'test')
-            .subscribe(response => {
-                this.statistic = new ExerciseStatistic().deserialize(response);
-                this.conditions.loading = false;
-              }, error => this.handleError(error)
-            );
-        this.sprintService.updateSprintExerciseInCache('test', this.exercise);
+          this.conditions.isModifiedAndsaved = true;
+          this.exercise = new Exercise().deserialize(data);
+          this.sprintService.getExerciseStatisticForCurrentSprint(this.exercise.getSid()).subscribe(
+            response => {
+              this.statistic = new ExerciseStatistic().deserialize(response);
+              this.conditions.loading = false;
+            }, error => this.handleError(error)
+          );
+          this.sprintService.updateSprintExerciseInCache(this.exercise);
         }, error =>
           this.handleError(new MultiTError('It was an error during updating exercise, please try later'))
       );

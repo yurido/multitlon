@@ -25,10 +25,9 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.conditions.loading = true;
-    this.sprintService.getExercisesForCurrentSprint('test', false)
-      .subscribe(
+    this.sprintService.getSprintExerciseListObjectForCurrentSprint().subscribe(
         data => {
-          const sprintExerciseList = new SprintExerciseList().deserialize(data);
+          /* const sprintExerciseList = new SprintExerciseList().deserialize(data);
           // tslint:disable-next-line:max-line-length
           if (sprintExerciseList.getSprintExercises() !== undefined && sprintExerciseList.getSprintExercises() !== null && sprintExerciseList.getSprintExercises().length > 0) {
             for (const sprintDay of sprintExerciseList.getSprintExercises()) {
@@ -39,7 +38,7 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
                 this.trainingDays.push(new Date(sprintDay.getSprintDay().getSprintDate()));
               }
             }
-          }
+          } */
           this.conditions.loading = false;
         },
         error => this.handleError(error)

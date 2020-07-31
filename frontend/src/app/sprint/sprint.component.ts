@@ -4,7 +4,6 @@ import {SprintExercise} from '../models/sprint.exercise';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
-import {SprintExerciseList} from '../models/sprint.exercise.list';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
 import {environment} from '../../environments/environment';
@@ -44,30 +43,11 @@ export class SprintComponent implements OnInit {
     } else {
       this.loadExerciseStatistic(false);
     }
-    this.getSprintExcercises(false);
-  }
+    this.getSprintExcercises();
 
-  private subscribeExercises(data: SprintExerciseList): void {
-    const sprintCalendar = new SprintExerciseList().deserialize(data);
-    this.sprintExercises = this.sprintService.sortSprintExercisesByDate(sprintCalendar.getSprintExercises());
-    const monthN = new Date(this.sprintExercises[0].getSprintDay().getSprintDate()).getMonth();
+    const monthN = new Date().getMonth();
     const monthObj = environment.MONTHS.find(value => value.id === monthN);
-    this.month = (monthObj !== undefined && monthObj !==  null) ? monthObj.name : '';
-    this.loading = false;
-  }
-
-  private updateSprintExerciseInCache(user: string, exercise: Exercise): void {
-    this.sprintService.updateSprintExerciseInCache(user, exercise).subscribe(
-      data => this.subscribeExercises(data),
-      error => this.handleError(error)
-    );
-  }
-
-  private deleteSprintExerciseInCache(user: string, exercise: Exercise): void {
-    this.sprintService.deleteSprintExerciseInCache(user, exercise).subscribe(
-      data => this.subscribeExercises(data),
-      error => this.handleError(error)
-    );
+    this.month = (monthObj !== undefined && monthObj !== null) ? monthObj.name : '';
   }
 
   private handleError(error: any): void {
@@ -76,10 +56,13 @@ export class SprintComponent implements OnInit {
     this.error = error;
   }
 
-  private getSprintExcercises(forceCallServer: boolean): void {
-    this.sprintService.getExercisesForCurrentSprint('test', forceCallServer)
-      .subscribe(
-        data => this.subscribeExercises(data),
+  private getSprintExcercises(): void {
+    this.sprintService.getSprintExerciseListObjectForCurrentSprint().subscribe(
+        data => {
+          console.log('SPRINT COMPONENT: getSprintExcercises=', data);
+          this.sprintExercises = data;
+          this.loading = false;
+        },
         error => this.handleError(error)
       );
   }
@@ -92,11 +75,11 @@ export class SprintComponent implements OnInit {
         this.loading = false;
       },
       error => this.handleError(new MultiTError('Exercise metadata not loaded'))
-      );
+    );
   }
 
   private loadExerciseStatistic(forceCallServer: boolean): void {
-    this.sprintService.getExerciseStatisticsForCurrentSprint('test', forceCallServer)
+    this.sprintService.getExerciseStatisticsForCurrentSprint(forceCallServer)
       .subscribe(data => {
           const sprintExerciseStatisticCalendar = new SprintExerciseStatisticCalendar().deserialize(data);
           this.sprintExerciseStatistic = sprintExerciseStatisticCalendar.getExerciseStatistic();

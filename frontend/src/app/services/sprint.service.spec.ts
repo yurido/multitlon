@@ -82,7 +82,7 @@ describe('SprintService', () => {
 
   it('should return all the exercises for user "test" for current sprint', () => {
     const exercises = new SprintExerciseList().deserialize(((sprintData) as any).default);
-    service.getExercisesForCurrentSprint('test', false).subscribe(data => {
+    service.getSprintExerciseListObjectForCurrentSprint('test', false).subscribe(data => {
       expect(data.getSprintExercises().length).toBeGreaterThan(5);
       expect(data).toEqual(exercises);
     });
@@ -117,7 +117,7 @@ describe('SprintService', () => {
     const exerciseShoulders = new Exercise().deserialize(jsonEx);
 
     const exercises = new SprintExerciseList().deserialize(((sprintData) as any).default);
-    service.getExercisesForCurrentSprint('test', false).subscribe(data => {
+    service.getSprintExerciseListObjectForCurrentSprint('test', false).subscribe(data => {
       expect(data).toEqual(exercises);
     });
     const request = httpTestingController.expectOne((req: any) =>

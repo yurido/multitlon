@@ -9,7 +9,8 @@ export class Serializator {
   public getObjectProperty(input: object, propertyName: string): any {
     // @ts-ignore
     if (!input.hasOwnProperty(propertyName) || input[propertyName] === undefined || input[propertyName] === null) {
-      throw SyntaxError(`${this.childClassName} deserialization, property "${propertyName}" is undefined`);
+      const message = `${this.childClassName} deserialization, property "${propertyName}" is undefined`;
+      throw new SyntaxError(message);
     }
     // @ts-ignore
     return input[propertyName];

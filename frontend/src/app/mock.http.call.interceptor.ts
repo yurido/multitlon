@@ -8,14 +8,15 @@ import {
   HttpResponse
 } from '@angular/common/http';
 import {Observable, of} from 'rxjs';
-import * as sprintData from './mock-data/sprint.json';
+import * as sprintData from './mock-data/sprint-exercises.json';
 import {delay} from 'rxjs/operators';
 import {Exercise} from './models/exercise';
 import * as exerciseStatistic from './mock-data/sprint-statistic.json';
 import {ExerciseStatistic} from './models/exercise.statistic';
 import * as exerciseMetadata from './mock-data/exercise-metadata.json';
 import {SprintService} from './services/sprint.service';
-import {SprintExerciseList} from './models/sprint.exercise.list';
+import {DaysOffList} from './models/days.off.list';
+import {ExerciseList} from './models/exercise.list';
 
 @Injectable()
 export class MockHttpCalIInterceptor implements HttpInterceptor {
@@ -25,25 +26,25 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     console.log('request: ' + request.url + ', method ' + request.method);
     if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'GET') {
+      console.log('HALLOOOO! sprintData=', ((sprintData) as any).default);
       //    this.throwError(request.headers, request.url);
       // return of(new HttpResponse({status: 400, body: {}}));
-      const sprintExerciseList = new SprintExerciseList().deserialize( ((sprintData) as any).default);
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < sprintExerciseList.getSprintExercises().length; i++) {
-        const date = new Date(sprintExerciseList.getSprintExercises()[i].getSprintDay().getSprintDate());
-        const newDateNumber = new Date(new Date().getFullYear(), new Date().getMonth(), date.getDate()).getTime();
-        sprintExerciseList.getSprintExercises()[i].getSprintDay().setSprintDate(newDateNumber);
-
-        // tslint:disable-next-line:max-line-length
-        if (!sprintExerciseList.getSprintExercises()[i].getSprintDay().getIsWeekend() && sprintExerciseList.getSprintExercises()[i].getExercises().length > 0) {
-          // tslint:disable-next-line:prefer-for-of
-          for (let j = 0; j < sprintExerciseList.getSprintExercises()[i].getExercises().length; j++) {
-            sprintExerciseList.getSprintExercises()[i].getExercises()[j].setDate(newDateNumber);
-          }
-        }
+      let exerciseList;
+      try {
+        exerciseList = new ExerciseList().deserialize(((sprintData) as any).default);
+      } catch (error) {
+        console.error(error);
       }
-
-      return of(new HttpResponse({status: 200, body: sprintExerciseList}))
+      // tslint:disable-next-line:prefer-for-of
+      // @ts-ignore
+      for (let i = 0; i < exerciseList.getExercises().length; i++) {
+        // @ts-ignore
+        const date = new Date(exerciseList.getExercises()[i].getDate());
+        const newDateNumber = new Date(new Date().getFullYear(), new Date().getMonth(), date.getDate()).getTime();
+        // @ts-ignore
+        exerciseList.getExercises()[i].setDate(newDateNumber);
+      }
+      return of(new HttpResponse({status: 200, body: exerciseList}))
         .pipe(
           delay(1000)
         );
@@ -91,6 +92,18 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
       return of(new HttpResponse({status: 200}))
         .pipe(
           delay(2000)
+        );
+    } else if (request.url === this.sprintService.getDaysOffURL() && request.method === 'GET') {
+      const daysOff = new DaysOffList();
+      daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 2).getTime());
+      daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 3).getTime());
+      daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 11).getTime());
+      daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 12).getTime());
+      daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 22).getTime());
+      daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 23).getTime());
+      return of(new HttpResponse({status: 200, body: daysOff}))
+        .pipe(
+          delay(1000)
         );
     }
     return next.handle(request);
