@@ -34,12 +34,12 @@
     <tr *ngFor="let sprintExercise of sprintExercises">
       <td class="text-center padding-0">
         <!-- Day -->
-        <div class="container sprint-day" [ngClass]="calcDayColor(sprintExercise.getSprintDay().getIsWeekend())">
+        <div class="container sprint-day" [ngClass]="calcDayColor(sprintExercise.getSprintDay().getIsDayOff())">
           <div class="row">
             <div class="col-8 text-left">
-              {{sprintExercise.getSprintDay().getSprintDate() | date}}
+              {{sprintExercise.getSprintDay().getSDate() | date}}
             </div>
-            <div class="col-4 text-right" *ngIf="!sprintExercise.getSprintDay().getIsWeekend()">
+            <div class="col-4 text-right" *ngIf="!sprintExercise.getSprintDay().getIsDayOff()">
               {{sprintExercise.getSprintDay().getTotal()}}
             </div>
           </div>

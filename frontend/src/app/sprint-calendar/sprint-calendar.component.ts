@@ -8,7 +8,6 @@ import * as _moment from 'moment';
 // @ts-ignore
 import {default as _rollupMoment} from 'moment';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
-import {Observable} from 'rxjs';
 
 const moment = _rollupMoment || _moment;
 

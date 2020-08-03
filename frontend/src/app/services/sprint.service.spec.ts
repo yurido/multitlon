@@ -4,11 +4,11 @@ import {SprintService} from './sprint.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import * as exerciseMetadataJSON from '../mock-data/exercise-metadata.json';
 import * as exerciseStatistic from '../mock-data/sprint-statistic.json';
-import * as sprintData from '../mock-data/sprint.json';
+import * as sprintData from '../mock-data/sprint-exercises.json';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list';
 import {SprintExerciseStatisticCalendar} from '../models/sprint.exercise.statistic.calendar';
-import {SprintExerciseList} from '../models/sprint.exercise.list';
 import {Exercise} from '../models/exercise';
+import {ExerciseList} from '../models/exercise.list';
 
 describe('SprintService', () => {
   let service: SprintService;
@@ -48,7 +48,7 @@ describe('SprintService', () => {
     const shoulders = 'SHOULDERS';
     const sprintStatistics = new SprintExerciseStatisticCalendar().deserialize(((exerciseStatistic) as any).default);
     const shouldersStat = sprintStatistics.getExerciseStatistic().find(value => value.getSid() === shoulders);
-    service.getExerciseStatisticForCurrentSprint(shoulders, 'test').subscribe(data => {
+    service.getExerciseStatisticForCurrentSprint(shoulders).subscribe(data => {
       expect(data.getSid()).toEqual(shoulders);
       expect(data.getQuota()).toBeGreaterThan(0);
       expect(data.getMaxPonts()).toBeGreaterThan(0);
@@ -58,41 +58,36 @@ describe('SprintService', () => {
       req.url.indexOf(service.getExerciseStatisticsCurrentSprintURL() + '/' + shoulders) > -1);
     expect(request.request.method).toBe('GET');
     expect(request.request.headers.get('Content-Type')).toEqual('application/json');
-    expect(request.request.params.get('user')).toEqual('test');
     expect(request.request.params.get('date')).toBeGreaterThan(0);
     // @ts-ignore
     request.flush(shouldersStat);
   });
 
-  it('should return statistics for all the exercises for user "test" for current sprint', () => {
+  it('should return statistics for all the exercises for current sprint', () => {
     const sprintStatistics = new SprintExerciseStatisticCalendar().deserialize(((exerciseStatistic) as any).default);
-    service.getExerciseStatisticsForCurrentSprint('test', false).subscribe(data => {
-      expect(data.getExerciseStatistic().length).toBeGreaterThan(10);
-      expect(typeof data.getExerciseStatistic()).toEqual('object');
-      expect(typeof data.getExerciseStatistic()[0]).toEqual('object');
-    });
+    service.getExerciseStatisticsForCurrentSprint(false).subscribe(
+      data => {
+        expect(data.getExerciseStatistic().length).toBeGreaterThan(10);
+        expect(typeof data.getExerciseStatistic()).toEqual('object');
+        expect(typeof data.getExerciseStatistic()[0]).toEqual('object');
+      });
     const request = httpTestingController.expectOne((req: any) =>
       req.url.indexOf(service.getExerciseStatisticsCurrentSprintURL()) > -1);
     expect(request.request.method).toBe('GET');
     expect(request.request.headers.get('Content-Type')).toEqual('application/json');
-    expect(request.request.params.get('user')).toEqual('test');
     expect(request.request.params.get('date')).toBeGreaterThan(0);
     request.flush(sprintStatistics);
   });
 
-  it('should return all the exercises for user "test" for current sprint', () => {
-    const exercises = new SprintExerciseList().deserialize(((sprintData) as any).default);
-    service.getSprintExerciseListObjectForCurrentSprint('test', false).subscribe(data => {
-      expect(data.getSprintExercises().length).toBeGreaterThan(5);
-      expect(data).toEqual(exercises);
+  it('should return all the exercises for current sprint', () => {
+    service.getSprintExerciseListObjectForCurrentSprint().subscribe(data => {
+      expect(data.length).toBeGreaterThan(5);
     });
     const request = httpTestingController.expectOne((req: any) =>
       req.url.indexOf(service.getSprintExercisesURL()) > -1);
     expect(request.request.method).toBe('GET');
     expect(request.request.headers.get('Content-Type')).toEqual('application/json');
-    expect(request.request.params.get('user')).toEqual('test');
     expect(request.request.params.get('date')).toBeGreaterThan(0);
-    request.flush(exercises);
   });
 
   it('should return updated exercise "SHOULDERS"', () => {
@@ -116,17 +111,15 @@ describe('SprintService', () => {
     const jsonEx = JSON.parse('{"id": 12345678998, "sid": "SHOULDERS", "date": 1580511600000, "reps": [{"weight":600, "reps":500}], "rawPoints": 1500, "totalPoints": 1320, "time": 0}');
     const exerciseShoulders = new Exercise().deserialize(jsonEx);
 
-    const exercises = new SprintExerciseList().deserialize(((sprintData) as any).default);
-    service.getSprintExerciseListObjectForCurrentSprint('test', false).subscribe(data => {
-      expect(data).toEqual(exercises);
+    service.getSprintExerciseListObjectForCurrentSprint().subscribe(data => {
+      expect(data).toEqual([]);
     });
     const request = httpTestingController.expectOne((req: any) =>
       req.url.indexOf(service.getSprintExercisesURL()) > -1);
     expect(request.request.method).toBe('GET');
-    request.flush(exercises);
 
-    service.updateSprintExerciseInCache('test', exerciseShoulders).subscribe(data => {
-      data.getSprintExercises().forEach(day => {
+    /* service.updateSprintExerciseInCache( exerciseShoulders).subscribe(data => {
+      data.length().forEach(day => {
         day.getExercises().forEach(exercise => {
           if (exercise.getId() === exerciseShoulders.getId()) {
             console.log('SHOULDERS is found in sprint exercises!');
@@ -135,7 +128,7 @@ describe('SprintService', () => {
           }
         });
       });
-    });
+    }); */
   });
 
   it('should replace object A with Z in array', () => {
@@ -171,12 +164,12 @@ describe('SprintService', () => {
   it('should not update exercise in empty cache', () => {
     // tslint:disable-next-line:max-line-length
     const exerciseShoulders = new Exercise();
-    const exercises = new SprintExerciseList().deserialize(((sprintData) as any).default);
-
-    service.updateSprintExerciseInCache('test', exerciseShoulders).subscribe(data => {
-      expect(data).toEqual(exercises);
+    const exercises = new ExerciseList().deserialize(((sprintData) as any).default);
+    /*
+    service.updateSprintExerciseInCache(exerciseShoulders).subscribe(data => {
+      expect(data).toEqual(exercises.getExercises());
     });
-
+*/
     const request = httpTestingController.expectOne((req: any) =>
       req.url.indexOf(service.getSprintExercisesURL()) > -1);
     expect(request.request.method).toBe('GET');

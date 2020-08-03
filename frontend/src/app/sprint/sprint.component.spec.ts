@@ -5,12 +5,12 @@ import {SprintService} from '../services/sprint.service';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 import {Router} from '@angular/router';
 import * as exerciseStatistic from '../mock-data/sprint-statistic.json';
-import * as sprintData from '../mock-data/sprint.json';
+import * as sprintData from '../mock-data/sprint-exercises.json';
 import * as exerciseMetadata from '../mock-data/exercise-metadata.json';
 import {of} from 'rxjs';
-import {SprintExerciseList} from '../models/sprint.exercise.list';
 import {DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
+import {ExerciseList} from '../models/exercise.list';
 
 describe('SprintComponent', () => {
   let component: SprintComponent;
@@ -23,8 +23,8 @@ describe('SprintComponent', () => {
     spySprintService.getExercisesForCurrentSprint.and.returnValue(of(((sprintData) as any).default));
     spySprintService.getExerciseStatisticsForCurrentSprint.and.returnValue(of(((exerciseStatistic) as any).default));
     spySprintService.getExerciseMetadata.and.returnValue(of(((exerciseMetadata) as any).default));
-    const exercises = new SprintExerciseList().deserialize((((sprintData) as any).default));
-    spySprintService.sortSprintExercisesByDate.and.returnValue(exercises.getSprintExercises());
+    const exercises = new ExerciseList().deserialize((((sprintData) as any).default));
+    // spySprintService.sortSprintExercisesByDate.and.returnValue(exercises.getSprintExercises());
     const spyRouter = jasmine.createSpyObj('Router', ['navigate']);
     const state = {isDataChanged: false};
     history.pushState(state, 'ingen');

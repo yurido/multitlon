@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {Router} from '@angular/router';
 import {SprintService} from '../services/sprint.service';
-import {SprintExerciseList} from '../models/sprint.exercise.list';
 
 @Component({
   selector: 'app-new-exercise',
@@ -26,23 +25,23 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.conditions.loading = true;
     this.sprintService.getSprintExerciseListObjectForCurrentSprint().subscribe(
-        data => {
-          /* const sprintExerciseList = new SprintExerciseList().deserialize(data);
-          // tslint:disable-next-line:max-line-length
-          if (sprintExerciseList.getSprintExercises() !== undefined && sprintExerciseList.getSprintExercises() !== null && sprintExerciseList.getSprintExercises().length > 0) {
-            for (const sprintDay of sprintExerciseList.getSprintExercises()) {
-              if (sprintDay.getSprintDay().getIsWeekend()) {
-                this.daysOff.push(new Date(sprintDay.getSprintDay().getSprintDate()));
-                // tslint:disable-next-line:max-line-length
-              } else if (!sprintDay.getSprintDay().getIsWeekend() && sprintDay.getExercises() !== null && sprintDay.getExercises().length > 0) {
-                this.trainingDays.push(new Date(sprintDay.getSprintDay().getSprintDate()));
-              }
+      data => {
+
+        // tslint:disable-next-line:max-line-length
+        if (data !== undefined && data !== null && data.length > 0) {
+          for (const sprintDay of data) {
+            if (sprintDay.getSprintDay().getIsDayOff()) {
+              this.daysOff.push(new Date(sprintDay.getSprintDay().getSDate()));
+              // tslint:disable-next-line:max-line-length
+            } else if (!sprintDay.getSprintDay().getIsDayOff() && sprintDay.getExercises() !== null && sprintDay.getExercises().length > 0) {
+              this.trainingDays.push(new Date(sprintDay.getSprintDay().getSDate()));
             }
-          } */
-          this.conditions.loading = false;
-        },
-        error => this.handleError(error)
-      );
+          }
+        }
+        this.conditions.loading = false;
+      },
+      error => this.handleError(error)
+    );
   }
 
   ngOnDestroy(): void {

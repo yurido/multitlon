@@ -12,6 +12,8 @@ import {ExerciseStatistic} from '../models/exercise.statistic';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list';
 import {ExerciseMetadata} from '../models/exercise.metadata';
 import {MultiTError} from '../models/multiterror';
+import {ExerciseList} from '../models/exercise.list';
+import {DaysOffList} from '../models/days.off.list';
 
 @Component({
   selector: 'app-sprint',
@@ -58,13 +60,30 @@ export class SprintComponent implements OnInit {
 
   private getSprintExcercises(): void {
     this.sprintService.getSprintExerciseListObjectForCurrentSprint().subscribe(
-        data => {
-          console.log('SPRINT COMPONENT: getSprintExcercises=', data);
+      data => {
+        if (data === null || data === undefined || data.length === 0) {
+          this.sprintService.getExerciseListForCurrentSprint().subscribe(
+            exerciseResp => {
+              const exerciseList = new ExerciseList().deserialize(exerciseResp);
+              this.sprintService.getDaysOffForCurrentSprint().subscribe(
+                dataDaysOff => {
+                  const daysOff = new DaysOffList().deserialize(dataDaysOff);
+                  this.sprintExercises = this.sprintService.buildSprintExerciseList(exerciseList.getExercises(), daysOff.getDaysOff());
+                  this.sprintService.setSprintExercisesInCache(this.sprintExercises);
+                },
+                error => this.handleError(error)
+              );
+            },
+            error => this.handleError(error)
+          );
+        } else {
           this.sprintExercises = data;
-          this.loading = false;
-        },
-        error => this.handleError(error)
-      );
+        }
+        this.loading = false;
+      },
+      error => this.handleError(error)
+    );
+
   }
 
   private loadExerciseMetadata(): void {

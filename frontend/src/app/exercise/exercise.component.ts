@@ -76,7 +76,9 @@ export class ExerciseComponent implements OnInit, OnDestroy {
 
   // TODO: should not be here!
   ngOnDestroy(): void {
-    this.modalWindowSubscription.unsubscribe();
+    if (this.modalWindowSubscription !== undefined) {
+      this.modalWindowSubscription.unsubscribe();
+    }
   }
 
   back(): void {

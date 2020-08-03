@@ -26,7 +26,6 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     console.log('request: ' + request.url + ', method ' + request.method);
     if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'GET') {
-      console.log('HALLOOOO! sprintData=', ((sprintData) as any).default);
       //    this.throwError(request.headers, request.url);
       // return of(new HttpResponse({status: 400, body: {}}));
       let exerciseList;
@@ -94,6 +93,7 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
           delay(2000)
         );
     } else if (request.url === this.sprintService.getDaysOffURL() && request.method === 'GET') {
+      // this.throwError(request.headers, request.url);
       const daysOff = new DaysOffList();
       daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 2).getTime());
       daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 3).getTime());
