@@ -2,7 +2,7 @@ import {Serializable} from './serializable';
 import {ExerciseStatistic} from './exercise.statistic';
 import {Serializator} from './serializator';
 
-export class SprintExerciseStatisticCalendar implements Serializable<SprintExerciseStatisticCalendar> {
+export class ExerciseStatisticList implements Serializable<ExerciseStatisticList> {
   private exerciseStatistic: ExerciseStatistic[] = [];
 
   constructor() {
@@ -12,8 +12,8 @@ export class SprintExerciseStatisticCalendar implements Serializable<SprintExerc
     return this.exerciseStatistic;
   }
 
-  deserialize(input: object): SprintExerciseStatisticCalendar {
-    const serializator = new Serializator(SprintExerciseStatisticCalendar.name);
+  deserialize(input: object): ExerciseStatisticList {
+    const serializator = new Serializator(ExerciseStatisticList.name);
     const exerciseStatistic = serializator.getObjectProperty(input, 'exerciseStatistic');
 
     for (const i in exerciseStatistic) {

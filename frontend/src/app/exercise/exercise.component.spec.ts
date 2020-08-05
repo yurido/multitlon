@@ -11,13 +11,11 @@ import {By} from '@angular/platform-browser';
 import {DebugElement} from '@angular/core';
 import {of, throwError} from 'rxjs';
 import {tick} from '@angular/core/testing';
-import {MultiTError} from '../models/multiterror';
-import {browser} from 'protractor';
 
 describe('ExerciseComponent', () => {
   let component: ExerciseComponent;
   let fixture: ComponentFixture<ExerciseComponent>;
-  let metadata;
+  let metadata: any;
   let spySprintService;
 
   beforeEach(async(() => {
@@ -72,7 +70,9 @@ describe('ExerciseComponent', () => {
     const headerDebugg = page.query(By.css('[class="badge-dark sticky-top container max-width"]'));
     const header: HTMLElement = headerDebugg.nativeElement;
     const span = header.querySelector('span');
-    expect(span.textContent).toBe('shoulders');
+    if (span !== null) {
+      expect(span.textContent).toBe('shoulders');
+    }
 
     // button back is present
     const buttonBackDebugg = page.query(By.css('[class="btn btn-dark margin-3px"]'));

@@ -10,7 +10,6 @@ import {RepsView} from '../models/reps.view';
 import {ExerciseStatistic} from '../models/exercise.statistic';
 import {MultiTError} from '../models/multiterror';
 import {ExerciseMetadata} from '../models/exercise.metadata';
-import {ExerciseMetadataList} from '../models/exercise.metadata.list';
 import {ModalService} from '../services/modal.service';
 import {ModalConfig} from '../models/modal.config';
 import {Subscription} from 'rxjs';
@@ -27,7 +26,7 @@ export class ExerciseComponent implements OnInit, OnDestroy {
   faPlus = faPlus;
   error: any;
   exercise: Exercise;
-  statistic: ExerciseStatistic;
+  statistic: ExerciseStatistic | undefined;
   reps: RepsView[] = [];
   config: ExerciseMetadata | undefined;
   rawPoints: string;
@@ -45,13 +44,20 @@ export class ExerciseComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.conditions.loading = true;
     // tslint:disable-next-line:max-line-length
-    if ((history.state.ex === undefined || history.state.ex === null) || (history.state.statistic === undefined || history.state.statistic === null)) {
+    if ((history.state.ex === undefined || history.state.ex === null)) {
       this.back();
       return;
     }
-    // getting exercise and statistic from sprint component
+    // getting exercise and statistic from sprint component ?!
     this.exercise = new Exercise().deserialize(history.state.ex);
-    this.statistic = new ExerciseStatistic().deserialize(history.state.statistic);
+    this.sprintService.getExerciseStatisticsForCurrentSprint(false).subscribe(
+      data => {
+        this.statistic = data.find(stat => stat.getSid() === this.exercise.getSid());
+        if (this.statistic === undefined) {
+          this.handleError(new MultiTError(`Statistic for exercise ${this.exercise.getSid()} is not loaded`));
+        }
+      }
+    );
 
     this.initRepsView();
     this.rawPoints = '' + this.exercise.getRawPoints();
@@ -124,10 +130,10 @@ export class ExerciseComponent implements OnInit, OnDestroy {
     this.sprintService.updateExercise(this.exercise)
       .subscribe(data => {
           this.conditions.isModifiedAndsaved = true;
-          this.exercise = new Exercise().deserialize(data);
+          this.exercise = data;
           this.sprintService.getExerciseStatisticForCurrentSprint(this.exercise.getSid()).subscribe(
             response => {
-              this.statistic = new ExerciseStatistic().deserialize(response);
+              this.statistic = response;
               this.conditions.loading = false;
             }, error => this.handleError(error)
           );
@@ -177,9 +183,9 @@ export class ExerciseComponent implements OnInit, OnDestroy {
       return 'quota-disabled';
     }
 
-    if (this.statistic.getQuota() < 26) {
+    if (this.statistic !== undefined && this.statistic.getQuota() < 26) {
       return 'quota-green';
-    } else if (this.statistic.getQuota() >= 26 && this.statistic.getQuota() < 31) {
+    } else if (this.statistic !== undefined && this.statistic.getQuota() >= 26 && this.statistic.getQuota() < 31) {
       return 'quota-yellow';
     } else {
       return 'quota-red';
@@ -224,10 +230,7 @@ export class ExerciseComponent implements OnInit, OnDestroy {
 
   private loadMetadata(): void {
     this.sprintService.getExerciseMetadata().subscribe(
-      data => {
-        const metaData = new ExerciseMetadataList().deserialize(data);
-        this.config = metaData.getExerciseMetadata().find(ex => ex.getSid() === this.exercise.getSid());
-      },
+      data => this.config = data.find(ex => ex.getSid() === this.exercise.getSid()),
       error => this.handleError(new MultiTError('Exercise metadata not loaded'))
     );
   }

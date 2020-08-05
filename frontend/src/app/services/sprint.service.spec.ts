@@ -6,7 +6,7 @@ import * as exerciseMetadataJSON from '../mock-data/exercise-metadata.json';
 import * as exerciseStatistic from '../mock-data/sprint-statistic.json';
 import * as sprintData from '../mock-data/sprint-exercises.json';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list';
-import {SprintExerciseStatisticCalendar} from '../models/sprint.exercise.statistic.calendar';
+import {ExerciseStatisticList} from '../models/exercise.statistic.list';
 import {Exercise} from '../models/exercise';
 import {ExerciseList} from '../models/exercise.list';
 
@@ -34,8 +34,8 @@ describe('SprintService', () => {
   it('should return exercise global metadata', () => {
     const metadata = new ExerciseMetadataList().deserialize(((exerciseMetadataJSON) as any).default);
     service.getExerciseMetadata().subscribe(data => {
-        expect(data.getExerciseMetadata().length).toBeGreaterThan(20);
-        expect(data).toEqual(metadata);
+        expect(data.length).toBeGreaterThan(20);
+        expect(data).toEqual(metadata.getExerciseMetadata());
       }
     );
     const request = httpTestingController.expectOne(service.getExercisMetadataURL());
@@ -46,7 +46,7 @@ describe('SprintService', () => {
 
   it('should return SHOULDERS statistics for user "test" for current sprint', () => {
     const shoulders = 'SHOULDERS';
-    const sprintStatistics = new SprintExerciseStatisticCalendar().deserialize(((exerciseStatistic) as any).default);
+    const sprintStatistics = new ExerciseStatisticList().deserialize(((exerciseStatistic) as any).default);
     const shouldersStat = sprintStatistics.getExerciseStatistic().find(value => value.getSid() === shoulders);
     service.getExerciseStatisticForCurrentSprint(shoulders).subscribe(data => {
       expect(data.getSid()).toEqual(shoulders);
@@ -64,12 +64,12 @@ describe('SprintService', () => {
   });
 
   it('should return statistics for all the exercises for current sprint', () => {
-    const sprintStatistics = new SprintExerciseStatisticCalendar().deserialize(((exerciseStatistic) as any).default);
+    const sprintStatistics = new ExerciseStatisticList().deserialize(((exerciseStatistic) as any).default);
     service.getExerciseStatisticsForCurrentSprint(false).subscribe(
       data => {
-        expect(data.getExerciseStatistic().length).toBeGreaterThan(10);
-        expect(typeof data.getExerciseStatistic()).toEqual('object');
-        expect(typeof data.getExerciseStatistic()[0]).toEqual('object');
+        expect(data.length).toBeGreaterThan(10);
+        expect(typeof data).toEqual('object');
+        expect(typeof data[0]).toEqual('object');
       });
     const request = httpTestingController.expectOne((req: any) =>
       req.url.indexOf(service.getExerciseStatisticsCurrentSprintURL()) > -1);
@@ -80,7 +80,7 @@ describe('SprintService', () => {
   });
 
   it('should return all the exercises for current sprint', () => {
-    service.getSprintExerciseListObjectForCurrentSprint().subscribe(data => {
+    service.getExerciseListForCurrentSprintFromCache().subscribe(data => {
       expect(data.length).toBeGreaterThan(5);
     });
     const request = httpTestingController.expectOne((req: any) =>
@@ -111,7 +111,7 @@ describe('SprintService', () => {
     const jsonEx = JSON.parse('{"id": 12345678998, "sid": "SHOULDERS", "date": 1580511600000, "reps": [{"weight":600, "reps":500}], "rawPoints": 1500, "totalPoints": 1320, "time": 0}');
     const exerciseShoulders = new Exercise().deserialize(jsonEx);
 
-    service.getSprintExerciseListObjectForCurrentSprint().subscribe(data => {
+    service.getExerciseListForCurrentSprintFromCache().subscribe(data => {
       expect(data).toEqual([]);
     });
     const request = httpTestingController.expectOne((req: any) =>

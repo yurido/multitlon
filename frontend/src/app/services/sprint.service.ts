@@ -2,14 +2,15 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {SprintExercise} from '../models/sprint.exercise';
 import {EMPTY, Observable, of} from 'rxjs';
-import {shareReplay, tap} from 'rxjs/operators';
+import {map, shareReplay, tap} from 'rxjs/operators';
 import {Exercise} from '../models/exercise';
 import {ExerciseStatistic} from '../models/exercise.statistic';
-import {SprintExerciseStatisticCalendar} from '../models/sprint.exercise.statistic.calendar';
+import {ExerciseStatisticList} from '../models/exercise.statistic.list';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list';
 import {DaysOffList} from '../models/days.off.list';
 import {ExerciseList} from '../models/exercise.list';
 import {SprintDay} from '../models/sprint.day';
+import {ExerciseMetadata} from '../models/exercise.metadata';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'}),
@@ -26,8 +27,8 @@ export class SprintService {
   private STATISTICS_URL = 'rest/statistics';
   private STATISTICS_EXERCISES_SPRINT_URL = this.STATISTICS_URL + '/sprintExercises';
   private SPRINT_EXERCISE_LIST_CACHE: Observable<SprintExercise[]> = EMPTY;
-  private EXERCISE_STATISTIC_CACHE: Observable<SprintExerciseStatisticCalendar> = EMPTY;
-  private EXERCISE_CONFIG_CACHE: Observable<ExerciseMetadataList> = EMPTY;
+  private EXERCISE_STATISTIC_CACHE: Observable<ExerciseStatistic[]> = EMPTY;
+  private EXERCISE_METADATA_CACHE: Observable<ExerciseMetadata[]> = EMPTY;
   private DAYS_OFF_URL = 'rest/daysoff';
 
   constructor(private http: HttpClient) {
@@ -49,18 +50,13 @@ export class SprintService {
     return this.DAYS_OFF_URL;
   }
 
-  setSprintExercisesInCache(exercises: SprintExercise[]): void {
-    console.log('cache updated!');
-    this.SPRINT_EXERCISE_LIST_CACHE = of(exercises);
-  }
-
   /**
    *  ************ REST ***************
    */
   /**
-   * method returns sprint exercise list object for current sprint. Only from cache
+   * method returns sprint exercise list for current sprint from cache
    */
-  getSprintExerciseListObjectForCurrentSprint(): Observable<SprintExercise[]> {
+  getExerciseListForCurrentSprintFromCache(): Observable<SprintExercise[]> {
     // tslint:disable-next-line:max-line-length
     if ((this.SPRINT_EXERCISE_LIST_CACHE !== undefined && this.SPRINT_EXERCISE_LIST_CACHE !== null) && this.SPRINT_EXERCISE_LIST_CACHE !== EMPTY) {
       console.log('got exercise list object from cache');
@@ -69,20 +65,22 @@ export class SprintService {
     return of([]);
   }
 
-  getExerciseListForCurrentSprint(): Observable<ExerciseList> {
+  getExerciseListForCurrentSprint(): Observable<Exercise[]> {
     console.log('getting exercises from server');
     return this.http.get<ExerciseList>(this.SPRINT_EXERCISES_URL, {
       headers: httpOptions.headers,
       params: httpOptions.params
         .set('date', new Date().getTime().toString())
-    });
+    }).pipe(
+      map(data => new ExerciseList().deserialize(data).getExercises())
+    );
   }
 
   /**
    * method returns user sprint exercise statistics for current sprint from server or cache
    * @param forceCallServer - force to read from server
    */
-  getExerciseStatisticsForCurrentSprint(forceCallServer: boolean): Observable<SprintExerciseStatisticCalendar> {
+  getExerciseStatisticsForCurrentSprint(forceCallServer: boolean): Observable<ExerciseStatistic[]> {
     // tslint:disable-next-line:max-line-length
     if ((this.EXERCISE_STATISTIC_CACHE !== undefined && this.EXERCISE_STATISTIC_CACHE !== null) && this.EXERCISE_STATISTIC_CACHE !== EMPTY && !forceCallServer
     ) {
@@ -90,13 +88,14 @@ export class SprintService {
       return this.EXERCISE_STATISTIC_CACHE;
     }
     console.log('getting statistic from server');
-    this.EXERCISE_STATISTIC_CACHE = this.http.get<SprintExerciseStatisticCalendar>(this.STATISTICS_EXERCISES_SPRINT_URL, {
+    this.EXERCISE_STATISTIC_CACHE = this.http.get<ExerciseStatisticList>(this.STATISTICS_EXERCISES_SPRINT_URL, {
       headers: httpOptions.headers,
       params: httpOptions.params
         .set('date', new Date().getTime().toString())
     })
       .pipe(
-        shareReplay(1)
+        shareReplay(1),
+        map(data => new ExerciseStatisticList().deserialize(data).getExerciseStatistic())
       );
     return this.EXERCISE_STATISTIC_CACHE;
   }
@@ -108,7 +107,8 @@ export class SprintService {
   updateExercise(exercise: Exercise): Observable<Exercise> {
     return this.http.put<Exercise>(this.SPRINT_EXERCISES_URL, exercise, {headers: httpOptions.headers})
       .pipe(
-        tap(ex => console.log('exercise ' + exercise.getSid() + ' updated'))
+        tap(ex => console.log('exercise ' + exercise.getSid() + ' updated on server')),
+        map(data => new Exercise().deserialize(data))
       );
   }
 
@@ -123,25 +123,27 @@ export class SprintService {
         .set('date', new Date().getTime().toString())
     })
       .pipe(
-        tap(ex => console.log('got statistic for exercise ' + sid))
+        tap(ex => console.log('got statistic for exercise ' + sid)),
+        map(data => new ExerciseStatistic().deserialize(data))
       );
   }
 
   /**
    * method returns exercise global metadata from server or cache
    */
-  getExerciseMetadata(): Observable<ExerciseMetadataList> {
-    if ((this.EXERCISE_CONFIG_CACHE !== undefined && this.EXERCISE_CONFIG_CACHE !== null) && this.EXERCISE_CONFIG_CACHE !== EMPTY
+  getExerciseMetadata(): Observable<ExerciseMetadata[]> {
+    if ((this.EXERCISE_METADATA_CACHE !== undefined && this.EXERCISE_METADATA_CACHE !== null) && this.EXERCISE_METADATA_CACHE !== EMPTY
     ) {
       console.log('got metadata from cache');
-      return this.EXERCISE_CONFIG_CACHE;
+      return this.EXERCISE_METADATA_CACHE;
     }
     console.log('getting metadata from server');
-    this.EXERCISE_CONFIG_CACHE = this.http.get<ExerciseMetadataList>(this.EXERCISE_METADATA_URL, {headers: httpOptions.headers})
+    this.EXERCISE_METADATA_CACHE = this.http.get<ExerciseMetadata[]>(this.EXERCISE_METADATA_URL, {headers: httpOptions.headers})
       .pipe(
-        shareReplay(1)
+        shareReplay(1),
+        map(data => new ExerciseMetadataList().deserialize(data).getExerciseMetadata())
       );
-    return this.EXERCISE_CONFIG_CACHE;
+    return this.EXERCISE_METADATA_CACHE;
   }
 
   deleteSprintExercise(id: number): Observable<any> {
@@ -157,13 +159,15 @@ export class SprintService {
   /**
    * method returns days-off for user for sprint from server
    */
-  getDaysOffForCurrentSprint(): Observable<DaysOffList> {
+  getDaysOffForCurrentSprint(): Observable<number[]> {
     console.log('getting days-off from server');
     return this.http.get<DaysOffList>(this.DAYS_OFF_URL, {
       headers: httpOptions.headers,
       params: httpOptions.params
         .set('date', new Date().getTime().toString())
-    });
+    }).pipe(
+      map(data => new DaysOffList().deserialize(data).getDaysOff())
+    );
   }
 
   /**
@@ -177,7 +181,7 @@ export class SprintService {
     if (this.SPRINT_EXERCISE_LIST_CACHE === EMPTY
     ) {
       console.log('SPRINT_EXERCISES_CACHE is empty, getting it from the server');
-      return this.getSprintExerciseListObjectForCurrentSprint();
+      return this.getExerciseListForCurrentSprintFromCache();
     }
     return this.modifySprintExerciseListInCache(exercise, false);
   }
@@ -190,7 +194,7 @@ export class SprintService {
     if (this.SPRINT_EXERCISE_LIST_CACHE === EMPTY
     ) {
       console.log('SPRINT_EXERCISES_CACHE is empty, getting it from the server');
-      return this.getSprintExerciseListObjectForCurrentSprint();
+      return this.getExerciseListForCurrentSprintFromCache();
     }
     return this.modifySprintExerciseListInCache(exercise, true);
   }
@@ -213,6 +217,44 @@ export class SprintService {
     return (numberValue !== null ? +numberValue[0] : 0);
   }
 
+  buildSprintExerciseList(exercises: Exercise[], daysOff: number[]): SprintExercise[] {
+    const sprintExercises: SprintExercise[] = [];
+    const sortedExercises = this.sortExerciseByDate(exercises);
+
+    // add exercises to the final list
+    for (const exercise of sortedExercises) {
+      const lastExIndex = sprintExercises.length - 1;
+
+      if (sprintExercises.length === 0) {
+        sprintExercises.push(new SprintExercise(new SprintDay(exercise.getDate(), false, exercise.getTotalPoints())));
+        sprintExercises[0].getExercises().push(exercise);
+        continue;
+      }
+      // if exercise has same day as last day in the list, add it to the list
+      const exDay = new Date(exercise.getDate()).getDate();
+      const lastSprintDay = new Date(sprintExercises[lastExIndex].getSprintDay().getSDate()).getDate();
+      if (exDay === lastSprintDay) {
+        sprintExercises[lastExIndex].getExercises().push(exercise);
+        // update total points for the day
+        const newTotal = sprintExercises[lastExIndex].getSprintDay().getTotal() + exercise.getTotalPoints();
+        sprintExercises[lastExIndex].getSprintDay().setTotal(newTotal);
+        continue;
+      }
+      // create new object
+      sprintExercises.push(new SprintExercise(new SprintDay(exercise.getDate(), false, exercise.getTotalPoints())));
+      sprintExercises[sprintExercises.length - 1].getExercises().push(exercise);
+    }
+
+    // add days-off to the final list
+    for (const dayOff of daysOff) {
+      sprintExercises.push(new SprintExercise(new SprintDay(dayOff, true, 0)));
+    }
+    // console.log('sprintExercises=', this.sortSprintExercisesByDateReverse(sprintExercises));
+    const retVal = this.sortSprintExercisesByDateReverse(sprintExercises);
+    this.setSprintExercisesInCache(retVal);
+    return retVal;
+  }
+
   /**
    *  ************ PRIVATE ***************
    */
@@ -233,15 +275,18 @@ export class SprintService {
           const sDay = new Date(data[i].getSprintDay().getSDate()).getDate();
           const exDay = new Date(exercise.getDate()).getDate();
           if (sDay === exDay) {
-
             for (let j = 0; j < data[i].getExercises().length; j++) {
               if (data[i].getExercises()[j].getId() === exercise.getId()) {
                 if (toDelete) {
                   data[i].getExercises().splice(j, 1); // delete exercise
+                  if (data[i].getExercises().length === 0) {
+                    data.splice(i, 1); // delete the whole day
+                    console.log(`exercise ${exercise.getSid()} deleted from cache`);
+                    break;
+                  }
                 } else {
                   data[i].getExercises().splice(j, 1, exercise); // replace exercise
                 }
-                console.log('exercise=', exercise);
                 // now we need to recalc days total points
                 let total = 0;
                 for (const ex of data[i].getExercises()) {
@@ -276,46 +321,15 @@ export class SprintService {
     }).reverse();
   }
 
-  private sortExerciseByDateReverse(list: Exercise[]): Exercise[] {
+  private sortExerciseByDate(list: Exercise[]): Exercise[] {
     return list.sort((a: Exercise, b: Exercise) => {
       return (a.getDate() - b.getDate());
-    }).reverse();
+    });
   }
 
-  buildSprintExerciseList(exercises: Exercise[], daysOff: number[]): SprintExercise[] {
-    const sprintExercises: SprintExercise[] = [];
-    const sortedExercises = this.sortExerciseByDateReverse(exercises);
-
-    // add exercises to the final list
-    for (const exercise of sortedExercises) {
-      const lastExIndex = sprintExercises.length - 1;
-
-      if (sprintExercises.length === 0) {
-        sprintExercises.push(new SprintExercise(new SprintDay(exercise.getDate(), false, exercise.getTotalPoints())));
-        sprintExercises[0].getExercises().push(exercise);
-        continue;
-      }
-      // if exercise has same day as last day in the list, add it to the list
-      const exDay = new Date(exercise.getDate()).getDate();
-      const lastSprintDay = new Date(sprintExercises[lastExIndex].getSprintDay().getSDate()).getDate();
-      if (exDay === lastSprintDay) {
-        sprintExercises[lastExIndex].getExercises().push(exercise);
-        // update total points for the day
-        const newTotal = sprintExercises[lastExIndex].getSprintDay().getTotal() + exercise.getTotalPoints();
-        sprintExercises[lastExIndex].getSprintDay().setTotal(newTotal);
-        continue;
-      }
-      // create new object
-      sprintExercises.push(new SprintExercise(new SprintDay(exercise.getDate(), false, exercise.getTotalPoints())));
-      sprintExercises[lastExIndex].getExercises().push(exercise);
-    }
-
-    // add days-off to the final list
-    for (const dayOff of daysOff) {
-      sprintExercises.push(new SprintExercise(new SprintDay(dayOff, true, 0)));
-    }
-    console.log('sprintExercises=', this.sortSprintExercisesByDateReverse(sprintExercises));
-    return this.sortSprintExercisesByDateReverse(sprintExercises);
+  private setSprintExercisesInCache(exercises: SprintExercise[]): void {
+    console.log('cache updated!');
+    this.SPRINT_EXERCISE_LIST_CACHE = of(exercises);
   }
 
 }

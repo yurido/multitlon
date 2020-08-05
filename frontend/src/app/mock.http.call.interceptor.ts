@@ -38,9 +38,10 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
       // @ts-ignore
       for (let i = 0; i < exerciseList.getExercises().length; i++) {
         // @ts-ignore
-        const date = new Date(exerciseList.getExercises()[i].getDate());
-        const newDateNumber = new Date(new Date().getFullYear(), new Date().getMonth(), date.getDate()).getTime();
+        const day = new Date(exerciseList.getExercises()[i].getDate()).getDate();
+        const newDateNumber = new Date(new Date().getFullYear(), new Date().getMonth(), day).getTime();
         // @ts-ignore
+        // console.log('ex ', exerciseList.getExercises()[i].getSid(), 'id ',exerciseList.getExercises()[i].getId(), ':old date ', new Date(exerciseList.getExercises()[i].getDate()), ', new date ', new Date(newDateNumber));
         exerciseList.getExercises()[i].setDate(newDateNumber);
       }
       return of(new HttpResponse({status: 200, body: exerciseList}))
@@ -86,7 +87,7 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
         .pipe(
           delay(1000)
         );
-      // this.throwError(request.headers, request.url);
+      this.throwError(request.headers, request.url);
     } else if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'DELETE') {
       return of(new HttpResponse({status: 200}))
         .pipe(

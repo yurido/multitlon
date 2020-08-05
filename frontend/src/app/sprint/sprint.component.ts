@@ -7,13 +7,9 @@ import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
 import {environment} from '../../environments/environment';
-import {SprintExerciseStatisticCalendar} from '../models/sprint.exercise.statistic.calendar';
 import {ExerciseStatistic} from '../models/exercise.statistic';
-import {ExerciseMetadataList} from '../models/exercise.metadata.list';
 import {ExerciseMetadata} from '../models/exercise.metadata';
 import {MultiTError} from '../models/multiterror';
-import {ExerciseList} from '../models/exercise.list';
-import {DaysOffList} from '../models/days.off.list';
 
 @Component({
   selector: 'app-sprint',
@@ -59,17 +55,14 @@ export class SprintComponent implements OnInit {
   }
 
   private getSprintExcercises(): void {
-    this.sprintService.getSprintExerciseListObjectForCurrentSprint().subscribe(
+    this.sprintService.getExerciseListForCurrentSprintFromCache().subscribe(
       data => {
         if (data === null || data === undefined || data.length === 0) {
           this.sprintService.getExerciseListForCurrentSprint().subscribe(
-            exerciseResp => {
-              const exerciseList = new ExerciseList().deserialize(exerciseResp);
+            exerciseList => {
               this.sprintService.getDaysOffForCurrentSprint().subscribe(
-                dataDaysOff => {
-                  const daysOff = new DaysOffList().deserialize(dataDaysOff);
-                  this.sprintExercises = this.sprintService.buildSprintExerciseList(exerciseList.getExercises(), daysOff.getDaysOff());
-                  this.sprintService.setSprintExercisesInCache(this.sprintExercises);
+                daysOff => {
+                  this.sprintExercises = this.sprintService.buildSprintExerciseList(exerciseList, daysOff);
                 },
                 error => this.handleError(error)
               );
@@ -83,14 +76,12 @@ export class SprintComponent implements OnInit {
       },
       error => this.handleError(error)
     );
-
   }
 
   private loadExerciseMetadata(): void {
     this.sprintService.getExerciseMetadata().subscribe(
       data => {
-        const metaData = new ExerciseMetadataList().deserialize(data);
-        this.exerciseConfig = metaData.getExerciseMetadata();
+        this.exerciseConfig = data;
         this.loading = false;
       },
       error => this.handleError(new MultiTError('Exercise metadata not loaded'))
@@ -100,8 +91,7 @@ export class SprintComponent implements OnInit {
   private loadExerciseStatistic(forceCallServer: boolean): void {
     this.sprintService.getExerciseStatisticsForCurrentSprint(forceCallServer)
       .subscribe(data => {
-          const sprintExerciseStatisticCalendar = new SprintExerciseStatisticCalendar().deserialize(data);
-          this.sprintExerciseStatistic = sprintExerciseStatisticCalendar.getExerciseStatistic();
+          this.sprintExerciseStatistic = data;
           this.loading = false;
         },
         error => this.handleError(error)
@@ -113,8 +103,7 @@ export class SprintComponent implements OnInit {
   }
 
   openExercise(exercise: Exercise): void {
-    const exerciseStatistic = this.sprintExerciseStatistic.find(ex => exercise.getSid() === ex.getSid());
-    this.router.navigate(['/sprint/exercise'], {state: {ex: exercise, statistic: exerciseStatistic}});
+    this.router.navigate(['/sprint/exercise'], {state: {ex: exercise}});
   }
 
   goBack(): void {
