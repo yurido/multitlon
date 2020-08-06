@@ -9,7 +9,6 @@ import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
 })
 export class AlertComponent implements OnInit {
   @Input() error: any;
-  message: string;
   alertClass: any;
   faExclamationTriangle = faExclamationTriangle;
 
@@ -21,6 +20,7 @@ export class AlertComponent implements OnInit {
   }
 
   getMessage(): string {
+    console.error('Error: ', this.error);
     return this.error.message;
   }
 

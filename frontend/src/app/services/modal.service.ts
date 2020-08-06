@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
 import {ModalConfig} from '../models/modal.config';
 
-// TODO: subscription should be deleted when subscriber dies!
 @Injectable({
   providedIn: 'root'
 })

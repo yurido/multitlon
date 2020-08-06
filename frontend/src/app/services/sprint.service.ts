@@ -11,6 +11,7 @@ import {DaysOffList} from '../models/days.off.list';
 import {ExerciseList} from '../models/exercise.list';
 import {SprintDay} from '../models/sprint.day';
 import {ExerciseMetadata} from '../models/exercise.metadata';
+import {ErrorService} from './error.service';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'}),
@@ -31,7 +32,7 @@ export class SprintService {
   private EXERCISE_METADATA_CACHE: Observable<ExerciseMetadata[]> = EMPTY;
   private DAYS_OFF_URL = 'rest/daysoff';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private errorService: ErrorService) {
   }
 
   getExercisMetadataURL(): string {
@@ -54,12 +55,12 @@ export class SprintService {
    *  ************ REST ***************
    */
   /**
-   * method returns sprint exercise list for current sprint from cache
+   * method returns sprint exercise list for current sprint from cache only
    */
   getExerciseListForCurrentSprintFromCache(): Observable<SprintExercise[]> {
     // tslint:disable-next-line:max-line-length
     if ((this.SPRINT_EXERCISE_LIST_CACHE !== undefined && this.SPRINT_EXERCISE_LIST_CACHE !== null) && this.SPRINT_EXERCISE_LIST_CACHE !== EMPTY) {
-      console.log('got exercise list object from cache');
+      console.log('got exercise list from cache');
       return this.SPRINT_EXERCISE_LIST_CACHE;
     }
     return of([]);
@@ -107,7 +108,7 @@ export class SprintService {
   updateExercise(exercise: Exercise): Observable<Exercise> {
     return this.http.put<Exercise>(this.SPRINT_EXERCISES_URL, exercise, {headers: httpOptions.headers})
       .pipe(
-        tap(ex => console.log('exercise ' + exercise.getSid() + ' updated on server')),
+        tap(ex => console.log(`exercise ${exercise.getSid()} updated on server`)),
         map(data => new Exercise().deserialize(data))
       );
   }
@@ -123,7 +124,6 @@ export class SprintService {
         .set('date', new Date().getTime().toString())
     })
       .pipe(
-        tap(ex => console.log('got statistic for exercise ' + sid)),
         map(data => new ExerciseStatistic().deserialize(data))
       );
   }
@@ -152,7 +152,7 @@ export class SprintService {
       params: httpOptions.params
     })
       .pipe(
-        tap(ex => console.log('exercise ' + id + ' deleted permanently'))
+        tap(ex => console.log(`exercise ${id} deleted permanently`))
       );
   }
 
@@ -178,9 +178,8 @@ export class SprintService {
    * @param exercise - sprint exercise
    */
   updateSprintExerciseInCache(exercise: Exercise): Observable<SprintExercise[]> {
-    if (this.SPRINT_EXERCISE_LIST_CACHE === EMPTY
-    ) {
-      console.log('SPRINT_EXERCISES_CACHE is empty, getting it from the server');
+    if (this.SPRINT_EXERCISE_LIST_CACHE === EMPTY) {
+      console.log('SPRINT_EXERCISE_LIST_CACHE is empty, getting it from the server');
       return this.getExerciseListForCurrentSprintFromCache();
     }
     return this.modifySprintExerciseListInCache(exercise, false);
@@ -249,15 +248,16 @@ export class SprintService {
     for (const dayOff of daysOff) {
       sprintExercises.push(new SprintExercise(new SprintDay(dayOff, true, 0)));
     }
-    // console.log('sprintExercises=', this.sortSprintExercisesByDateReverse(sprintExercises));
+
     const retVal = this.sortSprintExercisesByDateReverse(sprintExercises);
-    this.setSprintExercisesInCache(retVal);
+    this.SPRINT_EXERCISE_LIST_CACHE = of(retVal);
     return retVal;
   }
 
   /**
    *  ************ PRIVATE ***************
    */
+
   /**
    * method modifies SPRINT_EXERCISE_LIST_CACHE object
    * @param exercise - exercise to be modified/removed
@@ -268,7 +268,6 @@ export class SprintService {
     this.SPRINT_EXERCISE_LIST_CACHE.subscribe(
       data => {
         let isSprintModified = false;
-
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < data.length; i++) {
           // filter by date
@@ -327,9 +326,8 @@ export class SprintService {
     });
   }
 
-  private setSprintExercisesInCache(exercises: SprintExercise[]): void {
-    console.log('cache updated!');
-    this.SPRINT_EXERCISE_LIST_CACHE = of(exercises);
+  private handleError(error: any): void {
+    this.errorService.handleError(error);
   }
 
 }

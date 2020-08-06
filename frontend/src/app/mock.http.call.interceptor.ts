@@ -24,32 +24,8 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('request: ' + request.url + ', method ' + request.method);
-    if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'GET') {
-      //    this.throwError(request.headers, request.url);
-      // return of(new HttpResponse({status: 400, body: {}}));
-      let exerciseList;
-      try {
-        exerciseList = new ExerciseList().deserialize(((sprintData) as any).default);
-      } catch (error) {
-        console.error(error);
-      }
-      // tslint:disable-next-line:prefer-for-of
-      // @ts-ignore
-      for (let i = 0; i < exerciseList.getExercises().length; i++) {
-        // @ts-ignore
-        const day = new Date(exerciseList.getExercises()[i].getDate()).getDate();
-        const newDateNumber = new Date(new Date().getFullYear(), new Date().getMonth(), day).getTime();
-        // @ts-ignore
-        // console.log('ex ', exerciseList.getExercises()[i].getSid(), 'id ',exerciseList.getExercises()[i].getId(), ':old date ', new Date(exerciseList.getExercises()[i].getDate()), ', new date ', new Date(newDateNumber));
-        exerciseList.getExercises()[i].setDate(newDateNumber);
-      }
-      return of(new HttpResponse({status: 200, body: exerciseList}))
-        .pipe(
-          delay(1000)
-        );
-
-    } else if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'PUT') {
+    console.log('request: ', request.url, ', method ', request.method, 'header: ', request.headers);
+    if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'PUT') {
       const exercise = new Exercise().deserialize(request.body);
       /* console.log('raw = ', exercise.getRawPoints());
       console.log('reps = ', exercise.getReps()); */
@@ -65,11 +41,13 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
         );
       // this.throwError(request.headers, request.url);
     } else if (request.url === (this.sprintService.getExerciseStatisticsCurrentSprintURL())) {
+      // this.throwError(request.headers, request.url, 'statistics not loaded!');
       return of(new HttpResponse({status: 200, body: ((exerciseStatistic) as any).default}))
         .pipe(
           delay(1000)
         );
     } else if (request.url.indexOf(this.sprintService.getExerciseStatisticsCurrentSprintURL() + '/') >= 0) {
+      // this.throwError(request.headers, request.url);
       // tslint:disable-next-line:max-line-length
       const sidPos = request.url.indexOf(this.sprintService.getExerciseStatisticsCurrentSprintURL() + '/') + (this.sprintService.getExerciseStatisticsCurrentSprintURL() + '/').length;
       const sid = request.url.substr(sidPos, request.url.length - sidPos);
@@ -80,21 +58,20 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
         .pipe(
           delay(1000)
         );
-      // this.throwError(request.headers, request.url);
-
     } else if (request.url === this.sprintService.getExercisMetadataURL()) {
+      // this.throwError(request.headers, request.url, 'Metadata not found!');
       return of(new HttpResponse({status: 200, body: ((exerciseMetadata) as any).default}))
         .pipe(
           delay(1000)
         );
-      this.throwError(request.headers, request.url);
     } else if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'DELETE') {
+      // this.throwError(request.headers, request.url, 'DB is not available, retry later!');
       return of(new HttpResponse({status: 200}))
         .pipe(
           delay(2000)
         );
     } else if (request.url === this.sprintService.getDaysOffURL() && request.method === 'GET') {
-      // this.throwError(request.headers, request.url);
+      // this.throwError(request.headers, request.url, 'Exercises are broken!');
       const daysOff = new DaysOffList();
       daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 2).getTime());
       daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 3).getTime());
@@ -106,16 +83,41 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
         .pipe(
           delay(1000)
         );
+    } else if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'GET') {
+      let exerciseList;
+      try {
+        exerciseList = new ExerciseList().deserialize(((sprintData) as any).default);
+      } catch (error) {
+        console.error(error);
+      }
+      // tslint:disable-next-line:prefer-for-of
+      // @ts-ignore
+      for (let i = 0; i < exerciseList.getExercises().length; i++) {
+        // @ts-ignore
+        const day = new Date(exerciseList.getExercises()[i].getDate()).getDate();
+        const newDateNumber = new Date(new Date().getFullYear(), new Date().getMonth(), day).getTime();
+        // @ts-ignore
+        // tslint:disable-next-line:max-line-length
+        // console.log('ex ', exerciseList.getExercises()[i].getSid(), 'id ',exerciseList.getExercises()[i].getId(), ':old date ', new Date(exerciseList.getExercises()[i].getDate()), ', new date ', new Date(newDateNumber));
+        exerciseList.getExercises()[i].setDate(newDateNumber);
+      }
+      // console.log('will throw new error!');
+
+      // console.log('new error thrown!');
+
+      return of(new HttpResponse({status: 200, body: exerciseList}))
+        .pipe(
+          delay(1000)
+        );
     }
     return next.handle(request);
   }
 
-  private throwError(headers: any, url: any) {
+  private throwError(headers: any, url: any, message: string) {
     throw new HttpErrorResponse({
-      error: 'your error',
       headers,
       status: 500,
-      statusText: 'Error',
+      statusText: message,
       url
     });
   }

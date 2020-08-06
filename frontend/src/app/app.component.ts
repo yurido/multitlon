@@ -18,12 +18,13 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.modalService.onMessageToModalWindow().subscribe(modalConfig => {
-      console.log('Modal Window getting new message: ', modalConfig.getId());
-      this.modalText = modalConfig.getText();
-      this.modalCancelButton = modalConfig.getCanceButtonText();
-      this.modalAcceptButton = modalConfig.getAcceptButtonText();
-    });
+    this.modalService.onMessageToModalWindow().subscribe(
+      modalConfig => {
+        console.log('Modal Window getting new message: ', modalConfig.getId());
+        this.modalText = modalConfig.getText();
+        this.modalCancelButton = modalConfig.getCanceButtonText();
+        this.modalAcceptButton = modalConfig.getAcceptButtonText();
+      });
   }
 
   onModalClose(): void {

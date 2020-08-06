@@ -13,6 +13,7 @@ import {ExerciseMetadata} from '../models/exercise.metadata';
 import {ModalService} from '../services/modal.service';
 import {ModalConfig} from '../models/modal.config';
 import {Subscription} from 'rxjs';
+import {ErrorService} from '../services/error.service';
 
 @Component({
   selector: 'app-exercise',
@@ -38,11 +39,14 @@ export class ExerciseComponent implements OnInit, OnDestroy {
   };
   private modalWindowSubscription: Subscription;
 
-  constructor(private router: Router, private sprintService: SprintService, private modalService: ModalService) {
+  constructor(private router: Router, private sprintService: SprintService, private modalService: ModalService, private errorService: ErrorService) {
   }
 
   ngOnInit(): void {
     this.conditions.loading = true;
+    this.errorService.onError().subscribe(
+      data => this.error = data
+    );
     // tslint:disable-next-line:max-line-length
     if ((history.state.ex === undefined || history.state.ex === null)) {
       this.back();
@@ -127,20 +131,21 @@ export class ExerciseComponent implements OnInit, OnDestroy {
     });
 
     this.exercise.setRawPoints(this.sprintService.getFloatFromString(this.rawPoints));
-    this.sprintService.updateExercise(this.exercise)
-      .subscribe(data => {
-          this.conditions.isModifiedAndsaved = true;
-          this.exercise = data;
-          this.sprintService.getExerciseStatisticForCurrentSprint(this.exercise.getSid()).subscribe(
-            response => {
-              this.statistic = response;
-              this.conditions.loading = false;
-            }, error => this.handleError(error)
-          );
-          this.sprintService.updateSprintExerciseInCache(this.exercise);
-        }, error =>
-          this.handleError(new MultiTError('It was an error during updating exercise, please try later'))
-      );
+    this.sprintService.updateExercise(this.exercise).subscribe(
+      data => {
+        this.conditions.isModifiedAndsaved = true;
+        this.exercise = data;
+        this.sprintService.getExerciseStatisticForCurrentSprint(this.exercise.getSid()).subscribe(
+          response => {
+            this.statistic = response;
+            this.conditions.loading = false;
+          },
+          error => this.handleError(error)
+        );
+        this.sprintService.updateSprintExerciseInCache(this.exercise);
+      },
+      error => this.handleError(new MultiTError('It was an error during updating exercise, please try later'))
+    );
   }
 
   addReps(): void {
@@ -236,8 +241,7 @@ export class ExerciseComponent implements OnInit, OnDestroy {
   }
 
   private handleError(error: any): void {
-    console.log('error here ', error);
     this.conditions.loading = false;
-    this.error = error;
+    this.errorService.handleError(error);
   }
 }

@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {Router} from '@angular/router';
 import {SprintService} from '../services/sprint.service';
+import {ErrorService} from '../services/error.service';
 
 @Component({
   selector: 'app-new-exercise',
@@ -19,11 +20,14 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   daysOff: Date[] = [];
   trainingDays: Date[] = [];
 
-  constructor(private router: Router, private sprintService: SprintService) {
+  constructor(private router: Router, private sprintService: SprintService, private errorService: ErrorService) {
   }
 
   ngOnInit(): void {
     this.conditions.loading = true;
+    this.errorService.onError().subscribe(
+      data => this.error = data
+    );
     this.sprintService.getExerciseListForCurrentSprintFromCache().subscribe(
       data => {
 
@@ -79,8 +83,7 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   }
 
   private handleError(error: any): void {
-    console.log('error here ', error);
     this.conditions.loading = false;
-    this.error = error;
+    this.errorService.handleError(error);
   }
 }

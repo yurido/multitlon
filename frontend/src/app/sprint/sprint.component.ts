@@ -10,6 +10,8 @@ import {environment} from '../../environments/environment';
 import {ExerciseStatistic} from '../models/exercise.statistic';
 import {ExerciseMetadata} from '../models/exercise.metadata';
 import {MultiTError} from '../models/multiterror';
+import {ErrorService} from '../services/error.service';
+import {forkJoin} from 'rxjs';
 
 @Component({
   selector: 'app-sprint',
@@ -22,17 +24,20 @@ export class SprintComponent implements OnInit {
   faChevronLeft = faChevronLeft;
   faPlus = faPlus;
   faChevronRight = faChevronRight;
-  error: any;
   loading: boolean;
   month: string;
   sprintExerciseStatistic: ExerciseStatistic[];
   exerciseConfig: ExerciseMetadata[];
+  error: any;
 
-  constructor(private sprintService: SprintService, private router: Router) {
+  constructor(private sprintService: SprintService, private router: Router, private errorService: ErrorService) {
   }
 
   ngOnInit() {
     this.loading = true;
+    this.errorService.onError().subscribe(
+      data => this.error = data
+    );
     this.loadExerciseMetadata();
 
     if (history.state.isExerciseModified !== undefined && history.state.isExerciseModified !== null && history.state.isExerciseModified) {
@@ -41,31 +46,22 @@ export class SprintComponent implements OnInit {
     } else {
       this.loadExerciseStatistic(false);
     }
-    this.getSprintExcercises();
 
-    const monthN = new Date().getMonth();
-    const monthObj = environment.MONTHS.find(value => value.id === monthN);
+    this.loadExercises();
+
+    const monthObj = environment.MONTHS.find(value => value.id === new Date().getMonth());
     this.month = (monthObj !== undefined && monthObj !== null) ? monthObj.name : '';
   }
 
-  private handleError(error: any): void {
-    console.log('error here ', error);
-    this.loading = false;
-    this.error = error;
-  }
-
-  private getSprintExcercises(): void {
+  private loadExercises(): void {
     this.sprintService.getExerciseListForCurrentSprintFromCache().subscribe(
       data => {
-        if (data === null || data === undefined || data.length === 0) {
-          this.sprintService.getExerciseListForCurrentSprint().subscribe(
-            exerciseList => {
-              this.sprintService.getDaysOffForCurrentSprint().subscribe(
-                daysOff => {
-                  this.sprintExercises = this.sprintService.buildSprintExerciseList(exerciseList, daysOff);
-                },
-                error => this.handleError(error)
-              );
+        if (data === undefined || data.length === 0) {
+          const exerciseListObs = this.sprintService.getExerciseListForCurrentSprint();
+          const daysOffObs = this.sprintService.getDaysOffForCurrentSprint();
+          forkJoin([exerciseListObs, daysOffObs]).subscribe(
+            result => {
+              this.sprintExercises = this.sprintService.buildSprintExerciseList(result[0], result[1]);
             },
             error => this.handleError(error)
           );
@@ -73,9 +69,13 @@ export class SprintComponent implements OnInit {
           this.sprintExercises = data;
         }
         this.loading = false;
-      },
-      error => this.handleError(error)
+      }
     );
+  }
+
+  private handleError(error: any): void {
+    this.loading = false;
+    this.errorService.handleError(error);
   }
 
   private loadExerciseMetadata(): void {
@@ -84,7 +84,7 @@ export class SprintComponent implements OnInit {
         this.exerciseConfig = data;
         this.loading = false;
       },
-      error => this.handleError(new MultiTError('Exercise metadata not loaded'))
+      error => this.handleError(new MultiTError('Metadata not loaded!'))
     );
   }
 
