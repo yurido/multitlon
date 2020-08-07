@@ -11,7 +11,6 @@ import {DaysOffList} from '../models/days.off.list';
 import {ExerciseList} from '../models/exercise.list';
 import {SprintDay} from '../models/sprint.day';
 import {ExerciseMetadata} from '../models/exercise.metadata';
-import {ErrorService} from './error.service';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'}),
@@ -32,7 +31,7 @@ export class SprintService {
   private EXERCISE_METADATA_CACHE: Observable<ExerciseMetadata[]> = EMPTY;
   private DAYS_OFF_URL = 'rest/daysoff';
 
-  constructor(private http: HttpClient, private errorService: ErrorService) {
+  constructor(private http: HttpClient) {
   }
 
   getExercisMetadataURL(): string {
@@ -324,10 +323,6 @@ export class SprintService {
     return list.sort((a: Exercise, b: Exercise) => {
       return (a.getDate() - b.getDate());
     });
-  }
-
-  private handleError(error: any): void {
-    this.errorService.handleError(error);
   }
 
 }

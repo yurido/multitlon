@@ -10,7 +10,6 @@ import {environment} from '../../environments/environment';
 import {ExerciseStatistic} from '../models/exercise.statistic';
 import {ExerciseMetadata} from '../models/exercise.metadata';
 import {MultiTError} from '../models/multiterror';
-import {ErrorService} from '../services/error.service';
 import {forkJoin} from 'rxjs';
 
 @Component({
@@ -30,14 +29,11 @@ export class SprintComponent implements OnInit {
   exerciseConfig: ExerciseMetadata[];
   error: any;
 
-  constructor(private sprintService: SprintService, private router: Router, private errorService: ErrorService) {
+  constructor(private sprintService: SprintService, private router: Router) {
   }
 
   ngOnInit() {
     this.loading = true;
-    this.errorService.onError().subscribe(
-      data => this.error = data
-    );
     this.loadExerciseMetadata();
 
     if (history.state.isExerciseModified !== undefined && history.state.isExerciseModified !== null && history.state.isExerciseModified) {
@@ -75,7 +71,7 @@ export class SprintComponent implements OnInit {
 
   private handleError(error: any): void {
     this.loading = false;
-    this.errorService.handleError(error);
+    this.error = error;
   }
 
   private loadExerciseMetadata(): void {

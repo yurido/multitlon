@@ -13,7 +13,6 @@ import {ExerciseMetadata} from '../models/exercise.metadata';
 import {ModalService} from '../services/modal.service';
 import {ModalConfig} from '../models/modal.config';
 import {Subscription} from 'rxjs';
-import {ErrorService} from '../services/error.service';
 
 @Component({
   selector: 'app-exercise',
@@ -39,14 +38,11 @@ export class ExerciseComponent implements OnInit, OnDestroy {
   };
   private modalWindowSubscription: Subscription;
 
-  constructor(private router: Router, private sprintService: SprintService, private modalService: ModalService, private errorService: ErrorService) {
+  constructor(private router: Router, private sprintService: SprintService, private modalService: ModalService) {
   }
 
   ngOnInit(): void {
     this.conditions.loading = true;
-    this.errorService.onError().subscribe(
-      data => this.error = data
-    );
     // tslint:disable-next-line:max-line-length
     if ((history.state.ex === undefined || history.state.ex === null)) {
       this.back();
@@ -242,6 +238,6 @@ export class ExerciseComponent implements OnInit, OnDestroy {
 
   private handleError(error: any): void {
     this.conditions.loading = false;
-    this.errorService.handleError(error);
+    this.error = error;
   }
 }
