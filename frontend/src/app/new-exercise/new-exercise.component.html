@@ -28,6 +28,11 @@
       </app-sprint-calendar>
     </div>
     <!-- exercise list -->
+    <div *ngIf="choosenDayExercises.length >0" class="container max-width" align="center" style="padding: 5px">
+      <div *ngFor="let exercise of choosenDayExercises">
+        <div>{{exercise.getSid()}}</div>
+      </div>
+    </div>
     <!-- reps table -->
     <!-- no reps, raw points register -->
     <!-- footer -->
