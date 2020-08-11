@@ -1,8 +1,10 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {Router} from '@angular/router';
 import {SprintService} from '../services/sprint.service';
-import {SprintExercise} from "../models/sprint.exercise";
-import {Exercise} from "../models/exercise";
+import {SprintExercise} from '../models/sprint.exercise';
+import {Exercise} from '../models/exercise';
+import {MultiTError} from '../models/multiterror';
+import {ExerciseMetadata} from '../models/exercise.metadata';
 
 @Component({
   selector: 'app-new-exercise',
@@ -22,6 +24,10 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   trainingDays: Date[] = [];
   private sprint: SprintExercise[] = [];
   choosenDayExercises: Exercise[] = [];
+  private exerciseConfig: ExerciseMetadata[];
+  newExercises: string[] = [];
+  choosenExercise: string;
+  private availableExerciseList: string[] = [];
 
   constructor(private router: Router, private sprintService: SprintService) {
   }
@@ -48,6 +54,18 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
       },
       error => this.handleError(error)
     );
+
+    this.sprintService.getExerciseMetadata().subscribe(
+      data => {
+        this.exerciseConfig = data;
+        this.conditions.loading = false;
+      },
+      error => this.handleError(new MultiTError('Metadata not loaded!'))
+    );
+    // TODO: change to dynamical load
+    this.availableExerciseList = ['ABS', 'TRICEPS', 'OVERHEAD_PRESS', 'SWIM', 'RUN'];
+    this.newExercises = Object.assign([], this.availableExerciseList);
+    this.choosenExercise = 'exercises...';
   }
 
   ngOnDestroy(): void {
@@ -65,7 +83,6 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
 
   save(): void {
     // TODO: implement
-    console.log('date=', this.date);
   }
 
   canSave(): boolean {
@@ -74,16 +91,34 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   }
 
   onNewDate(date: Date): void {
-    console.log('choosen day=', date);
     this.date = date;
+    this.newExercises = Object.assign([], this.availableExerciseList);
     if (date !== undefined && this.sprint !== undefined) {
       const exercises = this.sprint.find(value => new Date(value.getSprintDay().getSDate()).getDate() === date.getDate());
       this.choosenDayExercises = exercises !== undefined ? exercises.getExercises() : [];
+      // update available exercise list, exclude exercises which are already exist in the choosen day
+      if (this.choosenDayExercises.length > 0) {
+        for (const ex of this.choosenDayExercises) {
+          const index = this.newExercises.findIndex(value => value === ex.getSid());
+          if (index > -1) {
+            this.newExercises.splice(index, 1);
+          }
+        }
+      }
     }
   }
 
   onCalendarOpen(opened: boolean): void {
     this.conditions.cancelDisabled = opened;
+  }
+
+  getExName(sid: string): string {
+    const exerciseObj = this.exerciseConfig.find(value => value.getSid() === sid);
+    return (exerciseObj !== undefined && exerciseObj !== null) ? exerciseObj.getName() : '';
+  }
+
+  chooseExercise(sid: string): void {
+    this.choosenExercise = this.getExName(sid);
   }
 
   private handleError(error: any): void {

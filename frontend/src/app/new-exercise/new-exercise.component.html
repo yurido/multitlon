@@ -28,11 +28,27 @@
       </app-sprint-calendar>
     </div>
     <!-- exercise list -->
-    <div *ngIf="choosenDayExercises.length >0" class="container max-width" align="center" style="padding: 5px">
+    <div *ngIf="choosenDayExercises.length" class="container max-width" align="center" style="padding: 5px">
       <div *ngFor="let exercise of choosenDayExercises">
-        <div>{{exercise.getSid()}}</div>
+        <a>{{getExName(exercise.getSid())}}</a>
       </div>
     </div>
+
+    <div class="dropdown container max-width" align="center" style="padding: 5px">
+      <button class="btn dropdown-toggle" type="button" id="dropdownExercises"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+              style="width: 180px; border-color: dimgray">
+        {{choosenExercise}}
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownExercises">
+        <div  *ngFor="let ex of newExercises">
+          <button class="dropdown-item" typ="button" style="width: 180px"
+                  (click)="chooseExercise(ex)">{{getExName(ex)}}</button>
+          <div class="dropdown-divider" *ngIf="ex !== newExercises[newExercises.length-1]"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- reps table -->
     <!-- no reps, raw points register -->
     <!-- footer -->
