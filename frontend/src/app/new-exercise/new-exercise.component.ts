@@ -3,8 +3,9 @@ import {Router} from '@angular/router';
 import {SprintService} from '../services/sprint.service';
 import {SprintExercise} from '../models/sprint.exercise';
 import {Exercise} from '../models/exercise';
-import {MultiTError} from '../models/multiterror';
 import {ExerciseMetadata} from '../models/exercise.metadata';
+import {forkJoin} from 'rxjs';
+import {ExerciseSidName} from '../models/exercise.sid.name';
 
 @Component({
   selector: 'app-new-exercise',
@@ -25,9 +26,9 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   private sprint: SprintExercise[] = [];
   choosenDayExercises: Exercise[] = [];
   private exerciseConfig: ExerciseMetadata[];
-  newExercises: string[] = [];
+  newExercises: ExerciseSidName[] = [];
   choosenExercise: string;
-  private availableExerciseList: string[] = [];
+  private availableExerciseList: ExerciseSidName[] = [];
 
   constructor(private router: Router, private sprintService: SprintService) {
   }
@@ -55,16 +56,26 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
       error => this.handleError(error)
     );
 
-    this.sprintService.getExerciseMetadata().subscribe(
-      data => {
-        this.exerciseConfig = data;
+    // build sprint available exercise list
+    const metadataObs = this.sprintService.getExerciseMetadata();
+    const availableExObs = this.sprintService.getSprintAvailableExercises();
+    forkJoin([metadataObs, availableExObs]).subscribe(
+      result => {
+        this.exerciseConfig = result[0];
+        if (result[1] !== undefined && result[1].length > 0) {
+          result[1].forEach(sid => {
+            const exObj = this.exerciseConfig.find(value => value.getSid() === sid);
+            if (exObj !== undefined) {
+              this.availableExerciseList.push(new ExerciseSidName(exObj.getSid(), exObj.getName()));
+            }
+          });
+          this.newExercises = Object.assign([], this.availableExerciseList);
+        }
         this.conditions.loading = false;
       },
-      error => this.handleError(new MultiTError('Metadata not loaded!'))
+      error => this.handleError(error)
     );
-    // TODO: change to dynamical load
-    this.availableExerciseList = ['ABS', 'TRICEPS', 'OVERHEAD_PRESS', 'SWIM', 'RUN'];
-    this.newExercises = Object.assign([], this.availableExerciseList);
+
     this.choosenExercise = 'exercises...';
   }
 
@@ -96,10 +107,10 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
     if (date !== undefined && this.sprint !== undefined) {
       const exercises = this.sprint.find(value => new Date(value.getSprintDay().getSDate()).getDate() === date.getDate());
       this.choosenDayExercises = exercises !== undefined ? exercises.getExercises() : [];
-      // update available exercise list, exclude exercises which are already exist in the choosen day
+      // update available exercise list, exclude exercises which are already exist in the chosen day
       if (this.choosenDayExercises.length > 0) {
         for (const ex of this.choosenDayExercises) {
-          const index = this.newExercises.findIndex(value => value === ex.getSid());
+          const index = this.newExercises.findIndex(value => value.getSid() === ex.getSid());
           if (index > -1) {
             this.newExercises.splice(index, 1);
           }
@@ -121,8 +132,12 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
     this.choosenExercise = this.getExName(sid);
   }
 
+  selectNewExercise($event: any): void {
+    console.log('$event=',$event);
+  }
+
   private handleError(error: any): void {
-    this.conditions.loading = false;
+    this.conditions.loading = true;
     this.error = error;
   }
 }

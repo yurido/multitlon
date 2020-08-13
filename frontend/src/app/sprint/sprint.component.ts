@@ -70,7 +70,7 @@ export class SprintComponent implements OnInit {
   }
 
   private handleError(error: any): void {
-    this.loading = false;
+    this.loading = true;
     this.error = error;
   }
 

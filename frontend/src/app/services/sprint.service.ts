@@ -11,6 +11,7 @@ import {DaysOffList} from '../models/days.off.list';
 import {ExerciseList} from '../models/exercise.list';
 import {SprintDay} from '../models/sprint.day';
 import {ExerciseMetadata} from '../models/exercise.metadata';
+import {AvailableExerciseList} from "../models/available.exercise.list";
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'}),
@@ -21,15 +22,15 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class SprintService {
-  private EXERCISES_URL = 'rest/exercises';
-  private SPRINT_EXERCISES_URL = this.EXERCISES_URL + '/sprint';
-  private EXERCISE_METADATA_URL = this.EXERCISES_URL + '/metadata';
-  private STATISTICS_URL = 'rest/statistics';
-  private STATISTICS_EXERCISES_SPRINT_URL = this.STATISTICS_URL + '/sprintExercises';
+  private SPRINT_EXERCISES_URL = 'rest/sprint/sprintExercises';
+  private SPRINT_AVAILABLE_EXERCISES_URL = 'rest/sprint/availableExercises';
+  private EXERCISE_METADATA_URL = 'rest/exercises/metadata';
+  private STATISTICS_EXERCISES_SPRINT_URL = 'rest/statistics/sprintExercises';
+  private DAYS_OFF_URL = 'rest/daysoff';
   private SPRINT_EXERCISE_LIST_CACHE: Observable<SprintExercise[]> = EMPTY;
   private EXERCISE_STATISTIC_CACHE: Observable<ExerciseStatistic[]> = EMPTY;
   private EXERCISE_METADATA_CACHE: Observable<ExerciseMetadata[]> = EMPTY;
-  private DAYS_OFF_URL = 'rest/daysoff';
+  private SPRINT_AVAILABLE_EXERCISES_CACHE: Observable<string[]> = EMPTY;
 
   constructor(private http: HttpClient) {
   }
@@ -50,15 +51,37 @@ export class SprintService {
     return this.DAYS_OFF_URL;
   }
 
+  getSprintAvailableExercisesURL(): string {
+    return this.SPRINT_AVAILABLE_EXERCISES_URL;
+  }
+
   /**
    *  ************ REST ***************
    */
+  getSprintAvailableExercises(): Observable<string[]> {
+    // tslint:disable-next-line:max-line-length
+    if (this.SPRINT_AVAILABLE_EXERCISES_CACHE !== undefined && this.SPRINT_AVAILABLE_EXERCISES_CACHE !== null && this.SPRINT_AVAILABLE_EXERCISES_CACHE !== EMPTY) {
+      console.log('getting sprint available exercises from cache');
+      return this.SPRINT_AVAILABLE_EXERCISES_CACHE;
+    }
+    console.log('getting sprint available exercises from server');
+    this.SPRINT_AVAILABLE_EXERCISES_CACHE = this.http.get<AvailableExerciseList>(this.SPRINT_AVAILABLE_EXERCISES_URL, {
+      headers: httpOptions.headers,
+      params: httpOptions.params
+        .set('date', new Date().getTime().toString())
+    }).pipe(
+      shareReplay(1),
+      map(data => new AvailableExerciseList().deserialize(data).getExercises())
+    );
+    return this.SPRINT_AVAILABLE_EXERCISES_CACHE;
+  }
+
   /**
    * method returns sprint exercise list for current sprint from cache only
    */
   getExerciseListForCurrentSprintFromCache(): Observable<SprintExercise[]> {
     // tslint:disable-next-line:max-line-length
-    if ((this.SPRINT_EXERCISE_LIST_CACHE !== undefined && this.SPRINT_EXERCISE_LIST_CACHE !== null) && this.SPRINT_EXERCISE_LIST_CACHE !== EMPTY) {
+    if (this.SPRINT_EXERCISE_LIST_CACHE !== undefined && this.SPRINT_EXERCISE_LIST_CACHE !== null && this.SPRINT_EXERCISE_LIST_CACHE !== EMPTY) {
       console.log('got exercise list from cache');
       return this.SPRINT_EXERCISE_LIST_CACHE;
     }
@@ -82,8 +105,7 @@ export class SprintService {
    */
   getExerciseStatisticsForCurrentSprint(forceCallServer: boolean): Observable<ExerciseStatistic[]> {
     // tslint:disable-next-line:max-line-length
-    if ((this.EXERCISE_STATISTIC_CACHE !== undefined && this.EXERCISE_STATISTIC_CACHE !== null) && this.EXERCISE_STATISTIC_CACHE !== EMPTY && !forceCallServer
-    ) {
+    if ((this.EXERCISE_STATISTIC_CACHE !== undefined && this.EXERCISE_STATISTIC_CACHE !== null && this.EXERCISE_STATISTIC_CACHE !== EMPTY) && !forceCallServer) {
       console.log('got statistic from cache');
       return this.EXERCISE_STATISTIC_CACHE;
     }
@@ -131,8 +153,7 @@ export class SprintService {
    * method returns exercise global metadata from server or cache
    */
   getExerciseMetadata(): Observable<ExerciseMetadata[]> {
-    if ((this.EXERCISE_METADATA_CACHE !== undefined && this.EXERCISE_METADATA_CACHE !== null) && this.EXERCISE_METADATA_CACHE !== EMPTY
-    ) {
+    if (this.EXERCISE_METADATA_CACHE !== undefined && this.EXERCISE_METADATA_CACHE !== null && this.EXERCISE_METADATA_CACHE !== EMPTY) {
       console.log('got metadata from cache');
       return this.EXERCISE_METADATA_CACHE;
     }

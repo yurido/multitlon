@@ -35,18 +35,23 @@
     </div>
 
     <div class="dropdown container max-width" align="center" style="padding: 5px">
-      <button class="btn dropdown-toggle" type="button" id="dropdownExercises"
+      <!-- button class="btn dropdown-toggle" type="button" id="dropdownExercises"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
               style="width: 180px; border-color: dimgray">
         {{choosenExercise}}
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownExercises">
-        <div  *ngFor="let ex of newExercises">
+        <div *ngFor="let ex of newExercises">
           <button class="dropdown-item" typ="button" style="width: 180px"
-                  (click)="chooseExercise(ex)">{{getExName(ex)}}</button>
+                  (click)="chooseExercise(ex.getSid())">{{ex.getName()}}</button>
           <div class="dropdown-divider" *ngIf="ex !== newExercises[newExercises.length-1]"></div>
         </div>
-      </div>
+      </div -->
+      <select id="exercises">
+        <option>exercises...</option>
+        <option *ngFor="let ex of newExercises; let i = index" [value]="ex.getSid()" (select)="selectNewExercise($event)">{{ex.getName()}}</option>
+      </select>
+
     </div>
 
     <!-- reps table -->

@@ -14,8 +14,8 @@ export class DaysOffList implements Serializable<DaysOffList> {
   deserialize(input: object): DaysOffList {
     const serializator = new Serializator(DaysOffList.name);
     const list = serializator.getObjectProperty(input, 'daysOff');
-    for (const i in list) {
-      this.daysOff.push(list[i]);
+    for (const obj of list) {
+      this.daysOff.push(obj);
     }
     return this;
   }

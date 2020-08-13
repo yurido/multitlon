@@ -17,6 +17,7 @@ import * as exerciseMetadata from './mock-data/exercise-metadata.json';
 import {SprintService} from './services/sprint.service';
 import {DaysOffList} from './models/days.off.list';
 import {ExerciseList} from './models/exercise.list';
+import * as availableExerciseListData from './mock-data/available-exercises.json';
 
 @Injectable()
 export class MockHttpCalIInterceptor implements HttpInterceptor {
@@ -102,10 +103,14 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
         exerciseList.getExercises()[i].setDate(newDateNumber);
       }
       // console.log('will throw new error!');
-
       // console.log('new error thrown!');
-
       return of(new HttpResponse({status: 200, body: exerciseList}))
+        .pipe(
+          delay(1000)
+        );
+    } else if (request.url === this.sprintService.getSprintAvailableExercisesURL()) {
+      // this.throwError(request.headers, request.url, 'Available exercise list is not available!');
+      return of(new HttpResponse({status: 200, body: ((availableExerciseListData) as any).default}))
         .pipe(
           delay(1000)
         );
