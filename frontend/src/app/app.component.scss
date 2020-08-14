@@ -42,7 +42,7 @@
   color: black;
 }
 .btn-exercise-operate {
-  width: 180px;
+  @extend .exercise-container-width;
   border-radius: 0.8em;
   border-color: dimgray;
 }
@@ -55,4 +55,15 @@
   padding-left: 5px;
   padding-right: 5px;
   padding-bottom: 15px;
+}
+.exercise-container-width {
+  width: 244px;
+}
+.dropdown-exercise-operate {
+  @extend .exercise-container-width;
+  border-color: lightgrey;
+}
+.sticky-bottom {
+  position: absolute;
+  bottom: 15px;
 }

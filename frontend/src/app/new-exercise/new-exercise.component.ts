@@ -27,14 +27,21 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   choosenDayExercises: Exercise[] = [];
   private exerciseConfig: ExerciseMetadata[];
   newExercises: ExerciseSidName[] = [];
-  choosenExercise: string;
+  chosenExercise: ExerciseSidName;
+  defaultExercise: ExerciseSidName = new ExerciseSidName('', 'exercises...');
   private availableExerciseList: ExerciseSidName[] = [];
+  myWindow = {height: 0, weight: 0};
 
   constructor(private router: Router, private sprintService: SprintService) {
   }
 
   ngOnInit(): void {
     this.conditions.loading = true;
+    this.chosenExercise = this.defaultExercise;
+    this.myWindow.height = window.innerHeight;
+    this.myWindow.weight = window.innerWidth;
+    console.log(`***WINDOW height ${window.innerHeight} and width ${window.innerWidth}`);
+
     this.sprintService.getExerciseListForCurrentSprintFromCache().subscribe(
       data => {
         // tslint:disable-next-line:max-line-length
@@ -75,8 +82,6 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
       },
       error => this.handleError(error)
     );
-
-    this.choosenExercise = 'exercises...';
   }
 
   ngOnDestroy(): void {
@@ -97,8 +102,7 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   }
 
   canSave(): boolean {
-    const condis = true;
-    return condis;
+    return false;
   }
 
   onNewDate(date: Date): void {
@@ -128,12 +132,10 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
     return (exerciseObj !== undefined && exerciseObj !== null) ? exerciseObj.getName() : '';
   }
 
-  chooseExercise(sid: string): void {
-    this.choosenExercise = this.getExName(sid);
-  }
-
-  selectNewExercise($event: any): void {
-    console.log('$event=',$event);
+  chooseExercise(ex: ExerciseSidName): void {
+    if (ex !== null && ex !== undefined) {
+      this.chosenExercise = ex;
+    }
   }
 
   private handleError(error: any): void {

@@ -14,52 +14,59 @@
       </div>
     </div>
   </div>
+
   <app-alert [error]="error"></app-alert>
   <app-spinner [loading]="conditions.loading"></app-spinner>
 
   <!-- body -->
-  <div class="container exercise-body max-width" *ngIf="!conditions.loading">
-    <!-- date picker -->
-    <div class="container max-width" align="center" style="padding: 5px">
-      <app-sprint-calendar [dayOffList]="daysOff"
-                           [trainingDayList]="trainingDays"
-                           (choosenDay)="onNewDate($event)"
-                           (calendarOpened)="onCalendarOpen($event)">
-      </app-sprint-calendar>
-    </div>
-    <!-- exercise list -->
-    <div *ngIf="choosenDayExercises.length" class="container max-width" align="center" style="padding: 5px">
-      <div *ngFor="let exercise of choosenDayExercises">
-        <a>{{getExName(exercise.getSid())}}</a>
+  <div class="container exercise-body max-width" *ngIf="!conditions.loading" style="text-align: center">
+    <!-- div class="container" style="padding: 5px; text-align: center"-->
+      <!-- date picker -->
+      <div>
+        <app-sprint-calendar [dayOffList]="daysOff"
+                             [trainingDayList]="trainingDays"
+                             (choosenDay)="onNewDate($event)"
+                             (calendarOpened)="onCalendarOpen($event)">
+        </app-sprint-calendar>
       </div>
-    </div>
 
-    <div class="dropdown container max-width" align="center" style="padding: 5px">
-      <!-- button class="btn dropdown-toggle" type="button" id="dropdownExercises"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-              style="width: 180px; border-color: dimgray">
-        {{choosenExercise}}
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownExercises">
-        <div *ngFor="let ex of newExercises">
-          <button class="dropdown-item" typ="button" style="width: 180px"
-                  (click)="chooseExercise(ex.getSid())">{{ex.getName()}}</button>
-          <div class="dropdown-divider" *ngIf="ex !== newExercises[newExercises.length-1]"></div>
+      <!-- existing exercises -->
+      <div *ngIf="choosenDayExercises.length>0" class="container exercise-container-width">
+        <div class="text-muted small" *ngFor="let exercise of choosenDayExercises"
+             style="margin: 0">
+          <div class="row">
+            <div class="col-8 text-left">
+              {{getExName(exercise.getSid())}}
+            </div>
+            <div class="col-4">
+              {{exercise.getTotalPoints()}}
+            </div>
+          </div>
         </div>
-      </div -->
-      <select id="exercises">
-        <option>exercises...</option>
-        <option *ngFor="let ex of newExercises; let i = index" [value]="ex.getSid()" (select)="selectNewExercise($event)">{{ex.getName()}}</option>
-      </select>
+        <br>
+      </div>
 
-    </div>
+      <!-- available exercises -->
+      <div class="btn-group">
+        <button class="btn dropdown-toggle dropdown-exercise-operate" type="button" data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+          {{chosenExercise.getName()}}
+        </button>
+        <div class="dropdown-menu">
+          <button class="dropdown-item exercise-container-width" type="button"
+                  (click)="chooseExercise(ex)" *ngFor="let ex of newExercises">{{ex.getName()}}
+          </button>
+        </div>
+      </div>
 
-    <!-- reps table -->
-    <!-- no reps, raw points register -->
+      <!-- reps table -->
+      <!-- no reps, raw points register -->
+    <!--/div -->
+
     <!-- footer -->
-    <div class="container max-width" align="center" style="padding: 5px">
-      <div class="max-width" align="center"
-           style="left: 50%; margin-left: -15px; padding-bottom: 20px; padding-top: 10px;">
+    <div class="container max-width sticky-bottom">
+      <div class="container" style="text-align: center">
         <button class="btn btn-success btn-exercise-operate" (click)="save()" [disabled]="!canSave()">save
         </button>
       </div>
