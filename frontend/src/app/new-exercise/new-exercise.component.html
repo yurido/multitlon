@@ -3,7 +3,7 @@
   <div class="badge-dark container sticky-top max-width">
     <div class="row">
       <div class="col-2 text-left padding-left-0">
-        <button class="btn btn-dark margin-3px" (click)="cancel()" [disabled]="conditions.cancelDisabled">
+        <button class="btn btn-dark margin-3" (click)="cancel()" [disabled]="conditions.cancelDisabled">
           cancel
         </button>
       </div>
@@ -19,57 +19,52 @@
   <app-spinner [loading]="conditions.loading"></app-spinner>
 
   <!-- body -->
-  <div class="container exercise-body max-width" *ngIf="!conditions.loading" style="text-align: center">
-    <!-- div class="container" style="padding: 5px; text-align: center"-->
-      <!-- date picker -->
-      <div>
-        <app-sprint-calendar [dayOffList]="daysOff"
-                             [trainingDayList]="trainingDays"
-                             (choosenDay)="onNewDate($event)"
-                             (calendarOpened)="onCalendarOpen($event)">
-        </app-sprint-calendar>
-      </div>
+  <div class="container exercise-body max-width" *ngIf="!conditions.loading">
+    <!-- date picker -->
+    <div>
+      <app-sprint-calendar [dayOffList]="daysOff"
+                           [trainingDayList]="trainingDays"
+                           (choosenDay)="onNewDate($event)"
+                           (calendarOpened)="onCalendarOpen($event)">
+      </app-sprint-calendar>
+    </div>
 
-      <!-- existing exercises -->
-      <div *ngIf="choosenDayExercises.length>0" class="container exercise-container-width">
-        <div class="text-muted small" *ngFor="let exercise of choosenDayExercises"
-             style="margin: 0">
-          <div class="row">
-            <div class="col-8 text-left">
-              {{getExName(exercise.getSid())}}
-            </div>
-            <div class="col-4">
-              {{exercise.getTotalPoints()}}
-            </div>
+    <!-- existing exercises -->
+    <div *ngIf="choosenDayExercises.length>0" class="container element-width">
+      <div class="text-muted small margin-0" *ngFor="let exercise of choosenDayExercises">
+        <div class="row">
+          <div class="col-8 text-left">
+            {{getExName(exercise.getSid())}}
+          </div>
+          <div class="col-4">
+            {{exercise.getTotalPoints()}}
           </div>
         </div>
-        <br>
       </div>
+      <br>
+    </div>
 
-      <!-- available exercises -->
-      <div class="btn-group">
-        <button class="btn dropdown-toggle dropdown-exercise-operate" type="button" data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false">
-          {{chosenExercise.getName()}}
+    <!-- available exercises -->
+    <div class="btn-group">
+      <button class="btn dropdown-toggle dropdown-exercise-operate" type="button" data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false">
+        {{chosenExercise.getName()}}
+      </button>
+      <div class="dropdown-menu">
+        <button class="dropdown-item exercise-container-width" type="button"
+                (click)="chooseExercise(ex)" *ngFor="let ex of newExercises">{{ex.getName()}}
         </button>
-        <div class="dropdown-menu">
-          <button class="dropdown-item exercise-container-width" type="button"
-                  (click)="chooseExercise(ex)" *ngFor="let ex of newExercises">{{ex.getName()}}
-          </button>
-        </div>
       </div>
+    </div>
 
-      <!-- reps table -->
-      <!-- no reps, raw points register -->
-    <!--/div -->
+    <!-- reps table -->
+    <!-- no reps, raw points register -->
 
     <!-- footer -->
-    <div class="container max-width sticky-bottom">
-      <div class="container" style="text-align: center">
-        <button class="btn btn-success btn-exercise-operate" (click)="save()" [disabled]="!canSave()">save
-        </button>
-      </div>
+    <div class="container sticky-bottom">
+      <button class="btn btn-success btn-exercise-operate" (click)="save()" [disabled]="!canSave()">save
+      </button>
     </div>
   </div>
 </div>

@@ -155,7 +155,7 @@ export class ExerciseComponent implements OnInit, OnDestroy {
     this.conditions.isModifiedButNotsaved = true;
   }
 
-  canAddMoreReps(): boolean {
+  noEmptyReps(): boolean {
     const emptyElements = this.reps.findIndex(element => element.getWeight() === '' || element.getReps() === '');
     return emptyElements === -1;
   }
@@ -196,7 +196,7 @@ export class ExerciseComponent implements OnInit, OnDestroy {
   canSave(): boolean {
     let condis = false;
     if (this.config !== undefined && this.config.isWithReps()) {
-      condis = (this.canAddMoreReps() && this.reps.length > 0);
+      condis = (this.noEmptyReps() && this.reps.length > 0);
     } else {
       condis = this.sprintService.isStringContainsNumbers(this.rawPoints);
     }

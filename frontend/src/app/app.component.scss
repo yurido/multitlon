@@ -6,8 +6,11 @@
   vertical-align: middle;
   margin: 8px;
 }
-.margin-3px {
+.margin-3 {
   margin: 3px;
+}
+.margin-0 {
+  margin: 0;
 }
 .max-width {
   max-width: 1010px;
@@ -16,11 +19,17 @@
   alignment: center;
   padding: 0px;
 }
+.element-width {
+  width: 244px;
+}
 .padding-left-0 {
   padding-left: 0px;
 }
 .padding-right-3 {
   padding-right: 3px;
+}
+.padding-right-0 {
+  padding-right: 0;
 }
 .padding-0 {
   padding: 0px;
@@ -32,6 +41,9 @@
   padding-top: 0px;
   padding-bottom: 0px;
 }
+padding-6 {
+  padding: 6px;
+}
 .btn-transparent {
   background-color: transparent;
 }
@@ -42,38 +54,78 @@
   color: black;
 }
 .btn-exercise-operate {
-  @extend .exercise-container-width;
+  @extend .element-width;
   border-radius: 0.8em;
   border-color: dimgray;
 }
 .max-width-600 {
   max-width: 600px;
 }
-.exercise-body {
+.text-align-center {
   alignment: center;
-  padding-top: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-bottom: 15px;
+  text-align: center;
 }
-.exercise-container-width {
-  width: 244px;
+.exercise-body {
+  @extend .text-align-center;
+  @extend .padding-0;
 }
 .dropdown-exercise-operate {
-  @extend .exercise-container-width;
+  @extend .element-width;
   border-color: lightgrey;
 }
 .sticky-bottom {
   position: absolute;
   bottom: 15px;
+  max-width: inherit;
+  @extend .padding-0;
 }
-
 .max-height {
   height: 100vh;
 }
-
 .container-image {
   // background-image: url(assets/main-32148-660x413.jpg);
   background-color: rgba(20,11,9,0.92);
 }
-
+.login-style {
+  @extend .text-align-center;
+  margin-top: 6px;
+  height: 35px;
+  max-width: 250px;
+  border-width: 1px;
+  border-radius: 0.8em;
+  border-color: dimgray;
+  opacity: 0.8;
+  outline-color: dodgerblue;
+  color: black;
+  @extend .element-width;
+}
+.reps-first-column {
+  padding-left: 10px;
+  padding-right: 0px;
+}
+.reps-last-column {
+  padding-right: 2px;
+  padding-left: 7px;
+}
+.reps-table-row {
+  height: 45px;
+}
+.reps-table-first-column {
+  padding-left: 10px;
+  padding-right: 0;
+}
+.margin-top-10 {
+  margin-top: 10px;
+}
+.open-exercise-button {
+  min-width: 40px;
+  padding-left: 0;
+  padding-right: 4px;
+}
+.progress-bar-custom {
+  height: 1.5rem;
+  padding-top: 1px;
+}
+.color-black {
+  color:black;
+}

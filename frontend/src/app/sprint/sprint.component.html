@@ -3,7 +3,7 @@
   <div class="badge-dark container sticky-top max-width">
     <div class="row">
       <div class="col-2 text-left padding-left-0">
-        <button class="btn btn-dark margin-3px" (click)="goBack()">
+        <button class="btn btn-dark margin-3" (click)="goBack()">
           <fa-icon [icon]="faChevronLeft"></fa-icon>
         </button>
       </div>
@@ -12,7 +12,7 @@
       </div>
       <div class="col-2 text-right header-rigth-column-style">
         <div class="dropdown">
-          <button class="btn badge-dark margin-3px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="btn badge-dark margin-3" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <fa-icon [icon]="faPlus"></fa-icon>
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -28,7 +28,7 @@
 
   <!-- body -->
   <app-spinner [loading]="loading || (!exerciseConfig || !sprintExercises)"></app-spinner>
-  <table class="table table-sm" style="max-width: 1000px;" align="center" *ngIf="!loading && exerciseConfig && sprintExercises">
+  <table class="table table-sm max-width text-align-center" *ngIf="!loading && exerciseConfig && sprintExercises">
     <tbody>
     <tr *ngFor="let sprintExercise of sprintExercises">
       <td class="text-center padding-0">
@@ -44,23 +44,23 @@
           </div>
         </div>
         <!-- Exercises -->
-        <table class="table table-sm" style="margin: 0px;">
+        <table class="table table-sm margin-0">
           <tr *ngFor="let exercise of sprintExercise.getExercises()">
             <td>
-              <div class="row" style="padding: 6px;">
-                <div class="col-4 text-left" style="padding-right: 0px">
+              <div class="row padding-6">
+                <div class="col-4 text-left padding-right-0">
                   {{getExName(exercise.getSid())}}
                 </div>
-                <div class="col-4 text-left max-width-100" style="padding-right: 0px">
+                <div class="col-4 text-left max-width-100 padding-right-0">
                   {{exercise.getRawPoints()}} {{getExItem(exercise.getSid())}}
                 </div>
-                <div class="col-4 text-left" style="padding-right: 0px">
+                <div class="col-4 text-left padding-right-0">
                   {{exercise.getTotalPoints()}}
                 </div>
               </div>
             </td>
-            <td style="text-align: right;">
-              <button class="btn btn-link btn-open-exercise text-right" (click)="openExercise(exercise)" style="min-width: 40px; padding-left: 0px; padding-right: 4px;">
+            <td class="text-right">
+              <button class="btn btn-link btn-open-exercise text-right open-exercise-button" (click)="openExercise(exercise)">
                 <fa-icon [icon]="faChevronRight"></fa-icon>
               </button>
             </td>

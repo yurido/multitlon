@@ -40,7 +40,6 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
     this.chosenExercise = this.defaultExercise;
     this.myWindow.height = window.innerHeight;
     this.myWindow.weight = window.innerWidth;
-    console.log(`***WINDOW height ${window.innerHeight} and width ${window.innerWidth}`);
 
     this.sprintService.getExerciseListForCurrentSprintFromCache().subscribe(
       data => {

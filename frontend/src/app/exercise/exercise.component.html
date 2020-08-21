@@ -3,10 +3,10 @@
   <div class="badge-dark container sticky-top max-width" *ngIf="statistic && exercise && config">
     <div class="row">
       <div class="col-2 text-left padding-left-0">
-        <button class="btn btn-dark margin-3px" (click)="back()" *ngIf="!conditions.inEditMode && !conditions.loading">
+        <button class="btn btn-dark margin-3" (click)="back()" *ngIf="!conditions.inEditMode && !conditions.loading">
           <fa-icon [icon]="faChevronLeft"></fa-icon>
         </button>
-        <button class="btn btn-dark margin-3px" (click)="cancel()" *ngIf="conditions.inEditMode">
+        <button class="btn btn-dark margin-3" (click)="cancel()" *ngIf="conditions.inEditMode">
           cancel
         </button>
       </div>
@@ -14,12 +14,13 @@
         <span class="text-white header-text-style">{{config.getName()}}</span>
       </div>
       <div class="col-2 text-right header-rigth-column-style">
-        <button class="btn btn-dark margin-3px" *ngIf="conditions.inEditMode" (click)="delete()" data-toggle="modal" data-target="#modalDialog">
+        <button class="btn btn-dark margin-3" *ngIf="conditions.inEditMode" (click)="delete()" data-toggle="modal" data-target="#modalDialog">
           <fa-icon [icon]="faTrash"></fa-icon>
         </button>
       </div>
     </div>
   </div>
+
   <app-alert [error]="error"></app-alert>
   <app-spinner [loading]="conditions.loading"></app-spinner>
 
@@ -57,13 +58,13 @@
     </div>
 
     <div class="padding-top-40"></div>
-    <table class="table table-sm table-borderless max-width-600" align="center"
+    <table class="table table-sm table-borderless max-width-600"
            *ngIf="config.isWithReps() && reps.length>0">
       <tbody>
       <tr *ngFor="let rep of reps; let i = index">
         <td class="text-center padding-top-bottom-0">
-          <div class="row" style="height: 45px">
-            <div class="col-1" style="padding-left: 10px; padding-right: 0px">
+          <div class="row reps-table-row">
+            <div class="col-1 reps-table-first-column">
             </div>
             <div class="col-4 text-center padding-0">
               <input type="text"
@@ -78,7 +79,7 @@
                      (focusout)="addPostfix('kg', $event)">
             </div>
             <div class="col-1 text-center padding-0" [class]="conditions.loading ? 'text-disabled': 'text-enabled'">
-              <p style="margin-top: 10px" >X</p>
+              <p class="margin-top-10">X</p>
             </div>
             <div class="col-4 text-center padding-0">
               <input type="text"
@@ -104,13 +105,13 @@
     </table>
 
     <!-- + button -->
-    <div class="container max-width-600" align="center" *ngIf="conditions.inEditMode && config.isWithReps()">
+    <div class="container max-width-600" *ngIf="conditions.inEditMode && config.isWithReps()">
       <div class="row">
-        <div class="col-1" style="padding-left: 10px; padding-right: 0px"></div>
+        <div class="col-1 reps-first-column"></div>
         <div class="col-4 padding-0"></div>
         <div class="col-1 padding-0"></div>
         <div class="col-4 padding-0"></div>
-        <div class="col-2 text-left" style="padding-right: 2px; padding-left: 7px" *ngIf="canAddMoreReps()">
+        <div class="col-2 text-left reps-last-column" *ngIf="noEmptyReps() && reps.length < 6">
           <button class="btn btn-light btn-transparent" (click)="addReps()">
             <fa-icon [icon]="faPlus"></fa-icon>
           </button>
@@ -118,7 +119,7 @@
       </div>
     </div>
 
-    <div class="container max-width-600" align="center" *ngIf="!config.isWithReps()">
+    <div class="container max-width-600" *ngIf="!config.isWithReps()">
       <input class="text" class="exercise-input"
              [class]="conditions.loading ? 'exercise-input-disabled': 'exercise-input-enabled'"
              value="{{rawPoints}}"
@@ -128,12 +129,8 @@
              (keyup)="changeRawPoints($event)">
     </div>
 
-  </div>
-
-  <!-- footer -->
-  <div class="container max-width" align="center" style="padding: 5px">
-    <div class="max-width" align="center"
-         style="left: 50%; margin-left: -15px; padding-bottom: 20px; padding-top: 10px;">
+    <!-- footer -->
+    <div class="container sticky-bottom">
       <button class="btn btn-light btn-exercise-operate" (click)="edit()"
               *ngIf="!conditions.inEditMode && !conditions.loading">edit
       </button>
