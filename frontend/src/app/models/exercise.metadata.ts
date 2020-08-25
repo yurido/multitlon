@@ -26,6 +26,10 @@ export class ExerciseMetadata implements Serializable<ExerciseMetadata> {
     return this.withReps;
   }
 
+  public setName(name: string): void {
+    this.name = name;
+  }
+
   deserialize(input: object): ExerciseMetadata {
     const serializator = new Serializator(ExerciseMetadata.name);
     this.sid = serializator.getObjectProperty(input, 'sid');

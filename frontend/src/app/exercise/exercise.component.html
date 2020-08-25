@@ -58,6 +58,7 @@
     </div>
 
     <div class="padding-top-40"></div>
+    <!-- reps table -->
     <table class="table table-sm table-borderless max-width-600"
            *ngIf="config.isWithReps() && reps.length>0">
       <tbody>
@@ -119,6 +120,7 @@
       </div>
     </div>
 
+    <!-- input for exercises without reps -->
     <div class="container max-width-600" *ngIf="!config.isWithReps()">
       <input class="text" class="exercise-input"
              [class]="conditions.loading ? 'exercise-input-disabled': 'exercise-input-enabled'"

@@ -1,4 +1,4 @@
-export class ExerciseSidName {
+export class  ExerciseSidName {
   private sid: string;
   private name: string;
 

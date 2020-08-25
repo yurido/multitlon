@@ -16,27 +16,3 @@
   border-radius: 0.2em;
   align-content: center;
 }
-.exercise-input {
-  text-align: center;
-  margin-top: 6px;
-  height: 35px;
-  max-width: 100px;
-  border-radius: 0.3em;
-  border-width: 1px;
-  outline-color: dodgerblue;
-}
-.exercise-input-disabled {
-  border-color: #adb5bd;
-}
-.exercise-input-enabled {
-  border-color: dimgray;
-}
-.btn-delete-reps {
-  background-color: transparent;
-  margin-top: 4px;
-  outline-color: dodgerblue;
-}
-.col-delete-reps {
-  padding-right: 10px;
-  padding-left: 0px;
-}

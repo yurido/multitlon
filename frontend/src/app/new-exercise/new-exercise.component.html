@@ -34,10 +34,10 @@
       <div class="text-muted small margin-0" *ngFor="let exercise of choosenDayExercises">
         <div class="row">
           <div class="col-8 text-left">
-            {{getExName(exercise.getSid())}}
+            {{exercise.getName()}}
           </div>
           <div class="col-4">
-            {{exercise.getTotalPoints()}}
+            <!-- TODO: add total poiunts-->
           </div>
         </div>
       </div>
@@ -52,13 +52,72 @@
         {{chosenExercise.getName()}}
       </button>
       <div class="dropdown-menu">
-        <button class="dropdown-item exercise-container-width" type="button"
+        <button class="dropdown-item element-width" type="button"
                 (click)="chooseExercise(ex)" *ngFor="let ex of newExercises">{{ex.getName()}}
         </button>
       </div>
     </div>
+    <br>
+    <br>
 
     <!-- reps table -->
+    <table class="table table-sm table-borderless max-width-600"
+           *ngIf="chosenExercise.isWithReps()">
+      <tbody>
+      <tr *ngFor="let rep of reps; let i = index">
+        <td class="text-center padding-top-bottom-0">
+          <div class="row reps-table-row">
+            <div class="col-1 reps-table-first-column">
+            </div>
+            <div class="col-4 text-center padding-0">
+              <input type="text"
+                     class="exercise-input"
+                     [class]="conditions.loading ? 'exercise-input-disabled': 'exercise-input-enabled'"
+                     value="{{rep.getWeight()}}"
+                     placeholder="weight"
+                     required
+                     (keyup)="changeWeight(i, $event)"
+                     (focusin)="removePostfix($event)"
+                     (focusout)="addPostfix('kg', $event)">
+            </div>
+            <div class="col-1 text-center padding-0" [class]="conditions.loading ? 'text-disabled': 'text-enabled'">
+              <p class="margin-top-10">X</p>
+            </div>
+            <div class="col-4 text-center padding-0">
+              <input type="text"
+                     class="exercise-input"
+                     [class]="conditions.loading ? 'exercise-input-disabled': 'exercise-input-enabled'"
+                     value="{{rep.getReps()}}"
+                     (keyup)="changeReps(i, $event)"
+                     placeholder="reps"
+                     required>
+            </div>
+            <div class="col-2 text-left col-delete-reps">
+              <button class="btn btn-light btn-delete-reps"
+                      (click)="deleteReps(i)">
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- + button -->
+    <div class="container max-width-600" *ngIf="chosenExercise.isWithReps()">
+      <div class="row">
+        <div class="col-1 reps-first-column"></div>
+        <div class="col-4 padding-0"></div>
+        <div class="col-1 padding-0"></div>
+        <div class="col-4 padding-0"></div>
+        <div class="col-2 text-left reps-last-column" *ngIf="noEmptyReps() && reps.length < 6">
+          <button class="btn btn-light btn-transparent" (click)="addReps()">
+            <fa-icon [icon]="faPlus"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </div>
     <!-- no reps, raw points register -->
 
     <!-- footer -->
