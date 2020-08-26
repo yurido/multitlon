@@ -22,6 +22,10 @@ export class Exercise implements Serializable<Exercise> {
     return this.sid;
   }
 
+  public setSid(sid: string): void {
+    this.sid = sid;
+  }
+
   public getDate(): number {
     return this.date;
   }

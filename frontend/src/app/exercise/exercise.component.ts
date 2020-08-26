@@ -145,8 +145,7 @@ export class ExerciseComponent implements OnInit, OnDestroy {
   }
 
   addReps(): void {
-    const rep = new RepsView('', '');
-    this.reps.push(rep);
+    this.reps.push(new RepsView('', ''));
     this.conditions.isModifiedButNotsaved = true;
   }
 

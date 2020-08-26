@@ -11,7 +11,7 @@ import {DaysOffList} from '../models/days.off.list';
 import {ExerciseList} from '../models/exercise.list';
 import {SprintDay} from '../models/sprint.day';
 import {ExerciseMetadata} from '../models/exercise.metadata';
-import {AvailableExerciseList} from "../models/available.exercise.list";
+import {AvailableExerciseList} from '../models/available.exercise.list';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'}),
@@ -31,6 +31,18 @@ export class SprintService {
   private EXERCISE_STATISTIC_CACHE: Observable<ExerciseStatistic[]> = EMPTY;
   private EXERCISE_METADATA_CACHE: Observable<ExerciseMetadata[]> = EMPTY;
   private SPRINT_AVAILABLE_EXERCISES_CACHE: Observable<string[]> = EMPTY;
+  private ActionEnum = {
+    DELETE: 1, INSERT: 2, UPDATE: 3, fromValue(val: number): any {
+      switch (val) {
+        case 1:
+          return this.DELETE;
+        case 2:
+          return this.INSERT;
+        case 3:
+          return this.UPDATE;
+      }
+    }
+  };
 
   constructor(private http: HttpClient) {
   }
@@ -202,7 +214,19 @@ export class SprintService {
       console.log('SPRINT_EXERCISE_LIST_CACHE is empty, getting it from the server');
       return this.getExerciseListForCurrentSprintFromCache();
     }
-    return this.modifySprintExerciseListInCache(exercise, false);
+    return this.modifySprintExerciseListInCache(exercise, this.ActionEnum.UPDATE);
+  }
+
+  /**
+   * method adds spint exercise to cache
+   * @param exercise - sprint exercise
+   */
+  addSprintExerciseToCache(exercise: Exercise): Observable<SprintExercise[]> {
+    if (this.SPRINT_EXERCISE_LIST_CACHE === EMPTY) {
+      console.log('SPRINT_EXERCISE_LIST_CACHE is empty, getting it from the server');
+      return this.getExerciseListForCurrentSprintFromCache();
+    }
+    return this.modifySprintExerciseListInCache(exercise, this.ActionEnum.INSERT);
   }
 
   /**
@@ -215,7 +239,17 @@ export class SprintService {
       console.log('SPRINT_EXERCISES_CACHE is empty, getting it from the server');
       return this.getExerciseListForCurrentSprintFromCache();
     }
-    return this.modifySprintExerciseListInCache(exercise, true);
+    return this.modifySprintExerciseListInCache(exercise, this.ActionEnum.DELETE);
+  }
+
+  addExerciseToSprint(ex: Exercise): Observable<any> {
+    return this.http.post(this.SPRINT_EXERCISES_URL, ex, {
+      headers: httpOptions.headers,
+      params: httpOptions.params
+    })
+      .pipe(
+        tap(data => console.log(`new exercise ${ex.getSid()} added to sprint`))
+      );
   }
 
   /**
@@ -281,10 +315,10 @@ export class SprintService {
   /**
    * method modifies SPRINT_EXERCISE_LIST_CACHE object
    * @param exercise - exercise to be modified/removed
-   * @param toDelete - true to delete exercise, false to modify
+   * @param action - update/insert or delete exercise
    */
-  private modifySprintExerciseListInCache(exercise: Exercise, toDelete: boolean): Observable<SprintExercise[]> {
-    console.log('will update/delete exercise in cache: ', toDelete);
+  private modifySprintExerciseListInCache(exercise: Exercise, action: number): Observable<SprintExercise[]> {
+    console.log(`will ${this.ActionEnum.fromValue(action)} exercise in cache`);
     this.SPRINT_EXERCISE_LIST_CACHE.subscribe(
       data => {
         let isSprintModified = false;
@@ -294,12 +328,18 @@ export class SprintService {
           const sDay = new Date(data[i].getSprintDay().getSDate()).getDate();
           const exDay = new Date(exercise.getDate()).getDate();
           if (sDay === exDay) {
+            if (this.ActionEnum.fromValue(action) === this.ActionEnum.INSERT) {
+              data[i].getExercises().push(exercise);
+              console.log(`exercise ${exercise.getSid()} added to sprint cache`);
+              break;
+            }
+
             for (let j = 0; j < data[i].getExercises().length; j++) {
               if (data[i].getExercises()[j].getId() === exercise.getId()) {
-                if (toDelete) {
+                if (this.ActionEnum.fromValue(action) === this.ActionEnum.DELETE) {
                   data[i].getExercises().splice(j, 1); // delete exercise
                   if (data[i].getExercises().length === 0) {
-                    data.splice(i, 1); // delete the whole day
+                    data.splice(i, 1); // delete the whole day!
                     console.log(`exercise ${exercise.getSid()} deleted from cache`);
                     break;
                   }
@@ -314,7 +354,7 @@ export class SprintService {
                 data[i].getSprintDay().setTotal(total); // update days total points
                 isSprintModified = true;
                 let logText = '';
-                if (toDelete) {
+                if (this.ActionEnum.fromValue(action) === this.ActionEnum.DELETE) {
                   logText = 'deleted from';
                 } else {
                   logText = 'updated in';

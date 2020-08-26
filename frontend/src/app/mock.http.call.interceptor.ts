@@ -114,6 +114,14 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
         .pipe(
           delay(1000)
         );
+    } else if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'POST') {
+      console.log('create exercise JSON ', request.body);
+      const exercise = JSON.parse(request.body);
+      const newExString = `{id: 236, sid: ${exercise.getSid()}, date=${exercise.getDate()}, reps: ${exercise.getReps()}, rawPoints: ${exercise.getRawPoints()}, totalPoints: 1652`;
+      return of(new HttpResponse({status: 200, body: newExString}))
+        .pipe(
+          delay(2000)
+        );
     }
     return next.handle(request);
   }

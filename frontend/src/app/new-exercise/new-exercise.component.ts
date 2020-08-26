@@ -7,6 +7,8 @@ import {forkJoin} from 'rxjs';
 import {RepsView} from '../models/reps.view';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {Exercise} from "../models/exercise";
+import {Reps} from "../models/reps";
 
 @Component({
   selector: 'app-new-exercise',
@@ -32,6 +34,7 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   reps: RepsView[] = [];
   faTrash = faTrash;
   faPlus = faPlus;
+  rawPoints = '';
 
   constructor(private router: Router, private sprintService: SprintService) {
   }
@@ -96,11 +99,40 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   }
 
   save(): void {
-    // TODO: implement
+    this.conditions.loading = true;
+    const ex = new Exercise();
+    ex.setDate(new Date().getTime());
+    ex.setSid(this.chosenExercise.getSid());
+    if (this.chosenExercise.isWithReps()) {
+      this.reps.forEach(rep => {
+        const newRep = new Reps();
+        newRep.setWeight(this.sprintService.getNumberFromString(rep.getWeight()));
+        newRep.setReps(this.sprintService.getNumberFromString(rep.getReps()));
+        ex.getReps().push(newRep);
+        ex.setRawPoints(0);
+      });
+    } else {
+      ex.setRawPoints(this.sprintService.getFloatFromString(this.rawPoints));
+      ex.setReps([]);
+    }
+    this.sprintService.addExerciseToSprint(ex).subscribe(
+      data => {
+        const newExercise = new Exercise().deserialize(data);
+        this.sprintService.addSprintExerciseToCache(newExercise).subscribe(
+          resp => {
+            this.conditions.loading = false;
+            // TODO: show global notification!
+            this.cancel();
+          }
+        );
+      },
+      error => this.handleError(error)
+    );
   }
 
   canSave(): boolean {
-    return false;
+    // tslint:disable-next-line:max-line-length
+    return this.chosenExercise.getSid() !== undefined && (this.chosenExercise.isWithReps() && this.reps.length > 0 && this.noEmptyReps()) || (!this.chosenExercise.isWithReps() && this.rawPoints !== '' && this.rawPoints !== '0');
   }
 
   onNewDate(date: Date): void {
@@ -134,11 +166,10 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
 
   chooseExercise(ex: ExerciseMetadata): void {
     if (ex !== null && ex !== undefined) {
+      this.reps = [];
       this.chosenExercise = ex;
       if (this.chosenExercise.isWithReps()) {
         this.reps.push(new RepsView('', ''));
-      } else {
-        this.reps = [];
       }
     }
   }
@@ -166,6 +197,10 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   }
 
   deleteReps(index: number): void {
+    if (this.reps.length === 1) {
+      this.reps = [new RepsView('', '')];
+      return;
+    }
     this.reps.splice(index, 1);
   }
 
@@ -177,6 +212,12 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   addReps(): void {
     const rep = new RepsView('', '');
     this.reps.push(rep);
+  }
+
+  changeRawPoints($event: any): void {
+    if (this.rawPoints !== $event.target.value) {
+    }
+    this.rawPoints = $event.target.value;
   }
 
   private handleError(error: any): void {

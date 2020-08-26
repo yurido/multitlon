@@ -118,11 +118,20 @@
         </div>
       </div>
     </div>
-    <!-- no reps, raw points register -->
+
+    <!-- input for exercises without reps -->
+    <div class="container max-width-600" *ngIf="!chosenExercise.isWithReps() && chosenExercise.getSid() !== undefined">
+      <input class="text" class="exercise-input"
+             [class]="conditions.loading ? 'exercise-input-disabled': 'exercise-input-enabled'"
+             value="{{rawPoints}}"
+             placeholder="{{chosenExercise.getItem()}}"
+             required
+             (keyup)="changeRawPoints($event)">
+    </div>
 
     <!-- footer -->
     <div class="container sticky-bottom">
-      <button class="btn btn-success btn-exercise-operate" (click)="save()" [disabled]="!canSave()">save
+      <button class="btn btn-success btn-exercise-operate" *ngIf="canSave()" (click)="save()" [disabled]="!canSave()">save
       </button>
     </div>
   </div>
