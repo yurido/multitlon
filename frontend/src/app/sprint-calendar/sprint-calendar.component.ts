@@ -48,13 +48,14 @@ export class SprintCalendarComponent implements OnInit {
   @Output() calendarOpened = new EventEmitter<boolean>(); // calendar open/close state API
   @Input() dayOffList: Date[] = [];
   @Input() trainingDayList: Date[] = [];
+  @Input() startDate: Date;
   today: any;
 
   constructor() {
   }
 
   ngOnInit(): void {
-    this.date = new FormControl(moment()).value;
+    this.date = new FormControl(this.startDate).value;
     this.today = new Date();
 
     if (moment.isMoment(this.date)) {

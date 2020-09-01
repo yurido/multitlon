@@ -48,6 +48,7 @@ export class ExerciseComponent implements OnInit, OnDestroy {
       this.back();
       return;
     }
+    console.log('history.state.ex=', history.state.ex);
     // getting exercise and statistic from sprint component ?!
     this.exercise = new Exercise().deserialize(history.state.ex);
     this.sprintService.getExerciseStatisticsForCurrentSprint(false).subscribe(

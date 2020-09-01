@@ -7,8 +7,9 @@ import {forkJoin} from 'rxjs';
 import {RepsView} from '../models/reps.view';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
-import {Exercise} from "../models/exercise";
-import {Reps} from "../models/reps";
+import {Exercise} from '../models/exercise';
+import {Reps} from '../models/reps';
+import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-new-exercise',
@@ -23,18 +24,19 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
     loading: false,
     cancelDisabled: false
   };
-  date: any;
+  chosenDate = new Date();
   daysOff: Date[] = [];
   trainingDays: Date[] = [];
   private sprint: SprintExercise[] = [];
-  choosenDayExercises: ExerciseMetadata[] = [];
+  chosenDayExercises: ExerciseMetadata[] = [];
   newExercises: ExerciseMetadata[] = [];
   chosenExercise: ExerciseMetadata;
   private availableExerciseList: ExerciseMetadata[] = [];
   reps: RepsView[] = [];
   faTrash = faTrash;
   faPlus = faPlus;
-  rawPoints = '';
+  rawPoints: number | undefined;
+  faChevronLeft = faChevronLeft;
 
   constructor(private router: Router, private sprintService: SprintService) {
   }
@@ -101,7 +103,7 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   save(): void {
     this.conditions.loading = true;
     const ex = new Exercise();
-    ex.setDate(new Date().getTime());
+    ex.setDate(this.chosenDate.getTime());
     ex.setSid(this.chosenExercise.getSid());
     if (this.chosenExercise.isWithReps()) {
       this.reps.forEach(rep => {
@@ -112,17 +114,25 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
         ex.setRawPoints(0);
       });
     } else {
-      ex.setRawPoints(this.sprintService.getFloatFromString(this.rawPoints));
+      // @ts-ignore
+      ex.setRawPoints(this.rawPoints !== undefined ? this.rawPoints : 0);
       ex.setReps([]);
     }
     this.sprintService.addExerciseToSprint(ex).subscribe(
       data => {
-        const newExercise = new Exercise().deserialize(data);
-        this.sprintService.addSprintExerciseToCache(newExercise).subscribe(
+        this.sprintService.addSprintExerciseToCache(data).subscribe(
           resp => {
-            this.conditions.loading = false;
-            // TODO: show global notification!
-            this.cancel();
+            this.initDefaultExercise();
+            this.reps = [];
+            this.rawPoints = undefined;
+            this.sprintService.getExerciseListForCurrentSprintFromCache().subscribe(
+              exResponse => {
+                this.sprint = exResponse;
+                this.conditions.loading = false;
+                this.conditions.isAdded = true;
+                // TODO: show global notification and clean the form!
+              }
+            );
           }
         );
       },
@@ -132,23 +142,25 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
 
   canSave(): boolean {
     // tslint:disable-next-line:max-line-length
-    return this.chosenExercise.getSid() !== undefined && (this.chosenExercise.isWithReps() && this.reps.length > 0 && this.noEmptyReps()) || (!this.chosenExercise.isWithReps() && this.rawPoints !== '' && this.rawPoints !== '0');
+    return this.chosenExercise.getSid() !== undefined &&
+      (this.chosenExercise.isWithReps() && this.reps.length > 0 && this.noEmptyReps()) ||
+      (!this.chosenExercise.isWithReps() && this.rawPoints !== undefined && this.rawPoints > 0);
   }
 
   onNewDate(date: Date): void {
-    this.date = date;
+    this.chosenDate = date;
     this.newExercises = Object.assign([], this.availableExerciseList);
     this.initDefaultExercise();
 
     if (date !== undefined && this.sprint !== undefined) {
-      this.choosenDayExercises = [];
-      const exercises = this.sprint.find(value => new Date(value.getSprintDay().getSDate()).getDate() === date.getDate());
+      this.chosenDayExercises = [];
+      const exercises = this.sprint.find(value => new Date(value.getSprintDay().getSDate()).getDate() === this.chosenDate.getDate());
       if (exercises !== undefined && exercises !== null && exercises.getExercises() !== null && exercises.getExercises().length > 0) {
         exercises.getExercises().forEach(exercise => {
           const foundMetaEx = this.availableExerciseList.find(exMeta => exercise.getSid() === exMeta.getSid());
           if (foundMetaEx !== undefined && foundMetaEx !== null) {
             // add exercise data to the chosen day
-            this.choosenDayExercises.push(foundMetaEx);
+            this.chosenDayExercises.push(foundMetaEx);
             // update available exercise list, exclude exercises which are already exist in the chosen day
             const index = this.newExercises.findIndex(value => value.getSid() === foundMetaEx.getSid());
             if (index > -1) {
@@ -180,16 +192,6 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
     $event.target.value = newValue;
   }
 
-  removePostfix($event: any): void {
-    if ($event.target.value.length > 0) {
-      $event.target.value = this.sprintService.getNumberFromString($event.target.value);
-    }
-  }
-
-  addPostfix(postfix: string, $event: any): void {
-    $event.target.value = $event.target.value + ($event.target.value.length > 0 ? postfix : '');
-  }
-
   changeReps(index: number, $event: any): void {
     const newValue = this.modifyRepsElement($event.target.value, this.reps[index].getReps());
     this.reps[index].setReps(newValue);
@@ -215,8 +217,16 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   }
 
   changeRawPoints($event: any): void {
-    if (this.rawPoints !== $event.target.value) {
+    const str = $event.target.value.toString();
+    if (str === '') {
+      this.rawPoints = undefined;
+      return;
     }
+    if (str.endsWith('.')) {
+      this.rawPoints = $event.target.value;
+      return;
+    }
+    $event.target.value = this.sprintService.getFloatFromString($event.target.value);
     this.rawPoints = $event.target.value;
   }
 

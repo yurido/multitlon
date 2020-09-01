@@ -18,6 +18,9 @@ import {SprintService} from './services/sprint.service';
 import {DaysOffList} from './models/days.off.list';
 import {ExerciseList} from './models/exercise.list';
 import * as availableExerciseListData from './mock-data/available-exercises.json';
+import {Serializable} from './models/serializable';
+import {Serializator} from './models/serializator';
+import {Reps} from './models/reps';
 
 @Injectable()
 export class MockHttpCalIInterceptor implements HttpInterceptor {
@@ -52,9 +55,8 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
       // tslint:disable-next-line:max-line-length
       const sidPos = request.url.indexOf(this.sprintService.getExerciseStatisticsCurrentSprintURL() + '/') + (this.sprintService.getExerciseStatisticsCurrentSprintURL() + '/').length;
       const sid = request.url.substr(sidPos, request.url.length - sidPos);
-      const json = JSON.parse('{"sid": "' + sid + '", "progress": 44, "totalRaw": 123, "totalPoints": 1500, "averagePoints": 45, "maxPonts": 500, "quota": 16}');
+      const json = JSON.parse(`{"sid": "${sid}", "progress": 44, "totalRaw": 123, "totalPoints": 1500, "averagePoints": 45, "maxPonts": 500, "quota": 16}`);
       const statistic = new ExerciseStatistic().deserialize(json);
-
       return of(new HttpResponse({status: 200, body: statistic}))
         .pipe(
           delay(1000)
@@ -115,10 +117,15 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
           delay(1000)
         );
     } else if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'POST') {
-      console.log('create exercise JSON ', request.body);
-      const exercise = JSON.parse(request.body);
-      const newExString = `{id: 236, sid: ${exercise.getSid()}, date=${exercise.getDate()}, reps: ${exercise.getReps()}, rawPoints: ${exercise.getRawPoints()}, totalPoints: 1652`;
-      return of(new HttpResponse({status: 200, body: newExString}))
+      const exercise = new CreateExercise().deserialize(request.body);
+      const newExString = `{"id": 236, "sid": "${exercise.getSid()}", "date": ${exercise.getDate()}, "reps": [], "rawPoints": ${exercise.getRawPoints()}, "totalPoints": 1652, "time": 0}`;
+      const newExJson = JSON.parse(newExString);
+      const newExObj = new Exercise().deserialize(newExJson);
+      newExObj.setReps(exercise.getReps());
+      if (exercise.getRawPoints() === 0) {
+        newExObj.setRawPoints(1566);
+      }
+      return of(new HttpResponse({status: 200, body: newExObj}))
         .pipe(
           delay(2000)
         );
@@ -133,5 +140,45 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
       statusText: message,
       url
     });
+  }
+}
+
+// --- This class is a part of backend!
+export class CreateExercise implements Serializable<CreateExercise> {
+  private sid: string;
+  private date: number;
+  private reps: Reps[] = [];
+  private rawPoints: number;
+
+  constructor() {
+  }
+
+  public getSid(): string {
+    return this.sid;
+  }
+
+  public getDate(): number {
+    return this.date;
+  }
+
+  public getReps(): Reps[] {
+    return this.reps;
+  }
+
+  public getRawPoints(): number {
+    return this.rawPoints;
+  }
+
+  deserialize(input: object): CreateExercise {
+    const serializator = new Serializator(CreateExercise.name);
+
+    this.sid = serializator.getObjectProperty(input, 'sid');
+    this.date = serializator.getObjectProperty(input, 'date');
+    const reps = serializator.getObjectProperty(input, 'reps');
+    for (const i in reps) {
+      this.reps.push(new Reps().deserialize(reps[i]));
+    }
+    this.rawPoints = serializator.getObjectProperty(input, 'rawPoints');
+    return this;
   }
 }
