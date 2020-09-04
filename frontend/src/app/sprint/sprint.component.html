@@ -28,7 +28,8 @@
 
   <!-- body -->
   <app-spinner [loading]="loading || (!exerciseConfig || !sprintExercises)"></app-spinner>
-  <table class="table table-sm max-width text-align-center" *ngIf="!loading && exerciseConfig && sprintExercises">
+  <div class="container exercise-body max-width">
+    <table class="table table-sm" *ngIf="!loading && exerciseConfig && sprintExercises">
     <tbody>
     <tr *ngFor="let sprintExercise of sprintExercises">
       <td class="text-center padding-0">
@@ -46,8 +47,8 @@
         <!-- Exercises -->
         <table class="table table-sm margin-0">
           <tr *ngFor="let exercise of sprintExercise.getExercises()">
-            <td>
-              <div class="row padding-6">
+            <td style="padding-top:12px;">
+              <div class="row">
                 <div class="col-4 text-left padding-right-0">
                   {{getExName(exercise.getSid())}}
                 </div>
@@ -70,5 +71,5 @@
     </tr>
     </tbody>
   </table>
-
+  </div>
 </div>
