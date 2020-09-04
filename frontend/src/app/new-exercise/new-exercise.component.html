@@ -38,7 +38,7 @@
             {{exercise.getName()}}
           </div>
           <div class="col-4">
-            <!-- TODO: add total poiunts-->
+            {{getExerciseTotalPoints(exercise)}}
           </div>
         </div>
       </div>
@@ -62,7 +62,8 @@
     <br>
 
     <!-- reps table -->
-    <table class="table table-sm table-borderless max-width-600"
+    <div class="container max-width-600">
+      <table class="table table-sm table-borderless"
            *ngIf="chosenExercise.isWithReps()">
       <tbody>
       <tr *ngFor="let rep of reps; let i = index">
@@ -102,7 +103,7 @@
       </tr>
       </tbody>
     </table>
-
+    </div>
     <!-- + button -->
     <div class="container max-width-600" *ngIf="chosenExercise.isWithReps()">
       <div class="row">

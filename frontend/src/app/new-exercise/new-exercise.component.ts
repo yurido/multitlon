@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {Router} from '@angular/router';
 import {SprintService} from '../services/sprint.service';
 import {SprintExercise} from '../models/sprint.exercise';
@@ -17,7 +17,7 @@ import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./new-exercise.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class NewExerciseComponent implements OnInit, OnDestroy {
+export class NewExerciseComponent implements OnInit {
   error: any;
   conditions = {
     isAdded: false,
@@ -28,7 +28,7 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   daysOff: Date[] = [];
   trainingDays: Date[] = [];
   private sprint: SprintExercise[] = [];
-  chosenDayExercises: ExerciseMetadata[] = [];
+  chosenDayExercises: ExerciseMetadata[] = []; // TODO: should be anothe type, with total points!
   newExercises: ExerciseMetadata[] = [];
   chosenExercise: ExerciseMetadata;
   private availableExerciseList: ExerciseMetadata[] = [];
@@ -75,6 +75,8 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
           });
           this.newExercises = Object.assign([], this.availableExerciseList);
         }
+        // show exercises for today
+        this.onNewDate(this.chosenDate);
         this.conditions.loading = false;
       },
       error => this.handleError(error)
@@ -85,9 +87,6 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
     const defaultExercise = new ExerciseMetadata();
     defaultExercise.setName('exercises...');
     this.chosenExercise = defaultExercise;
-  }
-
-  ngOnDestroy(): void {
   }
 
   cancel(): void {
@@ -108,7 +107,7 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
     if (this.chosenExercise.isWithReps()) {
       this.reps.forEach(rep => {
         const newRep = new Reps();
-        newRep.setWeight(this.sprintService.getNumberFromString(rep.getWeight()));
+        newRep.setWeight(this.sprintService.getFloatFromString(rep.getWeight()));
         newRep.setReps(this.sprintService.getNumberFromString(rep.getReps()));
         ex.getReps().push(newRep);
         ex.setRawPoints(0);
@@ -120,17 +119,27 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
     }
     this.sprintService.addExerciseToSprint(ex).subscribe(
       data => {
+        this.chosenDayExercises.push(this.chosenExercise);
         this.sprintService.addSprintExerciseToCache(data).subscribe(
           resp => {
             this.initDefaultExercise();
             this.reps = [];
             this.rawPoints = undefined;
+            // refresh exercises
             this.sprintService.getExerciseListForCurrentSprintFromCache().subscribe(
               exResponse => {
                 this.sprint = exResponse;
+                // refresh exercise days for the calendar
+                this.trainingDays = [];
+                 for (const sprintDay of this.sprint) {
+                    if (!sprintDay.getSprintDay().getIsDayOff() && sprintDay.getExercises() !== null && sprintDay.getExercises().length > 0) {
+                      this.trainingDays.push(new Date(sprintDay.getSprintDay().getSDate()));
+                    }
+                }
+
                 this.conditions.loading = false;
                 this.conditions.isAdded = true;
-                // TODO: show global notification and clean the form!
+                // TODO: show global notification!
               }
             );
           }
@@ -186,16 +195,32 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
     }
   }
 
+  // TODO: remove!
+  getExerciseTotalPoints(exMeta: ExerciseMetadata): number {
+    if (exMeta !== null && exMeta !== undefined) {
+      const exercises = this.sprint.find(value => new Date(value.getSprintDay().getSDate()).getDate() === this.chosenDate.getDate());
+      if (exercises !== undefined && exercises !== null && exercises.getExercises() !== null && exercises.getExercises().length > 0) {
+        const ex = exercises.getExercises().find(value => value.getSid() === exMeta.getSid());
+        if(ex !== null && ex !== undefined) {
+          return ex.getTotalPoints();
+        }
+      }
+    }
+    return 0;
+  }
+
+  /* --------------------------------------- REPS table -----------------------  */
   changeWeight(index: number, $event: any): void {
-    const newValue = this.modifyRepsElement($event.target.value, this.reps[index].getWeight());
+    const newValue = this.changeFieldFloatValue($event);
     this.reps[index].setWeight(newValue);
     $event.target.value = newValue;
   }
 
   changeReps(index: number, $event: any): void {
-    const newValue = this.modifyRepsElement($event.target.value, this.reps[index].getReps());
-    this.reps[index].setReps(newValue);
-    $event.target.value = newValue;
+    const newNumberValue = this.sprintService.getNumberFromString($event.target.value);
+    const newStringValue = (newNumberValue === 0 ? '' : '' + newNumberValue);
+    this.reps[index].setReps(newStringValue);
+    $event.target.value = newStringValue;
   }
 
   deleteReps(index: number): void {
@@ -217,28 +242,24 @@ export class NewExerciseComponent implements OnInit, OnDestroy {
   }
 
   changeRawPoints($event: any): void {
+    this.rawPoints = this.changeFieldFloatValue($event);
+  }
+
+  private changeFieldFloatValue($event: any): any {
     const str = $event.target.value.toString();
     if (str === '') {
-      this.rawPoints = undefined;
-      return;
+      return undefined;
     }
     if (str.endsWith('.')) {
-      this.rawPoints = $event.target.value;
-      return;
+      return $event.target.value;
     }
     $event.target.value = this.sprintService.getFloatFromString($event.target.value);
-    this.rawPoints = $event.target.value;
+    return $event.target.value;
   }
+  /* --------------------------------------- REPS table -----------------------  */
 
   private handleError(error: any): void {
     this.conditions.loading = true;
     this.error = error;
-  }
-
-  private modifyRepsElement(newValue: string, oldValue: string): string {
-    if (oldValue !== newValue) {
-    }
-    const newNumberValue = this.sprintService.getNumberFromString(newValue);
-    return (newNumberValue === 0 ? '' : '' + newNumberValue);
   }
 }
