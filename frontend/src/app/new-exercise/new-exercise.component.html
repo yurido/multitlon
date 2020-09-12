@@ -19,12 +19,12 @@
   <app-spinner [loading]="conditions.loading"></app-spinner>
 
   <!-- body -->
-  <div class="container exercise-body max-width" *ngIf="!conditions.loading">
+  <div class="container exercise-body element-width">
     <!-- date picker -->
-    <div>
+    <div class="margin-top-4">
       <app-sprint-calendar [dayOffList]="daysOff"
                            [trainingDayList]="trainingDays"
-                           [startDate]="chosenDate"
+                           [disabled]="conditions.loading"
                            (choosenDay)="onNewDate($event)"
                            (calendarOpened)="onCalendarOpen($event)">
       </app-sprint-calendar>
@@ -35,10 +35,10 @@
       <div class="text-muted small margin-0" *ngFor="let exercise of chosenDayExercises">
         <div class="row">
           <div class="col-8 text-left">
-            {{exercise.getName()}}
+            {{getExerciseName(exercise.getSid())}}
           </div>
           <div class="col-4">
-            {{getExerciseTotalPoints(exercise)}}
+            {{exercise.getTotalPoints()}}
           </div>
         </div>
       </div>
@@ -46,73 +46,65 @@
     </div>
 
     <!-- available exercises -->
-    <div class="btn-group">
-      <button class="btn dropdown-toggle dropdown-exercise-operate" type="button" data-toggle="dropdown"
+    <div class="btn-group" *ngIf="chosenDate !== undefined">
+      <button class="btn dropdown-toggle dropdown-exercise-operate" type="button"
+              data-toggle="dropdown"
+              [disabled]="conditions.loading"
               aria-haspopup="true"
               aria-expanded="false">
         {{chosenExercise.getName()}}
       </button>
       <div class="dropdown-menu">
         <button class="dropdown-item element-width" type="button"
-                (click)="chooseExercise(ex)" *ngFor="let ex of newExercises">{{ex.getName()}}
+                (click)="choseExercise(ex)" *ngFor="let ex of newExercises">{{ex.getName()}}
         </button>
       </div>
     </div>
     <br>
     <br>
 
-    <!-- reps table -->
-    <div class="container max-width-600">
-      <table class="table table-sm table-borderless"
-           *ngIf="chosenExercise.isWithReps()">
-      <tbody>
-      <tr *ngFor="let rep of reps; let i = index">
-        <td class="text-center padding-top-bottom-0">
-          <div class="row reps-table-row">
-            <div class="col-1 reps-table-first-column">
-            </div>
-            <div class="col-4 text-center padding-0">
-              <input type="text"
-                     class="exercise-input"
-                     [class]="conditions.loading ? 'exercise-input-disabled': 'exercise-input-enabled'"
-                     value="{{rep.getWeight()}}"
-                     placeholder="weight"
-                     required
-                     (keyup)="changeWeight(i, $event)">
-            </div>
-            <div class="col-1 text-center padding-0" [class]="conditions.loading ? 'text-disabled': 'text-enabled'">
-              <p class="margin-top-10">X</p>
-            </div>
-            <div class="col-4 text-center padding-0">
-              <input type="text"
-                     class="exercise-input"
-                     [class]="conditions.loading ? 'exercise-input-disabled': 'exercise-input-enabled'"
-                     value="{{rep.getReps()}}"
-                     (keyup)="changeReps(i, $event)"
-                     placeholder="reps"
-                     required>
-            </div>
-            <div class="col-2 text-left col-delete-reps">
-              <button class="btn btn-light btn-delete-reps"
-                      (click)="deleteReps(i)">
-                <fa-icon [icon]="faTrash" class="red-trash-bin"></fa-icon>
-              </button>
-            </div>
+    <!-- reps list -->
+    <div class="container element-width" *ngIf="chosenExercise.isWithReps()">
+      <div *ngFor="let rep of reps; let i = index">
+        <div class="row">
+          <div class="col-4 padding-0 text-left">
+            <input type="text"
+                   class="reps-input"
+                   [disabled]="conditions.loading"
+                   value="{{rep.getWeight()}}"
+                   placeholder="kg"
+                   required
+                   (keyup)="changeWeight(i, $event)">
           </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+          <div class="col-2 padding-0 text-center">
+            <p class="margin-top-4">X</p>
+          </div>
+          <div class="col-4 padding-0 text-center">
+            <input type="text"
+                   class="reps-input"
+                   [disabled]="conditions.loading"
+                   value="{{rep.getReps()}}"
+                   (keyup)="changeReps(i, $event)"
+                   placeholder="reps"
+                   required>
+          </div>
+          <div class="col-2 padding-0 text-right">
+            <button class="btn btn-light btn-delete-reps"
+                    (click)="deleteReps(i)"
+                    [disabled]="conditions.loading">
+              <fa-icon [icon]="faTrash" class="red-trash-bin"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+
     <!-- + button -->
-    <div class="container max-width-600" *ngIf="chosenExercise.isWithReps()">
+    <div class="container element-width" *ngIf="chosenExercise.isWithReps()">
       <div class="row">
-        <div class="col-1 reps-first-column"></div>
-        <div class="col-4 padding-0"></div>
-        <div class="col-1 padding-0"></div>
-        <div class="col-4 padding-0"></div>
-        <div class="col-2 text-left reps-last-column" *ngIf="noEmptyReps() && reps.length < 6">
-          <button class="btn btn-light btn-transparent" (click)="addReps()">
+        <div class="col-12 text-right padding-0" *ngIf="noEmptyReps() && reps.length < 6">
+          <button class="btn btn-light btn-transparent" (click)="addReps()"
+                  [disabled]="conditions.loading">
             <fa-icon [icon]="faPlus"></fa-icon>
           </button>
         </div>
@@ -120,18 +112,23 @@
     </div>
 
     <!-- input for exercises without reps -->
-    <div class="container max-width-600" *ngIf="!chosenExercise.isWithReps() && chosenExercise.getSid() !== undefined">
-      <input class="text" class="exercise-input"
-             [class]="conditions.loading ? 'exercise-input-disabled': 'exercise-input-enabled'"
-             value="{{rawPoints}}"
-             placeholder="{{chosenExercise.getItem()}}"
-             required
-             (keyup)="changeRawPoints($event)">
+    <div class="container element-width" *ngIf="!chosenExercise.isWithReps() && chosenExercise.getSid() !== undefined">
+      <div class="row">
+        <div class="col-12 text-center padding-0">
+          <input class="text" class="exercise-input"
+                 value="{{rawPoints}}"
+                 placeholder="{{chosenExercise.getItem()}}"
+                 required
+                 [disabled]="conditions.loading"
+                 (keyup)="changeRawPoints($event)">
+        </div>
+      </div>
     </div>
 
     <!-- footer -->
-    <div class="container sticky-bottom">
-      <button class="btn btn-success btn-exercise-operate" *ngIf="canSave()" (click)="save()" [disabled]="!canSave()">save
+    <div class="container element-width sticky-bottom">
+      <button class="btn btn-success btn-exercise-operate" *ngIf="canSave()" (click)="save()"
+              [disabled]="conditions.loading">add
       </button>
     </div>
   </div>

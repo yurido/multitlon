@@ -16,10 +16,10 @@ export const MY_FORMATS = {
     dateInput: 'LL',
   },
   display: {
-    dateInput: 'LL',
-    monthYearLabel: 'MMM YYYY',
+    dateInput: 'DD MMMM',
+    monthYearLabel: 'MMM',
     dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
+    monthYearA11yLabel: 'MMM',
   },
 };
 
@@ -43,69 +43,61 @@ export const MY_FORMATS = {
 })
 export class SprintCalendarComponent implements OnInit {
   header = SprintCalendarHeaderComponent; // modal view header
-  date: any; // choosen day
+  chosenDate: any; // choosen day
   @Output() choosenDay = new EventEmitter<Date>(); // choosen day API
   @Output() calendarOpened = new EventEmitter<boolean>(); // calendar open/close state API
   @Input() dayOffList: Date[] = [];
   @Input() trainingDayList: Date[] = [];
-  @Input() startDate: Date;
-  today: any;
+  @Input() disabled: boolean;
 
   constructor() {
   }
 
   ngOnInit(): void {
-    this.date = new FormControl(this.startDate).value;
-    this.today = new Date();
-
-    if (moment.isMoment(this.date)) {
-      const date = moment(this.date).toDate();
-      if (this.isDayOff(date)) {
-        this.date = undefined; // default date can't be day-off
-        console.log('day off!');
-      }
+    this.chosenDate = new FormControl(new Date()).value;
+    const date = moment(this.chosenDate).toDate();
+    if (this.isDayOff(date)) {
+      this.chosenDate = undefined; // default date can't be day-off
+      console.log('day off!');
     }
-    const event = {target: {value: this.date}};
+    const event = {target: {value: this.chosenDate}};
     // default day should be passed out
     this.dateChanged(event);
   }
 
   // prevent days-off and future days from being selected
   weekendFilter = (d: Date | null): boolean => {
-    if (moment.isMoment(d)) {
-      const date = moment(d).toDate();
-      return !this.isDayOff(date) && (date.getDate() <= this.today.getDate());
-    }
-    return false;
+    const date = moment(d).toDate();
+    return !this.isDayOff(date) && (date.getDate() <= new Date().getDate());
   }
 
   dateClass = (d: Date): MatCalendarCellCssClasses => {
-    if (moment.isMoment(d)) {
-      const date = moment(d).toDate();
-      // highlight days-off
-      if (this.isDayOff(date)) {
-        return 'day-off-class';
-      }
-      // fill days after 24 with grey
-      // TODO: should be input parameter
-      if (date.getDate() > 24) {
-        return 'grey-day-class';
-      }
-      // fill trainings days with green
-      for (const trainingDay of this.trainingDayList) {
-        if (date.getDate() === trainingDay.getDate() && trainingDay.getMonth() === date.getMonth()) {
-          return 'days-with-exercises-class';
-        }
+    const date = moment(d).toDate();
+    // highlight days-off
+    if (this.isDayOff(date)) {
+      return 'day-off-class';
+    }
+    // fill days after 24 with grey
+    // TODO: should be input parameter
+    if (date.getDate() > 24) {
+      return 'grey-day-class';
+    }
+    // fill trainings days with green
+    for (const trainingDay of this.trainingDayList) {
+      if (date.getDate() === trainingDay.getDate() && trainingDay.getMonth() === date.getMonth()) {
+        return 'days-with-exercises-class';
       }
     }
     return '';
   }
 
   dateChanged($event: any): void {
-    if (moment.isMoment($event.target.value)) {
-      const date = moment($event.target.value).toDate();
-      this.choosenDay.emit(date);
+    if($event.target.value === undefined) {
+      this.choosenDay.emit(undefined);
+      return;
     }
+    const date = moment($event.target.value).toDate();
+    this.choosenDay.emit(date);
   }
 
   open(isOpend: boolean): void {
@@ -113,12 +105,8 @@ export class SprintCalendarComponent implements OnInit {
   }
 
   private isDayOff(date: Date): boolean {
-    for (const dayOff of this.dayOffList) {
-      if (date.getDate() === dayOff.getDate() && date.getMonth() === dayOff.getMonth()) {
-        return true;
-      }
-    }
-    return false;
+    const dayOf = this.dayOffList.find(dayOff => date.getDate() === dayOff.getDate() && date.getMonth() === dayOff.getMonth());
+    return dayOf !== undefined ? true: false;
   }
 
 }

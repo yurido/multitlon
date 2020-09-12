@@ -1,6 +1,7 @@
-<mat-form-field appearance="fill">
-  <mat-label></mat-label>
-  <input matInput [matDatepicker]="picker" [value]="date" [matDatepickerFilter]="weekendFilter" (dateChange)="dateChanged($event)">
+<mat-form-field appearance="fill" class="element-width height-70">
+  <mat-label>chose a day</mat-label>
+  <input matInput [matDatepicker]="picker" [value]="chosenDate" [matDatepickerFilter]="weekendFilter"
+         (dateChange)="dateChanged($event)" [disabled]="disabled">
   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-  <mat-datepicker touchUi #picker [calendarHeaderComponent]="header" [dateClass]="dateClass" disabled="false" (opened)="open(true)" (closed)="open(false)"></mat-datepicker>
+  <mat-datepicker touchUi #picker [calendarHeaderComponent]="header" [dateClass]="dateClass" (opened)="open(true)" (closed)="open(false)"></mat-datepicker>
 </mat-form-field>

@@ -24,11 +24,11 @@ export class NewExerciseComponent implements OnInit {
     loading: false,
     cancelDisabled: false
   };
-  chosenDate = new Date();
+  chosenDate: Date;
   daysOff: Date[] = [];
   trainingDays: Date[] = [];
   private sprint: SprintExercise[] = [];
-  chosenDayExercises: ExerciseMetadata[] = []; // TODO: should be anothe type, with total points!
+  chosenDayExercises: Exercise[] = [];
   newExercises: ExerciseMetadata[] = [];
   chosenExercise: ExerciseMetadata;
   private availableExerciseList: ExerciseMetadata[] = [];
@@ -82,13 +82,6 @@ export class NewExerciseComponent implements OnInit {
       error => this.handleError(error)
     );
   }
-
-  private initDefaultExercise() {
-    const defaultExercise = new ExerciseMetadata();
-    defaultExercise.setName('exercises...');
-    this.chosenExercise = defaultExercise;
-  }
-
   cancel(): void {
     // tslint:disable-next-line:max-line-length
     const state = {
@@ -101,42 +94,27 @@ export class NewExerciseComponent implements OnInit {
 
   save(): void {
     this.conditions.loading = true;
-    const ex = new Exercise();
-    ex.setDate(this.chosenDate.getTime());
-    ex.setSid(this.chosenExercise.getSid());
-    if (this.chosenExercise.isWithReps()) {
-      this.reps.forEach(rep => {
-        const newRep = new Reps();
-        newRep.setWeight(this.sprintService.getFloatFromString(rep.getWeight()));
-        newRep.setReps(this.sprintService.getNumberFromString(rep.getReps()));
-        ex.getReps().push(newRep);
-        ex.setRawPoints(0);
-      });
-    } else {
-      // @ts-ignore
-      ex.setRawPoints(this.rawPoints !== undefined ? this.rawPoints : 0);
-      ex.setReps([]);
-    }
+    const ex = this.createExercise();
     this.sprintService.addExerciseToSprint(ex).subscribe(
       data => {
-        this.chosenDayExercises.push(this.chosenExercise);
+        this.chosenDayExercises.push(data);
+        // update available exercise list, exclude added exercise
+        const index = this.newExercises.findIndex(value => value.getSid() === ex.getSid());
+        if (index > -1) {
+          this.newExercises.splice(index, 1);
+        }
+
         this.sprintService.addSprintExerciseToCache(data).subscribe(
           resp => {
             this.initDefaultExercise();
             this.reps = [];
             this.rawPoints = undefined;
+            // add new training day to calendar
+            this.addNewTrainingDay();
             // refresh exercises
             this.sprintService.getExerciseListForCurrentSprintFromCache().subscribe(
               exResponse => {
                 this.sprint = exResponse;
-                // refresh exercise days for the calendar
-                this.trainingDays = [];
-                 for (const sprintDay of this.sprint) {
-                    if (!sprintDay.getSprintDay().getIsDayOff() && sprintDay.getExercises() !== null && sprintDay.getExercises().length > 0) {
-                      this.trainingDays.push(new Date(sprintDay.getSprintDay().getSDate()));
-                    }
-                }
-
                 this.conditions.loading = false;
                 this.conditions.isAdded = true;
                 // TODO: show global notification!
@@ -163,14 +141,14 @@ export class NewExerciseComponent implements OnInit {
 
     if (date !== undefined && this.sprint !== undefined) {
       this.chosenDayExercises = [];
-      const exercises = this.sprint.find(value => new Date(value.getSprintDay().getSDate()).getDate() === this.chosenDate.getDate());
-      if (exercises !== undefined && exercises !== null && exercises.getExercises() !== null && exercises.getExercises().length > 0) {
-        exercises.getExercises().forEach(exercise => {
+      const exercises = this.getSprintExercises(date);
+      if (exercises.length >0) {
+        exercises.forEach(exercise => {
           const foundMetaEx = this.availableExerciseList.find(exMeta => exercise.getSid() === exMeta.getSid());
           if (foundMetaEx !== undefined && foundMetaEx !== null) {
             // add exercise data to the chosen day
-            this.chosenDayExercises.push(foundMetaEx);
-            // update available exercise list, exclude exercises which are already exist in the chosen day
+            this.chosenDayExercises.push(exercise);
+            // update available exercise list, exclude exercises which already exist in the chosen day
             const index = this.newExercises.findIndex(value => value.getSid() === foundMetaEx.getSid());
             if (index > -1) {
               this.newExercises.splice(index, 1);
@@ -185,7 +163,7 @@ export class NewExerciseComponent implements OnInit {
     this.conditions.cancelDisabled = opened;
   }
 
-  chooseExercise(ex: ExerciseMetadata): void {
+  choseExercise(ex: ExerciseMetadata): void {
     if (ex !== null && ex !== undefined) {
       this.reps = [];
       this.chosenExercise = ex;
@@ -195,18 +173,14 @@ export class NewExerciseComponent implements OnInit {
     }
   }
 
-  // TODO: remove!
-  getExerciseTotalPoints(exMeta: ExerciseMetadata): number {
-    if (exMeta !== null && exMeta !== undefined) {
-      const exercises = this.sprint.find(value => new Date(value.getSprintDay().getSDate()).getDate() === this.chosenDate.getDate());
-      if (exercises !== undefined && exercises !== null && exercises.getExercises() !== null && exercises.getExercises().length > 0) {
-        const ex = exercises.getExercises().find(value => value.getSid() === exMeta.getSid());
-        if(ex !== null && ex !== undefined) {
-          return ex.getTotalPoints();
-        }
+  getExerciseName(sid: string): string {
+    if (sid !== null && sid !== undefined) {
+      const foundMetaEx = this.availableExerciseList.find(exMeta => sid === exMeta.getSid());
+      if(foundMetaEx !== null && foundMetaEx !== undefined) {
+        return foundMetaEx.getName();
       }
     }
-    return 0;
+    return '';
   }
 
   /* --------------------------------------- REPS table -----------------------  */
@@ -232,7 +206,7 @@ export class NewExerciseComponent implements OnInit {
   }
 
   noEmptyReps(): boolean {
-    const emptyElements = this.reps.findIndex(element => element.getWeight() === '' || element.getReps() === '');
+    const emptyElements = this.reps.findIndex(element => element.getWeight() === '' || element.getReps() === '' || element.getWeight() === '0' || element.getReps() === '0' || element.getWeight() === undefined);
     return emptyElements === -1;
   }
 
@@ -247,8 +221,8 @@ export class NewExerciseComponent implements OnInit {
 
   private changeFieldFloatValue($event: any): any {
     const str = $event.target.value.toString();
-    if (str === '') {
-      return undefined;
+    if (str === '' || str == undefined) {
+      return '';
     }
     if (str.endsWith('.')) {
       return $event.target.value;
@@ -261,5 +235,50 @@ export class NewExerciseComponent implements OnInit {
   private handleError(error: any): void {
     this.conditions.loading = true;
     this.error = error;
+  }
+
+  private getSprintExercises(date: Date): Exercise[] {
+    const exercises = this.sprint.find(value => new Date(value.getSprintDay().getSDate()).getDate() === this.chosenDate.getDate());
+    if (exercises !== undefined && exercises !== null && exercises.getExercises() !== null && exercises.getExercises().length > 0) {
+      return exercises.getExercises();
+    }
+    return [];
+  }
+
+  private initDefaultExercise() {
+    const defaultExercise = new ExerciseMetadata();
+    defaultExercise.setName('exercises...');
+    this.chosenExercise = defaultExercise;
+  }
+
+  private createExercise(): Exercise {
+    const ex = new Exercise();
+    ex.setDate(this.chosenDate.getTime());
+    ex.setSid(this.chosenExercise.getSid());
+    if (this.chosenExercise.isWithReps()) {
+      this.reps.forEach(rep => {
+        const newRep = new Reps();
+        newRep.setWeight(this.sprintService.getFloatFromString(rep.getWeight()));
+        newRep.setReps(this.sprintService.getNumberFromString(rep.getReps()));
+        ex.getReps().push(newRep);
+        ex.setRawPoints(0);
+      });
+    } else {
+      // @ts-ignore
+      ex.setRawPoints(this.rawPoints !== undefined ? this.rawPoints : 0);
+      ex.setReps([]);
+    }
+    return ex;
+  }
+
+  private addNewTrainingDay(): void {
+    if(this.trainingDays.length === 0) {
+      this.trainingDays.push(this.chosenDate);
+      return;
+    }
+    const trainingDay = this.trainingDays.find(date => date.getDate() === this.chosenDate.getDate());
+    if (trainingDay === null || trainingDay === undefined) {
+      this.trainingDays.push(this.chosenDate);
+    }
   }
 }
