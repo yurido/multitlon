@@ -22,7 +22,8 @@ export class NewExerciseComponent implements OnInit {
   conditions = {
     isAdded: false,
     loading: false,
-    cancelDisabled: false
+    clendarOpened: false,
+    initialized: false
   };
   chosenDate: Date;
   daysOff: Date[] = [];
@@ -37,6 +38,7 @@ export class NewExerciseComponent implements OnInit {
   faPlus = faPlus;
   rawPoints: number | undefined;
   faChevronLeft = faChevronLeft;
+  totalPointsDay: number | undefined;
 
   constructor(private router: Router, private sprintService: SprintService) {
   }
@@ -78,6 +80,7 @@ export class NewExerciseComponent implements OnInit {
         // show exercises for today
         this.onNewDate(this.chosenDate);
         this.conditions.loading = false;
+        this.conditions.initialized = true;
       },
       error => this.handleError(error)
     );
@@ -117,7 +120,7 @@ export class NewExerciseComponent implements OnInit {
                 this.sprint = exResponse;
                 this.conditions.loading = false;
                 this.conditions.isAdded = true;
-                // TODO: show global notification!
+                this.getSprintExercises(this.chosenDate);
               }
             );
           }
@@ -160,7 +163,7 @@ export class NewExerciseComponent implements OnInit {
   }
 
   onCalendarOpen(opened: boolean): void {
-    this.conditions.cancelDisabled = opened;
+    this.conditions.clendarOpened = opened;
   }
 
   choseExercise(ex: ExerciseMetadata): void {
@@ -240,6 +243,7 @@ export class NewExerciseComponent implements OnInit {
   private getSprintExercises(date: Date): Exercise[] {
     const exercises = this.sprint.find(value => new Date(value.getSprintDay().getSDate()).getDate() === this.chosenDate.getDate());
     if (exercises !== undefined && exercises !== null && exercises.getExercises() !== null && exercises.getExercises().length > 0) {
+      this.totalPointsDay = exercises.getSprintDay().getTotal();
       return exercises.getExercises();
     }
     return [];
