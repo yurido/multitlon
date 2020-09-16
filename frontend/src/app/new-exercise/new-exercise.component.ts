@@ -11,7 +11,7 @@ import {Exercise} from '../models/exercise';
 import {Reps} from '../models/reps';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {MatDialog} from '@angular/material/dialog';
-import {ModalDialogComponent} from '../modal.dialog/modal.dialog.component';
+import {ConfirmationModalComponent} from '../confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-new-exercise',
@@ -123,7 +123,7 @@ export class NewExerciseComponent implements OnInit {
                 this.conditions.isAdded = true;
                 this.getSprintExercises(this.chosenDate);
 
-                const dialogRef = this.dialog.open(ModalDialogComponent, {width: '300px', data: {text: 'Are you shure you wanna delete exercise?', acceptButtonText: 'delete', cancelButtonText: 'cancel'}});
+                const dialogRef = this.dialog.open(ConfirmationModalComponent, {width: '120px', height: '120px'});
                 dialogRef.afterClosed().subscribe(result => {
                   console.log('The dialog was closed: ', result);
                   this.conditions.loading = false;

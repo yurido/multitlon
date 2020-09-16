@@ -25,6 +25,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SprintCalendarHeaderComponent} from './sprint-calendar/sprint-calendar.component';
 import {SprintCalendarComponent} from './sprint-calendar/sprint-calendar.component';
 import { ModalDialogComponent } from './modal.dialog/modal.dialog.component';
+import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { ModalDialogComponent } from './modal.dialog/modal.dialog.component';
     NewExerciseComponent,
     SprintCalendarHeaderComponent,
     SprintCalendarComponent,
-    ModalDialogComponent
+    ModalDialogComponent,
+    ConfirmationModalComponent
   ],
   imports: [
     BrowserModule,
