@@ -10,6 +10,8 @@ import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {Exercise} from '../models/exercise';
 import {Reps} from '../models/reps';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
+import {MatDialog} from '@angular/material/dialog';
+import {ModalDialogComponent} from '../modal.dialog/modal.dialog.component';
 
 @Component({
   selector: 'app-new-exercise',
@@ -40,7 +42,7 @@ export class NewExerciseComponent implements OnInit {
   faChevronLeft = faChevronLeft;
   totalPointsDay: number | undefined;
 
-  constructor(private router: Router, private sprintService: SprintService) {
+  constructor(private router: Router, private sprintService: SprintService, public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -77,8 +79,7 @@ export class NewExerciseComponent implements OnInit {
           });
           this.newExercises = Object.assign([], this.availableExerciseList);
         }
-        // show exercises for today
-        this.onNewDate(this.chosenDate);
+
         this.conditions.loading = false;
         this.conditions.initialized = true;
       },
@@ -118,9 +119,15 @@ export class NewExerciseComponent implements OnInit {
             this.sprintService.getExerciseListForCurrentSprintFromCache().subscribe(
               exResponse => {
                 this.sprint = exResponse;
-                this.conditions.loading = false;
+
                 this.conditions.isAdded = true;
                 this.getSprintExercises(this.chosenDate);
+
+                const dialogRef = this.dialog.open(ModalDialogComponent, {width: '250px', data: {somedata: 'bla', cancelled: false, accepted: false}});
+                dialogRef.afterClosed().subscribe(result => {
+                  console.log('The dialog was closed: ', result);
+                  this.conditions.loading = false;
+                });
               }
             );
           }

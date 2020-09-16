@@ -170,7 +170,7 @@ padding-6 {
 }
 .exercise-input {
   @extend .base-input;
-  width: 200px;
+  @extend .element-width;
 }
 .height-70 {
   height: 70px;

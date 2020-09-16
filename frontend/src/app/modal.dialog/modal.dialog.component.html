@@ -1,0 +1,8 @@
+<!-- h1 mat-dialog-title>Hi {{data.name}}</h1 -->
+<div mat-dialog-content>
+  <p>Done!</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancelClick()">cancel</button>
+  <button mat-button [mat-dialog-close]="data.accepted" (click)="onOkClick()" cdkFocusInitial>ok</button>
+</div>

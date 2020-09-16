@@ -54,7 +54,7 @@
     </div>
 
     <!-- available exercises -->
-    <div class="btn-group" *ngIf="chosenDate !== undefined" style="margin-bottom: 12px">
+    <div class="btn-group" *ngIf="newExercises !== []" style="margin-bottom: 12px">
       <button class="btn dropdown-toggle dropdown-exercise-operate" type="button"
               data-toggle="dropdown"
               [disabled]="conditions.loading"

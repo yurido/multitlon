@@ -14,13 +14,17 @@ import {ExerciseComponent} from './exercise/exercise.component';
 import {ProgressBarComponent} from './progress-bar/progress-bar.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NewExerciseComponent} from './new-exercise/new-exercise.component';
+import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
+import {MatButtonModule} from '@angular/material/button';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SprintCalendarHeaderComponent} from './sprint-calendar/sprint-calendar.component';
 import {SprintCalendarComponent} from './sprint-calendar/sprint-calendar.component';
+import { ModalDialogComponent } from './modal.dialog/modal.dialog.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +37,8 @@ import {SprintCalendarComponent} from './sprint-calendar/sprint-calendar.compone
     ProgressBarComponent,
     NewExerciseComponent,
     SprintCalendarHeaderComponent,
-    SprintCalendarComponent
+    SprintCalendarComponent,
+    ModalDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +51,10 @@ import {SprintCalendarComponent} from './sprint-calendar/sprint-calendar.compone
     MatNativeDateModule,
     MatMomentDateModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatDialogModule
   ],
   providers: [
     {
