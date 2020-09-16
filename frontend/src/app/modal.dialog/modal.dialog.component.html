@@ -1,8 +1,7 @@
-<!-- h1 mat-dialog-title>Hi {{data.name}}</h1 -->
 <div mat-dialog-content>
-  <p>Done!</p>
+  <p>{{data.text}}</p>
 </div>
-<div mat-dialog-actions>
-  <button mat-button (click)="onCancelClick()">cancel</button>
-  <button mat-button [mat-dialog-close]="data.accepted" (click)="onOkClick()" cdkFocusInitial>ok</button>
+<div mat-dialog-actions align="center">
+  <button mat-raised-button (click)="onCancelClick()">{{data.cancelButtonText}}</button>
+  <button mat-raised-button color="warn" (click)="onOkClick()" cdkFocusInitial>{{data.acceptButtonText}}</button>
 </div>

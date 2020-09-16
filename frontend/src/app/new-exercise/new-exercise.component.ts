@@ -123,7 +123,7 @@ export class NewExerciseComponent implements OnInit {
                 this.conditions.isAdded = true;
                 this.getSprintExercises(this.chosenDate);
 
-                const dialogRef = this.dialog.open(ModalDialogComponent, {width: '250px', data: {somedata: 'bla', cancelled: false, accepted: false}});
+                const dialogRef = this.dialog.open(ModalDialogComponent, {width: '300px', data: {text: 'Are you shure you wanna delete exercise?', acceptButtonText: 'delete', cancelButtonText: 'cancel'}});
                 dialogRef.afterClosed().subscribe(result => {
                   console.log('The dialog was closed: ', result);
                   this.conditions.loading = false;
