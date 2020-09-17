@@ -12,7 +12,7 @@ export class ConfirmationModalComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<ConfirmationModalComponent>) { }
 
   ngOnInit(): void {
-    setTimeout(()=> this.dialogRef.close(), 2500);
+    setTimeout(()=> this.dialogRef.close(), 2000);
   }
 
 }

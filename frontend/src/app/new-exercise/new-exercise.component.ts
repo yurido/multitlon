@@ -123,11 +123,8 @@ export class NewExerciseComponent implements OnInit {
                 this.conditions.isAdded = true;
                 this.getSprintExercises(this.chosenDate);
 
-                const dialogRef = this.dialog.open(ConfirmationModalComponent, {width: '120px', height: '120px'});
-                dialogRef.afterClosed().subscribe(result => {
-                  console.log('The dialog was closed: ', result);
-                  this.conditions.loading = false;
-                });
+                this.dialog.open(ConfirmationModalComponent, {width: '120px', height: '120px'});
+                this.conditions.loading = false;
               }
             );
           }

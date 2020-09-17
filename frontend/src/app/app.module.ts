@@ -21,6 +21,7 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatIconModule} from '@angular/material/icon';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SprintCalendarHeaderComponent} from './sprint-calendar/sprint-calendar.component';
 import {SprintCalendarComponent} from './sprint-calendar/sprint-calendar.component';
@@ -56,7 +57,8 @@ import { ConfirmationModalComponent } from './confirmation-modal/confirmation-mo
     ReactiveFormsModule,
     MatButtonModule,
     MatButtonToggleModule,
-    MatDialogModule
+    MatDialogModule,
+    MatIconModule
   ],
   providers: [
     {
