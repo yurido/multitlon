@@ -18,121 +18,123 @@
   <app-alert [error]="error"></app-alert>
   <app-spinner [loading]="conditions.loading"></app-spinner>
 
-  <!-- body -->
-  <div class="container exercise-body element-width">
+  <div class="container element-width text-align-center-padding-0">
+    <!-- body -->
+    <div class="container exercise-body element-width margin-bottom-20" style="min-height:{{getBodyMinHeight()}}px;">
 
-    <!-- date picker -->
-    <div class="margin-top-4" *ngIf="conditions.initialized">
-      <app-sprint-calendar [dayOffList]="daysOff"
-                           [trainingDayList]="trainingDays"
-                           [disabled]="conditions.loading"
-                           (choosenDay)="onNewDate($event)"
-                           (calendarOpened)="onCalendarOpen($event)">
-      </app-sprint-calendar>
-    </div>
+      <!-- date picker -->
+      <div class="margin-top-4" *ngIf="conditions.initialized">
+        <app-sprint-calendar [dayOffList]="daysOff"
+                             [trainingDayList]="trainingDays"
+                             [disabled]="conditions.loading"
+                             (choosenDay)="onNewDate($event)"
+                             (calendarOpened)="onCalendarOpen($event)">
+        </app-sprint-calendar>
+      </div>
 
-    <!-- existing exercises -->
-    <div *ngIf="chosenDayExercises.length>0" class="container element-width" style="margin-bottom: 6px;">
-      <div class="text-muted small margin-0" *ngFor="let exercise of chosenDayExercises">
-        <div class="row">
-          <div class="col-8 text-left">
-            {{getExerciseName(exercise.getSid())}}
+      <!-- existing exercises -->
+      <div *ngIf="chosenDayExercises.length>0" class="container element-width margin-bottom-6">
+        <div class="text-muted small margin-0" *ngFor="let exercise of chosenDayExercises">
+          <div class="row">
+            <div class="col-8 text-left">
+              {{getExerciseName(exercise.getSid())}}
+            </div>
+            <div class="col-4 text-right">
+              {{exercise.getTotalPoints()}}
+            </div>
           </div>
-          <div class="col-4 text-right">
-            {{exercise.getTotalPoints()}}
+        </div>
+        <hr style="margin-top: 2px; margin-bottom: 2px;"/>
+        <div class="text-muted small">
+          <div class="row">
+            <div class="col-12 text-right">
+              {{totalPointsDay !== undefined ? totalPointsDay: ''}}
+            </div>
           </div>
         </div>
       </div>
-      <hr style="margin-top: 2px; margin-bottom: 2px;"/>
-      <div class="text-muted small">
-        <div class="row">
-          <div class="col-12 text-right">
-            {{totalPointsDay !== undefined ? totalPointsDay: ''}}
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- available exercises -->
-    <div class="btn-group" *ngIf="newExercises !== []" style="margin-bottom: 12px">
-      <button class="btn dropdown-toggle dropdown-exercise-operate" type="button"
-              data-toggle="dropdown"
-              [disabled]="conditions.loading"
-              aria-haspopup="true"
-              aria-expanded="false">
-        {{chosenExercise.getName()}}
-      </button>
-      <div class="dropdown-menu">
-        <button class="dropdown-item element-width" type="button"
-                (click)="choseExercise(ex)" *ngFor="let ex of newExercises">{{ex.getName()}}
+      <!-- available exercises -->
+      <div class="btn-group margin-bottom-12" *ngIf="newExercises !== []" >
+        <button class="btn dropdown-toggle dropdown-exercise-operate" type="button"
+                data-toggle="dropdown"
+                [disabled]="conditions.loading"
+                aria-haspopup="true"
+                aria-expanded="false">
+          {{chosenExercise.getName()}}
         </button>
+        <div class="dropdown-menu">
+          <button class="dropdown-item element-width" type="button"
+                  (click)="choseExercise(ex)" *ngFor="let ex of newExercises">{{ex.getName()}}
+          </button>
+        </div>
       </div>
-    </div>
 
-    <!-- reps list -->
-    <div class="container element-width" *ngIf="chosenExercise.isWithReps()">
-      <div *ngFor="let rep of reps; let i = index">
+      <!-- reps list -->
+      <div class="container element-width" *ngIf="chosenExercise.isWithReps()">
+        <div *ngFor="let rep of reps; let i = index">
+          <div class="row">
+            <div class="col-4 padding-0 text-left">
+              <input type="text"
+                     class="reps-input"
+                     [disabled]="conditions.loading"
+                     value="{{rep.getWeight()}}"
+                     placeholder="kg"
+                     required
+                     (keyup)="changeWeight(i, $event)">
+            </div>
+            <div class="col-2 padding-0 text-center">
+              <p class="margin-top-4">X</p>
+            </div>
+            <div class="col-4 padding-0 text-center">
+              <input type="text"
+                     class="reps-input"
+                     [disabled]="conditions.loading"
+                     value="{{rep.getReps()}}"
+                     (keyup)="changeReps(i, $event)"
+                     placeholder="reps"
+                     required>
+            </div>
+            <div class="col-2 padding-0 text-right">
+              <button class="btn btn-light btn-delete-reps"
+                      (click)="deleteReps(i)"
+                      [disabled]="conditions.loading">
+                <fa-icon [icon]="faTrash" class="red-trash-bin"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- + button -->
+      <div class="container element-width" *ngIf="chosenExercise.isWithReps()">
         <div class="row">
-          <div class="col-4 padding-0 text-left">
-            <input type="text"
-                   class="reps-input"
-                   [disabled]="conditions.loading"
-                   value="{{rep.getWeight()}}"
-                   placeholder="kg"
-                   required
-                   (keyup)="changeWeight(i, $event)">
-          </div>
-          <div class="col-2 padding-0 text-center">
-            <p class="margin-top-4">X</p>
-          </div>
-          <div class="col-4 padding-0 text-center">
-            <input type="text"
-                   class="reps-input"
-                   [disabled]="conditions.loading"
-                   value="{{rep.getReps()}}"
-                   (keyup)="changeReps(i, $event)"
-                   placeholder="reps"
-                   required>
-          </div>
-          <div class="col-2 padding-0 text-right">
-            <button class="btn btn-light btn-delete-reps"
-                    (click)="deleteReps(i)"
+          <div class="col-12 text-right padding-0" *ngIf="noEmptyReps()">
+            <button class="btn btn-light btn-transparent" (click)="addReps()"
                     [disabled]="conditions.loading">
-              <fa-icon [icon]="faTrash" class="red-trash-bin"></fa-icon>
+              <fa-icon [icon]="faPlus"></fa-icon>
             </button>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- + button -->
-    <div class="container element-width" *ngIf="chosenExercise.isWithReps()">
-      <div class="row">
-        <div class="col-12 text-right padding-0" *ngIf="noEmptyReps() && reps.length < 6">
-          <button class="btn btn-light btn-transparent" (click)="addReps()"
-                  [disabled]="conditions.loading">
-            <fa-icon [icon]="faPlus"></fa-icon>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- input for exercises without reps -->
-    <div class="container element-width" *ngIf="!chosenExercise.isWithReps() && chosenExercise.getSid() !== undefined">
-      <div class="row">
-        <div class="col-12 text-center padding-0">
-          <input class="text" class="exercise-input"
-                 value="{{rawPoints}}"
-                 placeholder="{{chosenExercise.getItem()}}"
-                 required
-                 [disabled]="conditions.loading"
-                 (keyup)="changeRawPoints($event)">
+      <!-- input for exercises without reps -->
+      <div class="container element-width" *ngIf="!chosenExercise.isWithReps() && chosenExercise.getSid() !== undefined">
+        <div class="row">
+          <div class="col-12 text-center padding-0">
+            <input class="text" class="exercise-input"
+                   value="{{rawPoints}}"
+                   placeholder="{{chosenExercise.getItem()}}"
+                   required
+                   [disabled]="conditions.loading"
+                   (keyup)="changeRawPoints($event)">
+          </div>
         </div>
       </div>
     </div>
 
     <!-- footer -->
-    <div class="container element-width sticky-bottom">
+    <div class="container element-width text-align-center-padding-0">
       <button class="btn btn-success btn-exercise-operate" *ngIf="canSave()" (click)="save()"
               [disabled]="conditions.loading">add
       </button>

@@ -41,6 +41,10 @@ export class SprintService {
   constructor(private http: HttpClient) {
   }
 
+  getContainerHeightForActionButton(): number {
+    return window.innerHeight - 120;
+  }
+
   getExercisMetadataURL(): string {
     return this.EXERCISE_METADATA_URL;
   }

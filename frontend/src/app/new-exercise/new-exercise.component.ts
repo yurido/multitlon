@@ -41,6 +41,7 @@ export class NewExerciseComponent implements OnInit {
   rawPoints: number | undefined;
   faChevronLeft = faChevronLeft;
   totalPointsDay: number | undefined;
+  bodyMinHeight: number;
 
   constructor(private router: Router, private sprintService: SprintService, public dialog: MatDialog) {
   }
@@ -86,6 +87,11 @@ export class NewExerciseComponent implements OnInit {
       error => this.handleError(error)
     );
   }
+
+  getBodyMinHeight(): number {
+    return this.sprintService.getContainerHeightForActionButton();
+  }
+
   cancel(): void {
     // tslint:disable-next-line:max-line-length
     const state = {

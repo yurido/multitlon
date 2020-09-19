@@ -28,7 +28,7 @@
 
   <!-- body -->
   <app-spinner [loading]="loading || (!exerciseConfig || !sprintExercises)"></app-spinner>
-  <div class="container exercise-body max-width">
+  <div class="container text-align-center-padding-0 max-width">
     <table class="table table-sm" *ngIf="!loading && exerciseConfig && sprintExercises">
     <tbody>
     <tr *ngFor="let sprintExercise of sprintExercises">
