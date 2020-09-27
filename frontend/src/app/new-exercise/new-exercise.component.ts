@@ -90,6 +90,7 @@ export class NewExerciseComponent implements OnInit {
     return this.sprintService.getContainerHeightForActionButton();
   }
 
+  // TODO: refactor, use sprintService instead
   cancel(): void {
     // tslint:disable-next-line:max-line-length
     const state = {
@@ -182,7 +183,6 @@ export class NewExerciseComponent implements OnInit {
   }
 
   onExerciseChanged(exercise: Exercise): void {
-    console.log('onExerciseChanged(), ex=', exercise);
     this.exercise = exercise;
     this.exercise.setDate(this.chosenDate.getTime());
     this.conditions.canSave = this.canSaveF();
@@ -220,7 +220,6 @@ export class NewExerciseComponent implements OnInit {
   }
 
   private canSaveF(): boolean {
-    console.log('canSaveF()');
     // tslint:disable-next-line:max-line-length
     if (this.exercise === undefined || this.chosenExerciseMetadata === undefined) {
       return false;
