@@ -1,0 +1,61 @@
+<!-- reps list -->
+<div class="container element-width" *ngIf="exerciseMetadata.isWithReps()">
+  <div *ngFor="let rep of reps; let i = index">
+    <div class="row">
+      <div class="col-4 padding-0 text-left">
+        <input type="text"
+               class="reps-input"
+               [disabled]="loading"
+               value="{{rep.getWeight()}}"
+               placeholder="kg"
+               required
+               (keyup)="changeWeight(i, $event)">
+      </div>
+      <div class="col-2 padding-0 text-center">
+        <p class="margin-top-4">X</p>
+      </div>
+      <div class="col-4 padding-0 text-center">
+        <input type="text"
+               class="reps-input"
+               [disabled]="loading"
+               value="{{rep.getReps()}}"
+               (keyup)="changeReps(i, $event)"
+               placeholder="reps"
+               required>
+      </div>
+      <div class="col-2 padding-0 text-right">
+        <button class="btn btn-light btn-delete-reps"
+                (click)="deleteReps(i)"
+                [disabled]="loading">
+          <fa-icon [icon]="faTrash" class="red-trash-bin"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- + button -->
+<div class="container element-width" *ngIf="exerciseMetadata.isWithReps()">
+  <div class="row">
+    <div class="col-12 text-right padding-0" *ngIf="noEmptyReps()">
+      <button class="btn btn-light btn-transparent" (click)="addReps()"
+              [disabled]="loading">
+        <fa-icon [icon]="faPlus"></fa-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- input for exercises without reps -->
+<div class="container element-width" *ngIf="exerciseMetadata !==undefined && exerciseMetadata.getSid() !== undefined && !exerciseMetadata.isWithReps()">
+  <div class="row">
+    <div class="col-12 text-center padding-0">
+      <input class="text" class="exercise-input"
+             value="{{rawPoints}}"
+             placeholder="{{exerciseMetadata.getItem()}}"
+             required
+             [disabled]="loading"
+             (keyup)="changeRawPoints($event)">
+    </div>
+  </div>
+</div>

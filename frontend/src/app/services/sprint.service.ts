@@ -45,6 +45,10 @@ export class SprintService {
     return window.innerHeight - 120;
   }
 
+  getContainerHeightForActionButtonWithFooter(): number {
+    return window.innerHeight - 140;
+  }
+
   getExercisMetadataURL(): string {
     return this.EXERCISE_METADATA_URL;
   }
@@ -256,7 +260,7 @@ export class SprintService {
    */
   getFloatFromString(str: string): number {
     const numberValue = str.match(/\d+(\.\d+)?/);
-    return (numberValue !== null ? +numberValue[0] : 0);
+    return (numberValue !== null ? +(numberValue[0]) : 0);
   }
 
   isStringContainsNumbers(str: string): boolean {
@@ -305,6 +309,16 @@ export class SprintService {
     const retVal = this.sortSprintExercisesByDateReverse(sprintExercises);
     this.SPRINT_EXERCISE_LIST_CACHE = of(retVal);
     return retVal;
+  }
+
+  isEmptyReps(exercise: Exercise): boolean {
+    if(exercise === undefined || exercise.getReps() === undefined) {
+      return true;
+    }
+    const index = exercise.getReps().findIndex(
+      element => element.getWeight() === undefined || element.getReps() === undefined ||
+      element.getWeight() === 0 || element.getReps() === 0);
+    return index > -1;
   }
 
   /**

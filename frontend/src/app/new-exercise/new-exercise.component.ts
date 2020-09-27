@@ -4,7 +4,6 @@ import {SprintService} from '../services/sprint.service';
 import {SprintExercise} from '../models/sprint.exercise';
 import {ExerciseMetadata} from '../models/exercise.metadata';
 import {forkJoin} from 'rxjs';
-import {RepsView} from '../models/reps.view';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {Exercise} from '../models/exercise';
@@ -25,23 +24,22 @@ export class NewExerciseComponent implements OnInit {
     isAdded: false,
     loading: false,
     clendarOpened: false,
-    initialized: false
+    initialized: false,
+    canSave: false
   };
   chosenDate: Date;
   daysOff: Date[] = [];
   trainingDays: Date[] = [];
-  private sprint: SprintExercise[] = [];
   chosenDayExercises: Exercise[] = [];
   newExercises: ExerciseMetadata[] = [];
-  chosenExercise: ExerciseMetadata;
+  chosenExerciseMetadata: ExerciseMetadata;
+  private sprint: SprintExercise[] = [];
   private availableExerciseList: ExerciseMetadata[] = [];
-  reps: RepsView[] = [];
+  private exercise: Exercise;
   faTrash = faTrash;
   faPlus = faPlus;
-  rawPoints: number | undefined;
   faChevronLeft = faChevronLeft;
   totalPointsDay: number | undefined;
-  bodyMinHeight: number;
 
   constructor(private router: Router, private sprintService: SprintService, public dialog: MatDialog) {
   }
@@ -104,12 +102,11 @@ export class NewExerciseComponent implements OnInit {
 
   save(): void {
     this.conditions.loading = true;
-    const ex = this.createExercise();
-    this.sprintService.addExerciseToSprint(ex).subscribe(
+    this.sprintService.addExerciseToSprint(this.exercise).subscribe(
       data => {
         this.chosenDayExercises.push(data);
         // update available exercise list, exclude added exercise
-        const index = this.newExercises.findIndex(value => value.getSid() === ex.getSid());
+        const index = this.newExercises.findIndex(value => value.getSid() === this.exercise.getSid());
         if (index > -1) {
           this.newExercises.splice(index, 1);
         }
@@ -117,8 +114,6 @@ export class NewExerciseComponent implements OnInit {
         this.sprintService.addSprintExerciseToCache(data).subscribe(
           resp => {
             this.initDefaultExercise();
-            this.reps = [];
-            this.rawPoints = undefined;
             // add new training day to calendar
             this.addNewTrainingDay();
             // refresh exercises
@@ -131,6 +126,7 @@ export class NewExerciseComponent implements OnInit {
 
                 this.dialog.open(ConfirmationModalComponent, {width: '120px', height: '120px'});
                 this.conditions.loading = false;
+                this.conditions.canSave = false;
               }
             );
           }
@@ -138,13 +134,6 @@ export class NewExerciseComponent implements OnInit {
       },
       error => this.handleError(error)
     );
-  }
-
-  canSave(): boolean {
-    // tslint:disable-next-line:max-line-length
-    return this.chosenExercise.getSid() !== undefined &&
-      (this.chosenExercise.isWithReps() && this.reps.length > 0 && this.noEmptyReps()) ||
-      (!this.chosenExercise.isWithReps() && this.rawPoints !== undefined && this.rawPoints > 0);
   }
 
   onNewDate(date: Date): void {
@@ -176,13 +165,9 @@ export class NewExerciseComponent implements OnInit {
     this.conditions.clendarOpened = opened;
   }
 
-  choseExercise(ex: ExerciseMetadata): void {
-    if (ex !== null && ex !== undefined) {
-      this.reps = [];
-      this.chosenExercise = ex;
-      if (this.chosenExercise.isWithReps()) {
-        this.reps.push(new RepsView('', ''));
-      }
+  choseExercise(meta: ExerciseMetadata): void {
+    if (meta !== null && meta !== undefined) {
+      this.chosenExerciseMetadata = meta;
     }
   }
 
@@ -196,54 +181,12 @@ export class NewExerciseComponent implements OnInit {
     return '';
   }
 
-  /* --------------------------------------- REPS table -----------------------  */
-  changeWeight(index: number, $event: any): void {
-    const newValue = this.changeFieldFloatValue($event);
-    this.reps[index].setWeight(newValue);
-    $event.target.value = newValue;
+  onExerciseChanged(exercise: Exercise): void {
+    console.log('onExerciseChanged(), ex=', exercise);
+    this.exercise = exercise;
+    this.exercise.setDate(this.chosenDate.getTime());
+    this.conditions.canSave = this.canSaveF();
   }
-
-  changeReps(index: number, $event: any): void {
-    const newNumberValue = this.sprintService.getNumberFromString($event.target.value);
-    const newStringValue = (newNumberValue === 0 ? '' : '' + newNumberValue);
-    this.reps[index].setReps(newStringValue);
-    $event.target.value = newStringValue;
-  }
-
-  deleteReps(index: number): void {
-    if (this.reps.length === 1) {
-      this.reps = [new RepsView('', '')];
-      return;
-    }
-    this.reps.splice(index, 1);
-  }
-
-  noEmptyReps(): boolean {
-    const emptyElements = this.reps.findIndex(element => element.getWeight() === '' || element.getReps() === '' || element.getWeight() === '0' || element.getReps() === '0' || element.getWeight() === undefined);
-    return emptyElements === -1;
-  }
-
-  addReps(): void {
-    const rep = new RepsView('', '');
-    this.reps.push(rep);
-  }
-
-  changeRawPoints($event: any): void {
-    this.rawPoints = this.changeFieldFloatValue($event);
-  }
-
-  private changeFieldFloatValue($event: any): any {
-    const str = $event.target.value.toString();
-    if (str === '' || str == undefined) {
-      return '';
-    }
-    if (str.endsWith('.')) {
-      return $event.target.value;
-    }
-    $event.target.value = this.sprintService.getFloatFromString($event.target.value);
-    return $event.target.value;
-  }
-  /* --------------------------------------- REPS table -----------------------  */
 
   private handleError(error: any): void {
     this.conditions.loading = true;
@@ -262,27 +205,7 @@ export class NewExerciseComponent implements OnInit {
   private initDefaultExercise() {
     const defaultExercise = new ExerciseMetadata();
     defaultExercise.setName('exercises...');
-    this.chosenExercise = defaultExercise;
-  }
-
-  private createExercise(): Exercise {
-    const ex = new Exercise();
-    ex.setDate(this.chosenDate.getTime());
-    ex.setSid(this.chosenExercise.getSid());
-    if (this.chosenExercise.isWithReps()) {
-      this.reps.forEach(rep => {
-        const newRep = new Reps();
-        newRep.setWeight(this.sprintService.getFloatFromString(rep.getWeight()));
-        newRep.setReps(this.sprintService.getNumberFromString(rep.getReps()));
-        ex.getReps().push(newRep);
-        ex.setRawPoints(0);
-      });
-    } else {
-      // @ts-ignore
-      ex.setRawPoints(this.rawPoints !== undefined ? this.rawPoints : 0);
-      ex.setReps([]);
-    }
-    return ex;
+    this.chosenExerciseMetadata = defaultExercise;
   }
 
   private addNewTrainingDay(): void {
@@ -294,5 +217,24 @@ export class NewExerciseComponent implements OnInit {
     if (trainingDay === null || trainingDay === undefined) {
       this.trainingDays.push(this.chosenDate);
     }
+  }
+
+  private canSaveF(): boolean {
+    console.log('canSaveF()');
+    // tslint:disable-next-line:max-line-length
+    if (this.exercise === undefined || this.chosenExerciseMetadata === undefined) {
+      return false;
+    }
+    // tslint:disable-next-line:max-line-length
+    if(this.exercise.getSid() === undefined ||this.exercise.getDate() === undefined) {
+      return false;
+    }
+    if(this.chosenExerciseMetadata.isWithReps()) {
+      if(this.exercise.getReps().length > 0 && !this.sprintService.isEmptyReps(this.exercise)) {
+        return true;
+      }
+      return false;
+    }
+    return this.exercise.getRawPoints() > 0;
   }
 }
