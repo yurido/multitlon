@@ -46,7 +46,7 @@
       "totalPoints": 900
     },
     {
-      "id": 2365,
+      "id": 3,
       "sid": "BARS",
       "date": 1581296400000,
       "reps": [
@@ -68,7 +68,7 @@
       "totalPoints": 1300
     },
     {
-      "id": 698,
+      "id": 4,
       "sid": "BICEPS",
       "date": 1580778000000,
       "reps": [
@@ -90,7 +90,7 @@
       "totalPoints": 500
     },
     {
-      "id": 78999,
+      "id": 5,
       "sid": "TRICEPS",
       "date": 1580778000000,
       "reps": [
@@ -112,7 +112,7 @@
       "totalPoints": 900
     },
     {
-      "id": 998969,
+      "id": 6,
       "sid": "ABS",
       "date": 1580778000000,
       "reps": [],
@@ -121,7 +121,7 @@
       "totalPoints": 1300
     },
     {
-      "id": 12345678998,
+      "id": 7,
       "sid": "SHOULDERS",
       "date": 1580518800000,
       "reps": [
@@ -143,7 +143,7 @@
       "totalPoints": 1820
     },
     {
-      "id": 9695959898,
+      "id": 8,
       "sid": "TRICEPS",
       "date": 1580518800000,
       "reps": [
@@ -165,7 +165,7 @@
       "totalPoints": 900
     },
     {
-      "id": 9878454,
+      "id": 9,
       "sid": "PLANK",
       "date": 1580518800000,
       "reps": [],
@@ -174,7 +174,7 @@
       "totalPoints": 1650
     },
     {
-      "id": 998,
+      "id": 10,
       "sid": "OVERHEAD_PRESS",
       "date": 1582074000000,
       "reps": [
@@ -188,7 +188,7 @@
       "totalPoints": 900
     },
     {
-      "id": 8,
+      "id": 11,
       "sid": "SWIM",
       "date": 1582160400000,
       "reps": [],
@@ -197,7 +197,7 @@
       "totalPoints": 2000
     },
     {
-      "id": 3,
+      "id": 12,
       "sid": "SQUATS",
       "date": 1582160400000,
       "reps": [
@@ -215,7 +215,7 @@
       "totalPoints": 1000
     },
     {
-      "id": 7,
+      "id": 13,
       "sid": "RUN",
       "date": 1582160400000,
       "reps": [],
@@ -224,7 +224,7 @@
       "totalPoints": 1600
     },
     {
-      "id": 77,
+      "id": 14,
       "sid": "PLANK",
       "date": 1582239600000,
       "reps": [],
@@ -233,7 +233,7 @@
       "totalPoints": 800
     },
     {
-      "id": 2366,
+      "id": 15,
       "sid": "BARS",
       "date": 1580864400000,
       "reps": [

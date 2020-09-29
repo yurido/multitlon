@@ -7,7 +7,6 @@ import {forkJoin} from 'rxjs';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {Exercise} from '../models/exercise';
-import {Reps} from '../models/reps';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmationModalComponent} from '../confirmation-modal/confirmation-modal.component';
@@ -55,18 +54,18 @@ export class NewExerciseComponent implements OnInit {
     forkJoin([metadataObs, availableExObs, exerciseListFromCache]).subscribe(
       result => {
         if (result[2] === undefined || result[2] === null || result[2].length === 0) {
-          this.cancel();
+          this.back();
           return;
         }
         // prepare list of my exercies this sprint
-        for (const sprintDay of result[2]) {
+        result[2].forEach(sprintDay => {
           if (sprintDay.getSprintDay().getIsDayOff()) {
             this.daysOff.push(new Date(sprintDay.getSprintDay().getSDate()));
             // tslint:disable-next-line:max-line-length
           } else if (!sprintDay.getSprintDay().getIsDayOff() && sprintDay.getExercises() !== null && sprintDay.getExercises().length > 0) {
             this.trainingDays.push(new Date(sprintDay.getSprintDay().getSDate()));
           }
-        }
+        });
         this.sprint = result[2];
 
         if (result[1] !== undefined && result[1].length > 0) {
@@ -91,7 +90,7 @@ export class NewExerciseComponent implements OnInit {
   }
 
   // TODO: refactor, use sprintService instead
-  cancel(): void {
+  back(): void {
     // tslint:disable-next-line:max-line-length
     const state = {
       state: {

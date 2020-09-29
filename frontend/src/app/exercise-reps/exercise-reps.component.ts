@@ -27,12 +27,18 @@ export class ExerciseRepsComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('ngOnInit(), meta=',this.exerciseMetadata,',ex=', this.exercise);
-    if(this.exerciseMetadata !== undefined && this.exerciseMetadata.isWithReps() && this.exercise.getReps().length > 0) {
+    if(this.exerciseMetadata === undefined || this.exercise === undefined) {
+      return;
+    }
+    if(this.exerciseMetadata.isWithReps() && this.exercise.getReps().length > 0) {
       this.reps = [];
       this.exercise.getReps().forEach(value => {
         this.reps.push(new RepsView(''+value.getWeight(), ''+value.getReps()));
       });
+      this.rawPoints = ''+this.exercise.getRawPoints();
+      return;
     }
+    this.rawPoints = ''+this.exercise.getRawPoints();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -108,7 +114,8 @@ export class ExerciseRepsComponent implements OnInit {
         newRep.setReps(this.sprintService.getNumberFromString(rep.getReps()));
         ex.getReps().push(newRep);
       });
-      ex.setRawPoints(0);
+      console.log('rawPoints=', this.rawPoints);
+      this.rawPoints === undefined ? ex.setRawPoints(0): ex.setRawPoints(this.sprintService.getFloatFromString(this.rawPoints));
     } else {
       ex.setRawPoints(this.sprintService.getFloatFromString(this.rawPoints));
     }

@@ -22,10 +22,14 @@ import {Serializable} from './models/serializable';
 import {Serializator} from './models/serializator';
 import {Reps} from './models/reps';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MockHttpCalIInterceptor implements HttpInterceptor {
   constructor(private injector: Injector, private sprintService: SprintService) {
   }
+
+  private CURRENT_ID: number = 15;
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     console.log('request: ', request.url, ', method ', request.method, 'header: ', request.headers);
@@ -118,7 +122,8 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
         );
     } else if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'POST') {
       const exercise = new CreateExercise().deserialize(request.body);
-      const newExString = `{"id": 236, "sid": "${exercise.getSid()}", "date": ${exercise.getDate()}, "reps": [], "rawPoints": ${exercise.getRawPoints()}, "totalPoints": 1652, "time": 0}`;
+      this.CURRENT_ID ++;
+      const newExString = `{"id": ${this.CURRENT_ID}, "sid": "${exercise.getSid()}", "date": ${exercise.getDate()}, "reps": [], "rawPoints": ${exercise.getRawPoints()}, "totalPoints": 1652, "time": 0}`;
       const newExJson = JSON.parse(newExString);
       const newExObj = new Exercise().deserialize(newExJson);
       newExObj.setReps(exercise.getReps());

@@ -255,24 +255,6 @@ export class SprintService {
       );
   }
 
-  /**
-   *  ************ UTILS ***************
-   */
-  getFloatFromString(str: string): number {
-    const numberValue = str.match(/\d+(\.\d+)?/);
-    return (numberValue !== null ? +(numberValue[0]) : 0);
-  }
-
-  isStringContainsNumbers(str: string): boolean {
-    const numberValue = str.match(/^\d+(\.\d+)?$/);
-    return numberValue === null ? false : true;
-  }
-
-  getNumberFromString(str: string): number {
-    const numberValue = str.match(/\d+/);
-    return (numberValue !== null ? +numberValue[0] : 0);
-  }
-
   buildSprintExerciseList(exercises: Exercise[], daysOff: number[]): SprintExercise[] {
     const sprintExercises: SprintExercise[] = [];
     const sortedExercises = this.sortExerciseByDate(exercises);
@@ -322,6 +304,34 @@ export class SprintService {
   }
 
   /**
+  *  ************ MODAL ***************
+  */
+  getModalDialogConfig(): any {
+    return {width: '400px', data: {text: '', cancelButtonText: 'no', acceptButtonText: 'yes'}};
+  }
+  getConfirmationModalDialogConfig(): any {
+    return {width: '120px', height: '120px'};
+  }
+
+  /**
+   *  ************ UTILS ***************
+   */
+  getFloatFromString(str: string): number {
+    const numberValue = str.match(/\d+(\.\d+)?/);
+    return (numberValue !== null ? +(numberValue[0]) : 0);
+  }
+
+  isStringContainsNumbers(str: string): boolean {
+    const numberValue = str.match(/^\d+(\.\d+)?$/);
+    return numberValue === null ? false : true;
+  }
+
+  getNumberFromString(str: string): number {
+    const numberValue = str.match(/\d+/);
+    return (numberValue !== null ? +numberValue[0] : 0);
+  }
+
+  /**
    *  ************ PRIVATE ***************
    */
 
@@ -331,7 +341,7 @@ export class SprintService {
    * @param action - update/insert or delete exercise
    */
   private modifySprintExerciseListInCache(exercise: Exercise, action: ActionEnum): Observable<SprintExercise[]> {
-    console.log(`will ${ActionEnum[action]} exercise in cache`);
+    console.log(`will ${ActionEnum[action]} exercise (sid=${exercise.getSid()}, id=${exercise.getId()}) in cache`);
     this.SPRINT_EXERCISE_LIST_CACHE.subscribe(
       data => {
         let isSprintModified = false;
@@ -340,26 +350,29 @@ export class SprintService {
           // filter by date
           const sDay = new Date(data[i].getSprintDay().getSDate()).getDate();
           const exDay = new Date(exercise.getDate()).getDate();
+
           if (sDay === exDay && !data[i].getSprintDay().getIsDayOff()) {
             if (action === ActionEnum.INSERT) {
               data[i].getExercises().push(exercise);
               data[i].getSprintDay().setTotal(data[i].getSprintDay().getTotal() + exercise.getTotalPoints());
-              console.log(`exercise ${exercise.getSid()} added to sprint cache`);
+              console.log(`exercise ${exercise.getSid()}, id=${exercise.getId()}, day=${sDay} added to sprint cache`);
               isSprintModified = true;
               break;
             }
 
             for (let j = 0; j < data[i].getExercises().length; j++) {
-              if (data[i].getExercises()[j].getId() === exercise.getId()) {
+              if (data[i].getExercises()[j].getSid() === exercise.getSid()) {
                 if (action === ActionEnum.DELETE) {
-                  data[i].getExercises().splice(j, 1); // delete exercise
+                  // DELETE exercise
+                  data[i].getExercises().splice(j, 1);
                   if (data[i].getExercises().length === 0) {
                     data.splice(i, 1); // delete the whole day!
                     console.log(`exercise ${exercise.getSid()} deleted from cache`);
                     break;
                   }
                 } else {
-                  data[i].getExercises().splice(j, 1, exercise); // replace exercise
+                   // REPLACE exercise
+                  data[i].getExercises().splice(j, 1, exercise);
                 }
                 // now we need to recalc days total points
                 let total = 0;
@@ -374,7 +387,7 @@ export class SprintService {
                 } else {
                   logText = 'updated in';
                 }
-                console.log(`exercise ${exercise.getSid()} ${logText} cache`);
+                console.log(`exercise ${exercise.getSid()}, ${exercise.getId()} ${logText} cache`);
                 break;
               }
             }
