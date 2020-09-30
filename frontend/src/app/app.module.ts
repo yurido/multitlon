@@ -10,7 +10,7 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {MockHttpCalIInterceptor} from './mock.http.call.interceptor';
 import {AlertComponent} from './alert/alert.component';
 import {SpinnerComponent} from './spinner/spinner.component';
-import {ExerciseComponent} from './exercise/exercise.component';
+import {EditExerciseComponent} from './edit-exercise/edit-exercise.component';
 import {ProgressBarComponent} from './progress-bar/progress-bar.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NewExerciseComponent} from './new-exercise/new-exercise.component';
@@ -36,7 +36,7 @@ import { ExerciseRepsComponent } from './exercise-reps/exercise-reps.component';
     LoginComponent,
     AlertComponent,
     SpinnerComponent,
-    ExerciseComponent,
+    EditExerciseComponent,
     ProgressBarComponent,
     NewExerciseComponent,
     SprintCalendarHeaderComponent,

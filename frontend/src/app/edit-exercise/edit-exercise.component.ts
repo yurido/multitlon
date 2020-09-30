@@ -14,12 +14,12 @@ import {ModalDialogComponent} from '../modal.dialog/modal.dialog.component';
 import {ConfirmationModalComponent} from '../confirmation-modal/confirmation-modal.component';
 
 @Component({
-  selector: 'app-exercise',
-  templateUrl: './exercise.component.html',
-  styleUrls: ['./exercise.component.scss'],
+  selector: 'app-edit-exercise',
+  templateUrl: './edit-exercise.component.html',
+  styleUrls: ['./edit-exercise.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ExerciseComponent implements OnInit {
+export class EditExerciseComponent implements OnInit {
   faChevronLeft = faChevronLeft;
   faTrash = faTrash;
   faPlus = faPlus;

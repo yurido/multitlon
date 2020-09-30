@@ -1,6 +1,6 @@
 import {async, ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
 
-import {ExerciseComponent} from './exercise.component';
+import {EditExerciseComponent} from './edit-exercise.component';
 import {SprintService} from '../services/sprint.service';
 import {Router} from '@angular/router';
 import {HttpClient, HttpHandler} from '@angular/common/http';
@@ -12,9 +12,9 @@ import {DebugElement} from '@angular/core';
 import {of, throwError} from 'rxjs';
 import {tick} from '@angular/core/testing';
 
-describe('ExerciseComponent', () => {
-  let component: ExerciseComponent;
-  let fixture: ComponentFixture<ExerciseComponent>;
+describe('EditExerciseComponent', () => {
+  let component: EditExerciseComponent;
+  let fixture: ComponentFixture<EditExerciseComponent>;
   let metadata: any;
   let spySprintService;
 
@@ -35,7 +35,7 @@ describe('ExerciseComponent', () => {
     history.pushState(state, 'ingen');
 
     TestBed.configureTestingModule({
-      declarations: [ExerciseComponent],
+      declarations: [EditExerciseComponent],
       providers: [{provide: SprintService, useValue: spySprintService}, {
         provide: Router,
         useValue: spyRouter
@@ -44,7 +44,7 @@ describe('ExerciseComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExerciseComponent);
+    fixture = TestBed.createComponent(EditExerciseComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

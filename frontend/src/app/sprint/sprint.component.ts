@@ -99,7 +99,7 @@ export class SprintComponent implements OnInit {
 
   openExercise(exercise: Exercise): void {
     this.sprintService.cacheExercise(exercise);
-    this.router.navigate(['/sprint/exercise']);
+    this.router.navigate(['/sprint/editExercise']);
   }
 
   goBack(): void {
