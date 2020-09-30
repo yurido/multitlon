@@ -39,14 +39,13 @@ export class ExerciseComponent implements OnInit {
 
   ngOnInit(): void {
     this.conditions.loading = true;
-    // TODO: use sprintService instead
-    // tslint:disable-next-line:max-line-length
-    if (history.state.ex === undefined || history.state.ex === null) {
+    const ex = this.sprintService.getExerciseFromCache();
+
+    if (ex === undefined) {
       this.back();
       return;
     }
-    // TODO: use sprintService instead
-    this.exercise = new Exercise().deserialize(history.state.ex);
+    this.exercise = ex;
 
     const exStat = this.sprintService.getExerciseStatisticsForCurrentSprint(false);
     const exMetadata = this.sprintService.getExerciseMetadata();
@@ -83,15 +82,9 @@ export class ExerciseComponent implements OnInit {
     return this.sprintService.getContainerHeightForActionButton() - 40;
   }
 
-  // TODO: use sprintService instead
   back(): void {
-    // tslint:disable-next-line:max-line-length
-    const state = {
-      state: {
-        isExerciseModified: this.conditions.modified
-      }
-    };
-    this.router.navigate(['/sprint'], state);
+    this.sprintService.setSprintModified(this.conditions.modified);
+    this.router.navigate(['/sprint']);
   }
 
   /**

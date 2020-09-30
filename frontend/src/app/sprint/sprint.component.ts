@@ -36,9 +36,8 @@ export class SprintComponent implements OnInit {
     this.loading = true;
     this.loadExerciseMetadata();
 
-    if (history.state.isExerciseModified !== undefined && history.state.isExerciseModified !== null && history.state.isExerciseModified) {
+    if (this.sprintService.isSprintModified()) {
       this.loadExerciseStatistic(true);
-      history.replaceState({state: {}}, 'nothing', '/sprint');
     } else {
       this.loadExerciseStatistic(false);
     }
@@ -99,7 +98,8 @@ export class SprintComponent implements OnInit {
   }
 
   openExercise(exercise: Exercise): void {
-    this.router.navigate(['/sprint/exercise'], {state: {ex: exercise}});
+    this.sprintService.cacheExercise(exercise);
+    this.router.navigate(['/sprint/exercise']);
   }
 
   goBack(): void {

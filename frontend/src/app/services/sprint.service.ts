@@ -37,6 +37,8 @@ export class SprintService {
   private EXERCISE_STATISTIC_CACHE: Observable<ExerciseStatistic[]> = EMPTY;
   private EXERCISE_METADATA_CACHE: Observable<ExerciseMetadata[]> = EMPTY;
   private SPRINT_AVAILABLE_EXERCISES_CACHE: Observable<string[]> = EMPTY;
+  private EXERCISE: Exercise | undefined;
+  private IS_SPRINT_MODIFIED: boolean;
 
   constructor(private http: HttpClient) {
   }
@@ -180,16 +182,6 @@ export class SprintService {
     return this.EXERCISE_METADATA_CACHE;
   }
 
-  deleteSprintExercise(id: number): Observable<any> {
-    return this.http.delete(this.SPRINT_EXERCISES_URL, {
-      headers: httpOptions.headers,
-      params: httpOptions.params
-    })
-      .pipe(
-        tap(ex => console.log(`exercise ${id} deleted permanently`))
-      );
-  }
-
   /**
    * method returns days-off for user for sprint from server
    */
@@ -205,8 +197,39 @@ export class SprintService {
   }
 
   /**
-   *  ************ SACOND-HAND METHODS ***************
+  *  ************ SACOND-HAND METHODS ***************
+  */
+  setSprintModified(value: boolean): void {
+    this.IS_SPRINT_MODIFIED = value;
+  }
+
+  isSprintModified(): boolean {
+    const retVal = this.IS_SPRINT_MODIFIED;
+    this.IS_SPRINT_MODIFIED = false;
+    return retVal;
+  }
+
+  /**
+  * Method caches the exercise
+  */
+  cacheExercise(exercise: Exercise): void {
+     const ex = Object.assign({}, exercise);
+     this.EXERCISE = new Exercise().deserialize(ex);
+     console.log('exercise ',this.EXERCISE,' cached');
+   }
+
+   /*
+   * Method returns cached exercise and cleans the cache
    */
+   getExerciseFromCache(): Exercise | undefined {
+     if(this.EXERCISE === undefined ) {
+       return this.EXERCISE;
+     }
+     const ex = Object.assign({}, this.EXERCISE);
+     this.EXERCISE = undefined;
+     return new Exercise().deserialize(ex);
+   }
+
   /**
    * method updates spint exercise in cache
    * @param exercise - sprint exercise
@@ -301,6 +324,16 @@ export class SprintService {
       element => element.getWeight() === undefined || element.getReps() === undefined ||
       element.getWeight() === 0 || element.getReps() === 0);
     return index > -1;
+  }
+
+  deleteSprintExercise(id: number): Observable<any> {
+    return this.http.delete(this.SPRINT_EXERCISES_URL, {
+      headers: httpOptions.headers,
+      params: httpOptions.params
+    })
+      .pipe(
+        tap(ex => console.log(`exercise ${id} deleted permanently`))
+      );
   }
 
   /**

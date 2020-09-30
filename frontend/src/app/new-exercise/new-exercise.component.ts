@@ -46,6 +46,7 @@ export class NewExerciseComponent implements OnInit {
   ngOnInit(): void {
     this.conditions.loading = true;
     this.initDefaultExercise();
+    this.totalPointsDay = undefined;
 
     // build sprint available exercise list
     const exerciseListFromCache = this.sprintService.getExerciseListForCurrentSprintFromCache();
@@ -89,15 +90,9 @@ export class NewExerciseComponent implements OnInit {
     return this.sprintService.getContainerHeightForActionButton();
   }
 
-  // TODO: refactor, use sprintService instead
   back(): void {
-    // tslint:disable-next-line:max-line-length
-    const state = {
-      state: {
-        isExerciseModified: this.conditions.isAdded
-      }
-    };
-    this.router.navigate(['/sprint'], state);
+    this.sprintService.setSprintModified(this.conditions.isAdded);
+    this.router.navigate(['/sprint']);
   }
 
   save(): void {
@@ -198,6 +193,7 @@ export class NewExerciseComponent implements OnInit {
       this.totalPointsDay = exercises.getSprintDay().getTotal();
       return exercises.getExercises();
     }
+    this.totalPointsDay = undefined;
     return [];
   }
 
