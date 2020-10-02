@@ -119,9 +119,13 @@ export class NewExerciseComponent implements OnInit {
                 this.conditions.isAdded = true;
                 this.getSprintExercises(this.chosenDate);
 
-                this.dialog.open(ConfirmationModalComponent, {width: '120px', height: '120px'});
-                this.conditions.loading = false;
-                this.conditions.canSave = false;
+                const modalDialogRef = this.dialog.open(ConfirmationModalComponent, this.sprintService.getConfirmationModalDialogConfig());
+                modalDialogRef.afterClosed().subscribe(
+                  confResp => {
+                    this.conditions.loading = false;
+                    this.conditions.canSave = false;
+                  }
+                );
               }
             );
           }

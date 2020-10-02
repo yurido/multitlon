@@ -1,5 +1,6 @@
 <div class="progress progress-bar-custom">
-  <div [ngClass]="calcClass()" role="progressbar" [ngStyle]="{'width.%':ariaWidth,'color':'black'}" aria-valuemin="0" aria-valuemax="100">
+  <div [ngClass]="calcClass()" role="progressbar"
+       [ngStyle]="{'width.%':ariaWidth}" aria-valuemin="0" aria-valuemax="100">
     <ng-content></ng-content>
   </div>
 </div>

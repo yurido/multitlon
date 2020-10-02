@@ -24,12 +24,13 @@
       </div>
     </div>
   </div>
+
   <app-alert [error]="error"></app-alert>
+  <app-spinner [loading]="loading"></app-spinner>
 
   <!-- body -->
-  <app-spinner [loading]="loading || (!exerciseConfig || !sprintExercises)"></app-spinner>
   <div class="container text-align-center-padding-0 max-width">
-    <table class="table table-sm" *ngIf="!loading && exerciseConfig && sprintExercises">
+    <table class="table table-sm" *ngIf="!loading">
     <tbody>
     <tr *ngFor="let sprintExercise of sprintExercises">
       <td class="text-center padding-0">

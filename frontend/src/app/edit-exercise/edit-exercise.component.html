@@ -23,8 +23,9 @@
   <app-spinner [loading]="conditions.loading"></app-spinner>
 
   <!-- progress bar -->
-  <div class="container max-width text-align-center-padding-0">
-    <app-progress-bar [percent]="statistic.getProgress()" [striped]="true" [disable]="conditions.loading" *ngIf="statistic !== undefined">
+  <div class="container max-width text-align-center-padding-0" *ngIf="statistic !== undefined">
+    <app-progress-bar [percent]="statistic.getProgress()"
+                      [striped]="true">
       <span [class]="conditions.loading ? 'text-disabled': 'text-enabled'">{{statistic.getProgress()}} %</span>
     </app-progress-bar>
   </div>
