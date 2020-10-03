@@ -92,8 +92,8 @@ padding-6 {
   border-color: lightgrey;
 }
 .sticky-bottom {
-  position: absolute;
-  bottom: 15px;
+  position: fixed;
+  bottom: 0;
   @extend .padding-0;
 }
 .max-height {
