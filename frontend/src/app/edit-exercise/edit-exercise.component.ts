@@ -122,7 +122,6 @@ export class EditExerciseComponent implements OnInit {
     this.sprintService.updateExercise(this.exercise).subscribe(
       data => {
         this.exercise = data;
-        console.log('updateExercise resp=', data);
         this.sprintService.getExerciseStatisticForCurrentSprint(this.exercise.getSid()).subscribe(
           response => {
             this.statistic = response;
@@ -139,7 +138,7 @@ export class EditExerciseComponent implements OnInit {
           error => this.sprintService.handleError(error)
         );
       },
-      error => this.sprintService.handleError(new MultiTError('It was an error during updating exercise, please try later'))
+      error => this.sprintService.handleError(error)
     );
   }
 
