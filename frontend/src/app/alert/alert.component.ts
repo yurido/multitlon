@@ -1,5 +1,10 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnInit, ViewEncapsulation, Inject} from '@angular/core';
 import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
+export interface AlertData {
+  error: any;
+}
 
 @Component({
   selector: 'app-alert',
@@ -8,24 +13,15 @@ import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
   encapsulation: ViewEncapsulation.None
 })
 export class AlertComponent implements OnInit {
-  @Input() error: any;
-  alertClass: any;
+  message: string;
   faExclamationTriangle = faExclamationTriangle;
 
-  constructor() {
-  }
+  constructor(public dialogRef: MatDialogRef<AlertComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: AlertData) { }
 
   ngOnInit(): void {
-    this.alertClass = 'alert-danger';
-  }
-
-  getMessage(): string {
-    console.error('Error: ', this.error);
-    return this.error.message;
-  }
-
-  close(): void {
-    this.error = undefined;
+    this.message = this.data.error.message;
+    console.error('Error: ', this.data.error.message);
   }
 
 }

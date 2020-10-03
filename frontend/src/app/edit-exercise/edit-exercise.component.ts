@@ -23,7 +23,6 @@ export class EditExerciseComponent implements OnInit {
   faChevronLeft = faChevronLeft;
   faTrash = faTrash;
   faPlus = faPlus;
-  error: any;
   exercise: Exercise;
   statistic: ExerciseStatistic | undefined;
   exerciseMetadata: ExerciseMetadata | undefined;
@@ -59,16 +58,16 @@ export class EditExerciseComponent implements OnInit {
 
         this.statistic = result[0].find(stat => stat.getSid() === this.exercise.getSid());
         if (this.statistic === undefined) {
-          this.handleError(new MultiTError(`Statistic for exercise ${this.exercise.getSid()} is not loaded`));
+          this.sprintService.handleError(new MultiTError(`Statistic for exercise ${this.exercise.getSid()} is not loaded`));
         }
         this.exerciseMetadata = result[1].find(ex => ex.getSid() === this.exercise.getSid());
         if(this.exerciseMetadata === undefined) {
-          this.handleError(new MultiTError(`Config for exercise ${this.exercise.getSid()} is not loaded`));
+          this.sprintService.handleError(new MultiTError(`Config for exercise ${this.exercise.getSid()} is not loaded`));
         }
         this.conditions.loading = false;
         this.conditions.initialized = true;
       },
-      error => this.handleError(error)
+      error => this.sprintService.handleError(error)
     );
   }
 
@@ -111,7 +110,7 @@ export class EditExerciseComponent implements OnInit {
                 }
               );
             },
-            error => this.handleError(error)
+            error => this.sprintService.handleError(error)
           );
         }
       });
@@ -137,10 +136,10 @@ export class EditExerciseComponent implements OnInit {
             );
             this.conditions.modified = true;
           },
-          error => this.handleError(error)
+          error => this.sprintService.handleError(error)
         );
       },
-      error => this.handleError(new MultiTError('It was an error during updating exercise, please try later'))
+      error => this.sprintService.handleError(new MultiTError('It was an error during updating exercise, please try later'))
     );
   }
 
@@ -169,10 +168,5 @@ export class EditExerciseComponent implements OnInit {
       return false;
     }
     return this.exercise.getRawPoints() > 0;
-  }
-
-  private handleError(error: any): void {
-    this.conditions.loading = true;
-    this.error = error;
   }
 }

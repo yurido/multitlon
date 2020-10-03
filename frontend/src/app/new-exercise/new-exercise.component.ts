@@ -18,7 +18,6 @@ import {ConfirmationModalComponent} from '../confirmation-modal/confirmation-mod
   encapsulation: ViewEncapsulation.None
 })
 export class NewExerciseComponent implements OnInit {
-  error: any;
   conditions = {
     isAdded: false,
     loading: false,
@@ -82,7 +81,7 @@ export class NewExerciseComponent implements OnInit {
         this.conditions.loading = false;
         this.conditions.initialized = true;
       },
-      error => this.handleError(error)
+      error => this.sprintService.handleError(error)
     );
   }
 
@@ -131,7 +130,7 @@ export class NewExerciseComponent implements OnInit {
           }
         );
       },
-      error => this.handleError(error)
+      error => this.sprintService.handleError(error)
     );
   }
 
@@ -184,11 +183,6 @@ export class NewExerciseComponent implements OnInit {
     this.exercise = exercise;
     this.exercise.setDate(this.chosenDate.getTime());
     this.conditions.canSave = this.canSaveF();
-  }
-
-  private handleError(error: any): void {
-    this.conditions.loading = true;
-    this.error = error;
   }
 
   private getSprintExercises(date: Date): Exercise[] {

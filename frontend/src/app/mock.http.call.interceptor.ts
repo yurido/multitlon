@@ -121,6 +121,8 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
           delay(1000)
         );
     } else if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'POST') {
+      // this.throwError(request.headers, request.url, 'Database is not available!');
+
       const exercise = new CreateExercise().deserialize(request.body);
       this.CURRENT_ID ++;
       const newExString = `{"id": ${this.CURRENT_ID}, "sid": "${exercise.getSid()}", "date": ${exercise.getDate()}, "reps": [], "rawPoints": ${exercise.getRawPoints()}, "totalPoints": 1652, "time": 0}`;

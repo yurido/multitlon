@@ -12,6 +12,8 @@ import {ExerciseList} from '../models/exercise.list';
 import {SprintDay} from '../models/sprint.day';
 import {ExerciseMetadata} from '../models/exercise.metadata';
 import {AvailableExerciseList} from '../models/available.exercise.list';
+import {MatDialog} from '@angular/material/dialog';
+import {AlertComponent} from '../alert/alert.component';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'}),
@@ -40,7 +42,7 @@ export class SprintService {
   private EXERCISE: Exercise | undefined;
   private IS_SPRINT_MODIFIED: boolean;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, public dialog: MatDialog) {
   }
 
   getContainerHeightForActionButton(): number {
@@ -344,6 +346,14 @@ export class SprintService {
   }
   getConfirmationModalDialogConfig(): any {
     return {width: '120px', height: '120px'};
+  }
+  getAlertDialogConfig(): any {
+    return {width: '400px', data: {error: ''}};
+  }
+  handleError(error: any): void {
+    const errorDialogConfig = this.getAlertDialogConfig();
+    errorDialogConfig.data.error = error;
+    const dialogRef = this.dialog.open(AlertComponent, errorDialogConfig);
   }
 
   /**

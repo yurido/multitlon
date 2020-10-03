@@ -12,6 +12,7 @@ import {ExerciseMetadata} from '../models/exercise.metadata';
 import {MultiTError} from '../models/multiterror';
 import {forkJoin} from 'rxjs';
 
+
 @Component({
   selector: 'app-sprint',
   templateUrl: './sprint.component.html',
@@ -27,7 +28,6 @@ export class SprintComponent implements OnInit {
   month: string;
   sprintExerciseStatistic: ExerciseStatistic[];
   exerciseConfig: ExerciseMetadata[];
-  error: any;
 
   constructor(private sprintService: SprintService, private router: Router) {
   }
@@ -41,14 +41,14 @@ export class SprintComponent implements OnInit {
     forkJoin([metadata, exStatistic]).subscribe(
       result => {
         if(result[0] === undefined || result[1] === undefined) {
-          this.handleError(new MultiTError('Some sprint data isn\'t loaded'));
+          this.sprintService.handleError(new MultiTError('Some sprint data isn\'t loaded'));
           return;
         }
         this.exerciseConfig = result[0];
         this.sprintExerciseStatistic = result[1];
         this.loadExercises();
       },
-        error => this.handleError(error)
+      error => this.sprintService.handleError(error)
     );
     const monthObj = environment.MONTHS.find(value => value.id === new Date().getMonth());
     this.month = (monthObj !== undefined && monthObj !== null) ? monthObj.name : '';
@@ -93,7 +93,7 @@ export class SprintComponent implements OnInit {
               this.sprintExercises = this.sprintService.buildSprintExerciseList(result[0], result[1]);
               this.loading = false;
             },
-            error => this.handleError(error)
+            error => this.sprintService.handleError(error)
           );
         } else {
           this.sprintExercises = data;
@@ -101,9 +101,5 @@ export class SprintComponent implements OnInit {
         }
       }
     );
-  }
-
-  private handleError(error: any): void {
-    this.error = error;
   }
 }
