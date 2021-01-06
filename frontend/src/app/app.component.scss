@@ -61,6 +61,14 @@ padding-6 {
   border-radius: 0.8em;
   border-color: dimgray;
 }
+.btn-day-circle {
+  border-radius: 1em;
+  width: 35px;
+  height: 35px;
+  border-color: dimgray;
+  background-color: transparent;
+  border-width: 1px solid;
+}
 .max-width-600 {
   max-width: 600px;
 }
@@ -136,6 +144,9 @@ padding-6 {
 }
 .margin-top-4 {
   margin-top: 4px;
+}
+.margin-top-20 {
+  margin-top: 20px;
 }
 .margin-bottom-2 {
  margin-bottom: 2px;

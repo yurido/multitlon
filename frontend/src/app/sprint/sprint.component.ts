@@ -58,6 +58,10 @@ export class SprintComponent implements OnInit {
     this.router.navigate(['/sprint/newExercise']);
   }
 
+  addDayOff(): void {
+    this.router.navigate(['/sprint/addDaysOff']);
+  }
+
   openExercise(exercise: Exercise): void {
     this.sprintService.cacheExercise(exercise);
     this.router.navigate(['/sprint/editExercise']);

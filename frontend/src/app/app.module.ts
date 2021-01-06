@@ -28,6 +28,7 @@ import {SprintCalendarComponent} from './sprint-calendar/sprint-calendar.compone
 import { ModalDialogComponent } from './modal.dialog/modal.dialog.component';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 import { ExerciseRepsComponent } from './exercise-reps/exercise-reps.component';
+import { ChangeDaysOffComponent } from './change-days-off/change-days-off.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { ExerciseRepsComponent } from './exercise-reps/exercise-reps.component';
     SprintCalendarComponent,
     ModalDialogComponent,
     ConfirmationModalComponent,
-    ExerciseRepsComponent
+    ExerciseRepsComponent,
+    ChangeDaysOffComponent
   ],
   imports: [
     BrowserModule,

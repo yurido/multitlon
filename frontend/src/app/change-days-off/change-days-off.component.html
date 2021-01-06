@@ -1,0 +1,46 @@
+<div class="container-fluid container-fluid-styling">
+  <!-- header -->
+  <div class="badge-dark container sticky-top max-width">
+    <div class="row">
+      <div class="col-2 text-left padding-left-0">
+        <button class="btn btn-dark margin-3" (click)="back()" [disabled]="conditions.loading">
+          <fa-icon [icon]="faChevronLeft"></fa-icon>
+        </button>
+      </div>
+      <div class="col-8 text-center">
+        <span class="text-white header-text-style">days off</span>
+      </div>
+      <div class="col-2 text-right header-rigth-column-style">
+      </div>
+    </div>
+  </div>
+
+  <app-spinner [loading]="conditions.loading"></app-spinner>
+
+  <div class="container element-width text-align-center-padding-0">
+    <!-- body -->
+    <div class="container exercise-body element-width margin-top-20" *ngIf="conditions.initialized">
+      <table class="table table-borderless table-sm" *ngIf="!conditions.loading">
+        <tbody>
+          <tr>
+            <td><a style="color: grey; font-size: 0.8em;padding:0;">Mo</a></td>
+            <td><a style="color: grey; font-size: 0.8em;padding:0;">Tu</a></td>
+            <td><a style="color: grey; font-size: 0.8em;padding:0;">We</a></td>
+            <td><a style="color: grey; font-size: 0.8em;padding:0;">Th</a></td>
+            <td><a style="color: grey; font-size: 0.8em;padding:0;">Fr</a></td>
+            <td><a style="color: grey; font-size: 0.8em;padding:0;">Sa</a></td>
+            <td><a style="color: grey; font-size: 0.8em;padding:0;">Su</a></td>
+          </tr>
+          <tr *ngFor="let week of sprint">
+            <td class="text-center" style="padding:0;" *ngFor="let day of week">
+              <!-- button mat-mini-fab color="white" style="shadow: false" -->
+              <button class="btn-day-circle text-align-center-padding-0">
+                <a style="font-size: 0.8em; text-align: center;">{{day > 0 ? day: ''}}</a>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
