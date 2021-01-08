@@ -44,7 +44,9 @@
             </div>
           </div>
         </div>
-        <hr style="margin-top: 2px; margin-bottom: 2px;"/>
+        <div *ngIf="chosenDayExercises.length >0">
+          <hr style="margin-top: 2px; margin-bottom: 2px;"/>
+        </div>
         <div class="text-muted small">
           <div class="row">
             <div class="col-12 text-right">
@@ -55,7 +57,7 @@
       </div>
 
       <!-- available exercises -->
-      <div class="btn-group margin-bottom-12" *ngIf="conditions.initialized" >
+      <div class="btn-group margin-bottom-12" *ngIf="conditions.initialized && chosenDate !== undefined" >
         <button class="btn dropdown-toggle dropdown-exercise-operate" type="button"
                 data-toggle="dropdown"
                 [disabled]="conditions.loading"
