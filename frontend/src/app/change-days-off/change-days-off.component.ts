@@ -21,6 +21,8 @@ export class ChangeDaysOffComponent implements OnInit {
   };
   faChevronLeft = faChevronLeft;
   sprint: number[][];
+  daysOff: Date[] = [];
+  trainingDays: Date[] = [];
 
   constructor(private sprintService: SprintService, private router: Router) { }
 
@@ -76,8 +78,24 @@ export class ChangeDaysOffComponent implements OnInit {
 
     console.log('sprint days=', this.sprint);
 
-    this.conditions.loading = false;
-    this.conditions.initialized = true;
+    this.sprintService.getExerciseListForCurrentSprintFromCache().subscribe(result => {
+      // prepare list of days-off and trainings days
+      result.forEach(sprintDay => {
+        if (sprintDay.getSprintDay().getIsDayOff()) {
+         this.daysOff.push(new Date(sprintDay.getSprintDay().getSDate()));
+         // tslint:disable-next-line:max-line-length
+        } else if (!sprintDay.getSprintDay().getIsDayOff() && sprintDay.getExercises() !== null && sprintDay.getExercises().length > 0) {
+         this.trainingDays.push(new Date(sprintDay.getSprintDay().getSDate()));
+        }
+      });
+
+      this.conditions.loading = false;
+      this.conditions.initialized = true;
+
+      console.log('daysOff=', this.daysOff);
+    },
+    error => this.sprintService.handleError(error)
+    );
   }
 
   back(): void {

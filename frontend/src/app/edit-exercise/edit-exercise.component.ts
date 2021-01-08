@@ -110,7 +110,14 @@ export class EditExerciseComponent implements OnInit {
                 }
               );
             },
-            error => this.sprintService.handleError(error)
+            error => {
+              const modalDialogRef = this.sprintService.handleError(error);
+              modalDialogRef.afterClosed().subscribe(
+                (confResp: any) => {
+                  this.conditions.loading = false;
+                }
+              );
+            }
           );
         }
       });
@@ -135,10 +142,24 @@ export class EditExerciseComponent implements OnInit {
             );
             this.conditions.modified = true;
           },
-          error => this.sprintService.handleError(error)
+          error => {
+            const modalDialogRef = this.sprintService.handleError(error);
+            modalDialogRef.afterClosed().subscribe(
+              (confResp: any) => {
+                this.conditions.loading = false;
+              }
+            );
+          }
         );
       },
-      error => this.sprintService.handleError(error)
+      error => {
+        const modalDialogRef = this.sprintService.handleError(error);
+        modalDialogRef.afterClosed().subscribe(
+          (confResp: any) => {
+            this.conditions.loading = false;
+          }
+        );
+      }
     );
   }
 

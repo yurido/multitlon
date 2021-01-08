@@ -130,7 +130,14 @@ export class NewExerciseComponent implements OnInit {
           }
         );
       },
-      error => this.sprintService.handleError(error)
+      error => {
+        const modalDialogRef = this.sprintService.handleError(error);
+        modalDialogRef.afterClosed().subscribe(
+          (confResp: any) => {
+            this.conditions.loading = false;
+          }
+        );
+      }
     );
   }
 

@@ -34,7 +34,7 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     console.log('request: ', request.url, ', method ', request.method, 'header: ', request.headers);
     if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'PUT') {
-      this.throwError(request.headers, request.url, 'You can not edit this exercise! DB is not available! Try later');
+      // this.throwError(request.headers, request.url, 'You can not edit this exercise! DB is not available! Try later');
 
       const exercise = new Exercise().deserialize(request.body);
       /* console.log('raw = ', exercise.getRawPoints());

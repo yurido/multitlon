@@ -350,10 +350,10 @@ export class SprintService {
   getAlertDialogConfig(): any {
     return {width: '400px', data: {error: ''}};
   }
-  handleError(error: any): void {
+  handleError(error: any): any {
     const errorDialogConfig = this.getAlertDialogConfig();
     errorDialogConfig.data.error = error;
-    const dialogRef = this.dialog.open(AlertComponent, errorDialogConfig);
+    return this.dialog.open(AlertComponent, errorDialogConfig);
   }
 
   /**
