@@ -4,6 +4,7 @@ import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/mater
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {FormControl} from '@angular/forms';
 import * as _moment from 'moment';
+import {SprintService} from '../services/sprint.service';
 // tslint:disable-next-line:no-duplicate-imports
 // @ts-ignore
 import {default as _rollupMoment} from 'moment';
@@ -50,31 +51,28 @@ export class SprintCalendarComponent implements OnInit {
   @Input() trainingDayList: Date[] = [];
   @Input() disabled: boolean;
 
-  constructor() {
+  constructor(private sprintService: SprintService) {
   }
 
   ngOnInit(): void {
     this.chosenDate = new FormControl(new Date()).value;
     const date = moment(this.chosenDate).toDate();
-    if (this.isDayOff(date)) {
+    if (this.sprintService.isDayOff(date, this.dayOffList)) {
       this.chosenDate = undefined; // default date can't be day-off
       console.log('day off!');
     }
-    const event = {target: {value: this.chosenDate}};
-    // default day should be passed out
-    this.dateChanged(event);
   }
 
   // prevent days-off and future days from being selected
   weekendFilter = (d: Date | null): boolean => {
     const date = moment(d).toDate();
-    return !this.isDayOff(date) && (date.getDate() <= new Date().getDate());
+    return !this.sprintService.isDayOff(date, this.dayOffList) && (date.getDate() <= new Date().getDate());
   }
 
   dateClass = (d: Date): MatCalendarCellCssClasses => {
     const date = moment(d).toDate();
     // highlight days-off
-    if (this.isDayOff(date)) {
+    if (this.sprintService.isDayOff(date, this.dayOffList)) {
       return 'day-off-class';
     }
     // fill days after 24 with grey
@@ -103,12 +101,6 @@ export class SprintCalendarComponent implements OnInit {
   open(isOpend: boolean): void {
     this.calendarOpened.emit(isOpend);
   }
-
-  private isDayOff(date: Date): boolean {
-    const dayOf = this.dayOffList.find(dayOff => date.getDate() === dayOff.getDate() && date.getMonth() === dayOff.getMonth());
-    return dayOf !== undefined ? true: false;
-  }
-
 }
 
 @Component({

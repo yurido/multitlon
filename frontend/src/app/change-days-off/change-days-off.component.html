@@ -35,7 +35,7 @@
             <td class="text-center" style="padding:0;" *ngFor="let day of week">
               <!-- button mat-mini-fab color="white" style="shadow: false" -->
               <button class="btn-day-circle text-align-center-padding-0">
-                <a style="font-size: 0.8em; text-align: center;">{{day > 0 ? day: ''}}</a>
+                <a style="font-size: 0.8em; text-align: center;">{{day[0] > 0 ? day[0]: ''}}</a>
               </button>
             </td>
           </tr>

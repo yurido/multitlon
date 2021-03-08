@@ -374,6 +374,14 @@ export class SprintService {
     return (numberValue !== null ? +numberValue[0] : 0);
   }
 
+  isDayOff(date: Date, dayOffList: Date[]): boolean {
+    if(date === undefined || dayOffList === undefined) {
+      return false;
+    }
+    const dayOf = dayOffList.find(dayOff => date.getDate() === dayOff.getDate() && date.getMonth() === dayOff.getMonth());
+    return dayOf !== undefined ? true: false;
+  }
+
   /**
    *  ************ PRIVATE ***************
    */

@@ -1,15 +1,16 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {Router} from '@angular/router';
 import {SprintService} from '../services/sprint.service';
 import {SprintExercise} from '../models/sprint.exercise';
 import {ExerciseMetadata} from '../models/exercise.metadata';
-import {forkJoin} from 'rxjs';
+import {forkJoin, Subject} from 'rxjs';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {Exercise} from '../models/exercise';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmationModalComponent} from '../confirmation-modal/confirmation-modal.component';
+import { startWith, tap, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-new-exercise',
@@ -57,7 +58,7 @@ export class NewExerciseComponent implements OnInit {
           this.back();
           return;
         }
-        // prepare list of my exercies this sprint
+        // prepare days-off and training days
         result[2].forEach(sprintDay => {
           if (sprintDay.getSprintDay().getIsDayOff()) {
             this.daysOff.push(new Date(sprintDay.getSprintDay().getSDate()));
@@ -67,7 +68,11 @@ export class NewExerciseComponent implements OnInit {
           }
         });
         this.sprint = result[2];
+        if(!this.sprintService.isDayOff(new Date(), this.daysOff)) {
+          this.chosenDate = new Date();
+        }
 
+        // prepare list of available exercies for this sprint
         if (result[1] !== undefined && result[1].length > 0) {
           result[1].forEach(sid => {
             const exObj = result[0].find(value => value.getSid() === sid);
@@ -143,6 +148,7 @@ export class NewExerciseComponent implements OnInit {
 
   onNewDate(date: Date): void {
     this.chosenDate = date;
+    console.log('OnNewDate event ', date);
     this.newExercises = Object.assign([], this.availableExerciseList);
     this.initDefaultExercise();
 
