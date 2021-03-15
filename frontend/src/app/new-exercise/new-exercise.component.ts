@@ -11,6 +11,7 @@ import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmationModalComponent} from '../confirmation-modal/confirmation-modal.component';
 import { startWith, tap, delay } from 'rxjs/operators';
+import {MultiTError} from '../models/multiterror';
 
 @Component({
   selector: 'app-new-exercise',
@@ -48,31 +49,17 @@ export class NewExerciseComponent implements OnInit {
     this.initDefaultExercise();
     this.totalPointsDay = undefined;
 
-    // build sprint available exercise list
-    const exerciseListFromCache = this.sprintService.getExerciseListForCurrentSprintFromCache();
-    const metadataObs = this.sprintService.getExerciseMetadata();
-    const availableExObs = this.sprintService.getSprintAvailableExercises();
-    forkJoin([metadataObs, availableExObs, exerciseListFromCache]).subscribe(
+    const metadata = this.sprintService.getExerciseMetadata();
+    const availableExercises = this.sprintService.getSprintAvailableExercises();
+
+    forkJoin([metadata, availableExercises]).subscribe(
       result => {
-        if (result[2] === undefined || result[2] === null || result[2].length === 0) {
-          this.back();
+        if(result[0] === undefined || result[1] === undefined) {
+          this.sprintService.handleError(new MultiTError('Sprint metadata isn\'t loaded'));
           return;
         }
-        // prepare days-off and training days
-        result[2].forEach(sprintDay => {
-          if (sprintDay.getSprintDay().getIsDayOff()) {
-            this.daysOff.push(new Date(sprintDay.getSprintDay().getSDate()));
-            // tslint:disable-next-line:max-line-length
-          } else if (!sprintDay.getSprintDay().getIsDayOff() && sprintDay.getExercises() !== null && sprintDay.getExercises().length > 0) {
-            this.trainingDays.push(new Date(sprintDay.getSprintDay().getSDate()));
-          }
-        });
-        this.sprint = result[2];
-        if(!this.sprintService.isDayOff(new Date(), this.daysOff)) {
-          this.chosenDate = new Date();
-        }
 
-        // prepare list of available exercies for this sprint
+        // prepare list of available exercises for this sprint
         if (result[1] !== undefined && result[1].length > 0) {
           result[1].forEach(sid => {
             const exObj = result[0].find(value => value.getSid() === sid);
@@ -82,9 +69,7 @@ export class NewExerciseComponent implements OnInit {
           });
           this.newExercises = Object.assign([], this.availableExerciseList);
         }
-
-        this.conditions.loading = false;
-        this.conditions.initialized = true;
+        this.loadExercises();
       },
       error => this.sprintService.handleError(error)
     );
@@ -241,5 +226,48 @@ export class NewExerciseComponent implements OnInit {
       return false;
     }
     return this.exercise.getRawPoints() > 0;
+  }
+
+  private prepareDaysOffAndTrainingDays(): void {
+    // prepare days-off and training days
+    this.sprint.forEach(sprintDay => {
+      if (sprintDay.getSprintDay().getIsDayOff()) {
+        this.daysOff.push(new Date(sprintDay.getSprintDay().getSDate()));
+        // tslint:disable-next-line:max-line-length
+      } else if (!sprintDay.getSprintDay().getIsDayOff() && sprintDay.getExercises() !== null && sprintDay.getExercises().length > 0) {
+        this.trainingDays.push(new Date(sprintDay.getSprintDay().getSDate()));
+      }
+    });
+    if(!this.sprintService.isDayOff(new Date(), this.daysOff)) {
+      this.chosenDate = new Date();
+      this.onNewDate(this.chosenDate);
+    }
+  }
+
+  private loadExercises(): void {
+    this.sprintService.getExerciseListForCurrentSprintFromCache().subscribe(
+      data => {
+        if (data === undefined || data.length === 0) {
+          const exerciseList = this.sprintService.getExerciseListForCurrentSprint();
+          const daysOff = this.sprintService.getDaysOffForCurrentSprint();
+          forkJoin([exerciseList, daysOff]).subscribe(
+            result => {
+              this.sprint = this.sprintService.buildSprintExerciseList(result[0], result[1]);
+              this.prepareDaysOffAndTrainingDays();
+
+              this.conditions.loading = false;
+              this.conditions.initialized = true;
+            },
+            error => this.sprintService.handleError(error)
+          );
+        } else {
+          this.sprint = data;
+          console.log('sprint exercises after loading from cache=', this.sprint);
+          this.prepareDaysOffAndTrainingDays();
+
+          this.conditions.loading = false;
+          this.conditions.initialized = true;
+        }
+    });
   }
 }
