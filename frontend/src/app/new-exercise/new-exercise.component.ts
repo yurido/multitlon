@@ -262,7 +262,6 @@ export class NewExerciseComponent implements OnInit {
           );
         } else {
           this.sprint = data;
-          console.log('sprint exercises after loading from cache=', this.sprint);
           this.prepareDaysOffAndTrainingDays();
 
           this.conditions.loading = false;
