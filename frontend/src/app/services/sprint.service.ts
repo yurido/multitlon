@@ -218,7 +218,7 @@ export class SprintService {
      const ex = Object.assign({}, exercise);
      this.EXERCISE = new Exercise().deserialize(ex);
      console.log('exercise ',this.EXERCISE,' cached');
-   }
+  }
 
    /*
    * Method returns cached exercise and cleans the cache
@@ -336,6 +336,17 @@ export class SprintService {
       .pipe(
         tap(ex => console.log(`exercise ${id} deleted permanently`))
       );
+  }
+
+  saveDaysOff(daysOff: number[]): Observable<any> {
+    return this.http.post(this.DAYS_OFF_URL, daysOff, {
+       headers: httpOptions.headers,
+       params: httpOptions.params
+    });
+  }
+
+  clearSprintExercisesInCache(): void {
+    this.SPRINT_EXERCISE_LIST_CACHE = EMPTY;
   }
 
   /**

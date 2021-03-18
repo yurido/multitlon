@@ -30,6 +30,7 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
   }
 
   private CURRENT_ID: number = 15;
+  private DAYS_OFF: number[] = [];
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     console.log('request: ', request.url, ', method ', request.method, 'header: ', request.headers);
@@ -81,16 +82,29 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
     } else if (request.url === this.sprintService.getDaysOffURL() && request.method === 'GET') {
       // this.throwError(request.headers, request.url, 'Exercises are broken!');
       const daysOff = new DaysOffList();
-      daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 2).getTime());
-      daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 3).getTime());
-      daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 8).getTime());
-      daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 12).getTime());
-      daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 22).getTime());
-      daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 23).getTime());
+      if(this.DAYS_OFF.length === 0) {
+        daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 2).getTime());
+        daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 3).getTime());
+        daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 8).getTime());
+        daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 12).getTime());
+        daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 22).getTime());
+        daysOff.getDaysOff().push(new Date(new Date().getFullYear(), new Date().getMonth(), 23).getTime());
+      } else {
+        for(let i = 0; i< this.DAYS_OFF.length; i++) {
+          daysOff.getDaysOff().push(this.DAYS_OFF[i]);
+        }
+      }
       return of(new HttpResponse({status: 200, body: daysOff}))
-        .pipe(
-          delay(1000)
-        );
+            .pipe(
+              delay(1000)
+            );
+    } else if (request.url === this.sprintService.getDaysOffURL() && request.method === 'POST') {
+      console.log('save new days off: ', request.body);
+      this.DAYS_OFF = request.body;
+      return of(new HttpResponse({status: 200}))
+              .pipe(
+                delay(1000)
+              );
     } else if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'GET') {
       let exerciseList;
       try {

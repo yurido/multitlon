@@ -19,8 +19,9 @@
 
   <div class="container element-width text-align-center-padding-0">
     <!-- body -->
-    <div class="container exercise-body element-width margin-top-20" *ngIf="conditions.initialized">
-      <table class="table table-borderless table-sm" *ngIf="!conditions.loading">
+    <div class="container exercise-body element-width margin-top-20"
+         *ngIf="conditions.initialized" style="min-height:{{getBodyMinHeight()}}px;">
+      <table class="table table-borderless table-sm">
         <tbody>
           <tr>
             <td><a style="color: grey; font-size: 0.8em;padding:0;">Mo</a></td>
@@ -31,16 +32,25 @@
             <td><a style="color: grey; font-size: 0.8em;padding:0;">Sa</a></td>
             <td><a style="color: grey; font-size: 0.8em;padding:0;">Su</a></td>
           </tr>
-          <tr *ngFor="let week of sprint">
-            <td class="text-center" style="padding:0;" *ngFor="let day of week">
+          <tr *ngFor="let week of sprint; let j = index">
+            <td class="text-center" style="padding:0;" *ngFor="let day of week; let i = index">
               <!-- button mat-mini-fab color="white" style="shadow: false" -->
-              <button class="btn-day-circle text-align-center-padding-0" [ngStyle]="{'background-color': day[1]===1 ? 'lightgreen': day[1]===0 ? 'red': day[0]>24 ? 'gainsboro': 'white'}">
+              <button class="btn-day-circle text-align-center-padding-0"
+                  [ngStyle]="{'background-color': day[1]===1 ? 'lightgreen': day[1]===0 ? 'red': day[0]>24 ? 'gainsboro': 'white', 'border-color': day[0] === today ? 'blue': 'transparent'}"
+                  (click)="onClick(j, i, $event)"
+                  [disabled]="conditions.loading">
                 <a style="font-size: 0.8em; text-align: center;">{{day[0] > 0 ? day[0]: ''}}</a>
               </button>
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+    <!-- footer -->
+    <div class="container element-width text-align-center-padding-0">
+      <button class="btn btn-success btn-exercise-operate" *ngIf="conditions.canSave" (click)="save()"
+              [disabled]="conditions.loading">save
+      </button>
     </div>
   </div>
 </div>
