@@ -14,7 +14,7 @@ const routes: Routes = [
   {path: 'sprint/newExercise', component: NewExerciseComponent},
   {path: 'sprint/addDaysOff', component: ChangeDaysOffComponent},
   {path: '', redirectTo: '/login', pathMatch: 'full'},
-  {path: '**', redirectTo: '/login', pathMatch: 'full'}
+  {path: '**', redirectTo: '/sprint', pathMatch: 'full'}
 ];
 
 @NgModule({
