@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import {SprintComponent} from './sprint.component';
 import {SprintService} from '../services/sprint.service';
@@ -16,7 +16,7 @@ describe('SprintComponent', () => {
   let component: SprintComponent;
   let fixture: ComponentFixture<SprintComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
 
     // tslint:disable-next-line:max-line-length
     const spySprintService = jasmine.createSpyObj('SprintService', ['getExercisesForCurrentSprint', 'getExerciseStatisticsForCurrentSprint', 'getExerciseMetadata', 'sortSprintExercisesByDate']);

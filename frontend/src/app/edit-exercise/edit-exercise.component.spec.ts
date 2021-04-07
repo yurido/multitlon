@@ -1,4 +1,4 @@
-import {async, ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, waitForAsync } from '@angular/core/testing';
 
 import {EditExerciseComponent} from './edit-exercise.component';
 import {SprintService} from '../services/sprint.service';
@@ -18,7 +18,7 @@ describe('EditExerciseComponent', () => {
   let metadata: any;
   let spySprintService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     // tslint:disable-next-line:max-line-length
     spySprintService = jasmine.createSpyObj('SprintService', ['getExerciseMetadata']);
     metadata = spySprintService.getExerciseMetadata.and.returnValue(of(((exerciseMetadata) as any).default));
