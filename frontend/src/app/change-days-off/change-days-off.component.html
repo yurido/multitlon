@@ -33,8 +33,8 @@
             <td><a class="grey-boring-text">Su</a></td>
           </tr>
           <tr *ngFor="let week of sprint; let j = index">
-            <td style="padding:0" *ngFor="let day of week; let i = index">
-              <button class="btn btn-day-circle text-align-center-padding-0"
+            <td style="padding-bottom:1px" *ngFor="let day of week; let i = index">
+              <button class="btn btn-day-circle text-align-center-padding-0" style="z-index:1000"
                   [ngStyle]="{'background-color': day[1]===1 ? 'lightgreen': day[1]===0 ? 'red': day[0]>24 ? 'gainsboro': 'white', 'border-color': day[0] === today ? 'blue': 'transparent'}"
                   (click)="onClick(j, i, $event)"
                   [disabled]="conditions.loading">
