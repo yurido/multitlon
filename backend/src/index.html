@@ -1,0 +1,23 @@
+<html>
+<head>
+    <script type="text/javascript">
+        function hamtaJson() {
+            console.log("test");
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+                var resp = JSON.parse(this.response);
+                document.getElementById("resultat").innerHTML = resp.status;
+              }
+            };
+            xhttp.open("GET", "/ping", true);
+            xhttp.send();
+        }
+    </script>
+</head>
+<body>
+    <button onClick="hamtaJson()">Klick me</button><br>
+    <div id="resultat"/>
+</body>
+</html>
