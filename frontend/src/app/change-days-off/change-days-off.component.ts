@@ -127,9 +127,9 @@ export class ChangeDaysOffComponent implements OnInit {
   }
 
   onClick(weekIndex: number, dayIndex: number, $event: any): void {
-  console.log('$event obj=', $event);
+  // console.log('$event obj=', $event);
     // this property is specific for Google Chrome, does not work on other web browsers
-    let color = $event.path[1].style['background-color'];
+    /* let color = $event.path[1].style['background-color'];
     if(color === 'red') {
       $event.path[1].style['background-color'] = 'white';
       this.numberOfDaysOff = this.numberOfDaysOff - 1;
@@ -142,7 +142,7 @@ export class ChangeDaysOffComponent implements OnInit {
       if(this.numberOfDaysOff === this.MAX_NUMBER_OF_DAYSOFF) {
         this.conditions.canSave = true;
       }
-    }
+    } */
   }
 
   save(): void {
