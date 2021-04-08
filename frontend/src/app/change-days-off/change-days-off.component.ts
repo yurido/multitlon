@@ -127,8 +127,9 @@ export class ChangeDaysOffComponent implements OnInit {
   }
 
   onClick(weekIndex: number, dayIndex: number, $event: any): void {
+  console.log('$event obj=', $event);
+    // this property is specific for Google Chrome, does not work on other web browsers
     let color = $event.path[1].style['background-color'];
-
     if(color === 'red') {
       $event.path[1].style['background-color'] = 'white';
       this.numberOfDaysOff = this.numberOfDaysOff - 1;
