@@ -27,6 +27,9 @@ e2e/logs/*.log
 *.trace.db
 /backend/backend.iml
 /backend/src/main/resources/assets/*
+/backend/node_modules
+/backend/package-lock.json
+/backend/dist
 
 # ------------------------------------
 #              FRONTEND
@@ -57,4 +60,6 @@ e2e/logs/*.log
 
 #System Files
 /frontend/.DS_Store
+/backend/.DS_Store
+.DS_Store
 /frontend/Thumbs.db
