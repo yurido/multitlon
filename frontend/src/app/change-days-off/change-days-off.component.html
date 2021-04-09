@@ -35,8 +35,8 @@
           <tr *ngFor="let week of sprint; let j = index">
             <td *ngFor="let day of week; let i = index" style="padding: 2px">
               <button class="btn btn-day-circle text-align-center-padding-0"
-                  [ngStyle]="{'background-color': day[1]===1 ? 'lightgreen': day[1]===0 ? 'red': day[0]>24 ? 'gainsboro': 'white', 'border-color': day[0] === today ? 'blue': 'transparent'}"
-                  (click)="onClick(j, i, $event)"
+                  (click)="onClick(j, i)"
+                  [ngClass]="calcBackgroundColor(j, i)"
                   [disabled]="conditions.loading">
                 <a class="black-font-08">{{day[0] > 0 ? day[0]: ''}}</a>
               </button>

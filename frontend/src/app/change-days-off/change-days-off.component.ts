@@ -62,15 +62,10 @@ export class ChangeDaysOffComponent implements OnInit {
 
         this.conditions.loading = false;
         this.conditions.initialized = true;
-
-        console.log('sprint calendar after update:', this.sprint);
       }
     );
 
     const date = '' + moment().format('YYYY') + moment().format('MM') + '01';
-    console.log('current year and month: ',  date);
-    console.log('the 1st day in this month: ', moment(date).day());
-    console.log('days in this month: ', moment().daysInMonth());
 
     this.today = new Date().getDate();
 
@@ -126,24 +121,26 @@ export class ChangeDaysOffComponent implements OnInit {
     this.router.navigate(['/sprint']);
   }
 
-  onClick(weekIndex: number, dayIndex: number, $event: any): void {
-  // console.log('$event obj=', $event);
-  alert("$event.path=" +  $event.path);
-    // this property is specific for Google Chrome, does not work on other web browsers
-    /* let color = $event.path[1].style['background-color'];
-    if(color === 'red') {
-      $event.path[1].style['background-color'] = 'white';
+  calcBackgroundColor(weekIndex: number, dayIndex: number) {
+   const backgroundColor = (this.sprint[weekIndex][dayIndex][1]===1 ? 'bgc-lightgreen':  (this.sprint[weekIndex][dayIndex][1]===0 ? 'bgc-red': (this.sprint[weekIndex][dayIndex][0]>24 ? 'bgc-gainsboro': 'bgc-white')));
+   const borderColor = (this.sprint[weekIndex][dayIndex][0] === this.today ? 'border-blue': 'border-transparent');
+   return backgroundColor + ' ' + borderColor;
+  }
+
+  onClick(weekIndex: number, dayIndex: number): void {
+    // if red then mark it white
+    if(this.sprint[weekIndex][dayIndex][1] === 0) {
       this.numberOfDaysOff = this.numberOfDaysOff - 1;
       this.sprint[weekIndex][dayIndex][1] = -1;
       this.conditions.canSave = false;
-    } else if(color === 'white' && this.numberOfDaysOff < this.MAX_NUMBER_OF_DAYSOFF) {
-      $event.path[1].style['background-color'] = 'red';
+    } else if(this.sprint[weekIndex][dayIndex][1] === -1 && this.numberOfDaysOff < this.MAX_NUMBER_OF_DAYSOFF) {
+      // if white and number of red less than 6 then mark it red
       this.numberOfDaysOff = this.numberOfDaysOff + 1;
       this.sprint[weekIndex][dayIndex][1] = 0;
       if(this.numberOfDaysOff === this.MAX_NUMBER_OF_DAYSOFF) {
         this.conditions.canSave = true;
       }
-    } */
+    }
   }
 
   save(): void {

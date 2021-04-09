@@ -1,5 +1,4 @@
 ## Multitlon - Frontend
-### Attention! works correctly only on Google Chrome!
 
 ### Prerequisites
 1. `npm install`
