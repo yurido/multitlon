@@ -2,7 +2,7 @@
 <head>
     <script type="text/javascript">
         function hamtaJson() {
-            console.log("test");
+            console.log("index.html is here!");
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
@@ -11,7 +11,8 @@
                 document.getElementById("resultat").innerHTML = resp.status;
               }
             };
-            xhttp.open("GET", "/ping", true);
+            xhttp.open("GET", "/rest/ping", true);
+            xhttp.open("GET", "/rest/exercise", true);
             xhttp.send();
         }
     </script>
