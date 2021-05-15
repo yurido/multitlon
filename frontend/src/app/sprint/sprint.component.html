@@ -3,7 +3,9 @@
   <div class="badge-dark container sticky-top max-width">
     <div class="row">
       <div class="col-2 text-left padding-left-0">
-
+        <button class="btn btn-dark margin-3" (click)="goBack()">
+          <fa-icon [icon]="faChevronLeft"></fa-icon>
+        </button>
       </div>
       <div class="col-8 text-center">
         <span class="text-white header-text-style">{{month}}</span>
