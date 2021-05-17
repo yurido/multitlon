@@ -104,6 +104,18 @@ export class ChangeDaysOffComponent implements OnInit {
     if(lastDayInTheWeek < lastDayInMonth) {
       weekIndex = 4;
       this.sprint[weekIndex] = [];
+      let lastIndex = lastDayInMonth - lastDayInTheWeek;
+      lastIndex = lastIndex > 7 ? 7: lastIndex;
+      for(var i=1; i<=lastIndex; i++) {
+        lastDayInTheWeek=lastDayInTheWeek+1;
+        this.sprint[weekIndex].push([lastDayInTheWeek, -1]); // date, neutral day
+      }
+    }
+
+    // and the last 6th week! yeah baby!
+    if(lastDayInTheWeek < lastDayInMonth) {
+      weekIndex = 5;
+      this.sprint[weekIndex] = [];
       const lastIndex = lastDayInMonth - lastDayInTheWeek;
       for(var i=1; i<=lastIndex; i++) {
         lastDayInTheWeek=lastDayInTheWeek+1;
