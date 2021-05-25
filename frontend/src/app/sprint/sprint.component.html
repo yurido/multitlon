@@ -1,6 +1,6 @@
 <div class="container-fluid container-fluid-styling">
   <!-- header -->
-  <div class="badge-dark container sticky-top max-width">
+  <div class="container sticky-top max-width" style="background-color:#343a40; color: #fff;">
     <div class="row">
       <div class="col-2 text-left padding-left-0">
 
@@ -10,10 +10,12 @@
       </div>
       <div class="col-2 text-right header-rigth-column-style">
         <div class="dropdown">
-          <button class="btn badge-dark margin-3" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="btn btn-secondary" href="#" role="button" id="dropdownMenuLink"
+             data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" style="background-color:#343a40; color: #fff;">
             <fa-icon [icon]="faPlus"></fa-icon>
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          </a>
+
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
             <button class="dropdown-item" type="button" (click)="addExercise()">exercise</button>
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" type="button" (click)="addDayOff()">day off</button>
