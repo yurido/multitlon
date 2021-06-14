@@ -1,17 +1,17 @@
 <div class="container-fluid container-fluid-styling">
   <!-- header -->
-  <div class="container sticky-top max-width" style="background-color:#343a40; color: #fff;">
+  <div class="container sticky-top max-width bgc-darkgrey-text-white">
     <div class="row">
       <div class="col-2 text-left padding-left-0">
 
       </div>
-      <div class="col-8 text-center">
+      <div class="col-8 text-align-center">
         <span class="text-white header-text-style">{{month}}</span>
       </div>
-      <div class="col-2 text-right header-rigth-column-style">
+      <div class="col-2 text-end header-rigth-column-style">
         <div class="dropdown">
-          <a class="btn btn-secondary" href="#" role="button" id="dropdownMenuLink"
-             data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" style="background-color:#343a40; color: #fff;">
+          <a class="btn btn-secondary bgc-darkgrey-text-white" href="#" role="button" id="dropdownMenuLink"
+             data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
             <fa-icon [icon]="faPlus"></fa-icon>
           </a>
 
@@ -33,40 +33,42 @@
       <table class="table table-sm" *ngIf="!loading">
       <tbody>
       <tr *ngFor="let sprintExercise of sprintExercises">
-        <td class="text-center padding-0">
+        <td class="padding-0">
           <!-- Day -->
           <div class="container sprint-day" [ngClass]="calcDayColor(sprintExercise.getSprintDay().getIsDayOff())">
             <div class="row">
-              <div class="col-8 text-left">
+              <div class="col-8 text-start">
                 {{sprintExercise.getSprintDay().getSDate() | date}}
               </div>
-              <div class="col-4 text-right" *ngIf="!sprintExercise.getSprintDay().getIsDayOff()">
+              <div class="col-4 text-end" *ngIf="!sprintExercise.getSprintDay().getIsDayOff()">
                 {{sprintExercise.getSprintDay().getTotal()}}
               </div>
             </div>
           </div>
           <!-- Exercises -->
           <table class="table table-sm margin-0">
+            <tbody>
             <tr *ngFor="let exercise of sprintExercise.getExercises()">
               <td style="padding-top:12px;">
                 <div class="row">
-                  <div class="col-4 text-left padding-right-0">
+                  <div class="col-4 text-start padding-right-0">
                     {{getExName(exercise.getSid())}}
                   </div>
-                  <div class="col-4 text-left max-width-100 padding-right-0">
+                  <div class="col-4 text-start max-width-100 padding-right-0">
                     {{exercise.getRawPoints()}} {{getExItem(exercise.getSid())}}
                   </div>
-                  <div class="col-4 text-left padding-right-0">
+                  <div class="col-4 text-start padding-right-0">
                     {{exercise.getTotalPoints()}}
                   </div>
                 </div>
               </td>
-              <td class="text-right">
+              <td class="text-end">
                 <button class="btn btn-link btn-open-exercise text-right open-exercise-button" (click)="openExercise(exercise)">
                   <fa-icon [icon]="faChevronRight"></fa-icon>
                 </button>
               </td>
             </tr>
+            </tbody>
           </table>
         </td>
       </tr>
@@ -74,16 +76,16 @@
     </table>
     </div>
     <!-- footer -->
-    <div class="badge-dark container max-width sticky-bottom">
+    <div class="container max-width sticky-bottom bgc-darkgrey-text-white">
       <div class="row">
         <div class="col-4">
-          <button class="btn badge-dark margin-3">goal</button>
+          <button class="btn margin-3 bgc-darkgrey-text-white">goal</button>
         </div>
         <div class="col-4">
-          <button class="btn badge-dark margin-3">me</button>
+          <button class="btn margin-3 bgc-darkgrey-text-white">me</button>
         </div>
         <div class="col-4">
-          <button class="btn badge-dark margin-3">team</button>
+          <button class="btn margin-3 bgc-darkgrey-text-white">team</button>
         </div>
       </div>
     </div>
