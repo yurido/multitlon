@@ -2,7 +2,7 @@
   <!-- header -->
   <div class="container sticky-top max-width bgc-darkgrey-text-white">
     <div class="row">
-      <div class="col-2 text-left padding-left-0">
+      <div class="col-2 text-start padding-left-0">
 
       </div>
       <div class="col-8 text-align-center">
@@ -29,11 +29,11 @@
 
   <div class="container max-width text-align-center-padding-0">
     <!-- body -->
-    <div class="container text-align-center-padding-0 max-width">
-      <table class="table table-sm" *ngIf="!loading">
+    <div class="container text-align-center-padding-0 max-width" style="min-height:{{getBodyMinHeight()}}px;">
+      <table class="table table-sm table-borderless" *ngIf="!loading">
       <tbody>
       <tr *ngFor="let sprintExercise of sprintExercises">
-        <td class="padding-0">
+        <td style="padding-top: 2px; padding-bottom: 0px;">
           <!-- Day -->
           <div class="container sprint-day" [ngClass]="calcDayColor(sprintExercise.getSprintDay().getIsDayOff())">
             <div class="row">
@@ -49,7 +49,7 @@
           <table class="table table-sm margin-0">
             <tbody>
             <tr *ngFor="let exercise of sprintExercise.getExercises()">
-              <td style="padding-top:12px;">
+              <td style="padding-top:12px; padding-bottom: 0px; margin: 0">
                 <div class="row">
                   <div class="col-4 text-start padding-right-0">
                     {{getExName(exercise.getSid())}}
@@ -63,7 +63,7 @@
                 </div>
               </td>
               <td class="text-end">
-                <button class="btn btn-link btn-open-exercise text-right open-exercise-button" (click)="openExercise(exercise)">
+                <button class="btn btn-link btn-open-exercise text-end open-exercise-button" (click)="openExercise(exercise)">
                   <fa-icon [icon]="faChevronRight"></fa-icon>
                 </button>
               </td>
@@ -73,7 +73,9 @@
         </td>
       </tr>
       </tbody>
-    </table>
+      </table>
+      <!-- dummy div -->
+      <div class="max-width" style="height: 35px"></div>
     </div>
     <!-- footer -->
     <div class="container max-width sticky-bottom bgc-darkgrey-text-white">

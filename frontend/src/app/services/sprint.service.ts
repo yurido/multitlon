@@ -49,6 +49,10 @@ export class SprintService {
     return window.innerHeight - 120;
   }
 
+  getWindowHeight(): number {
+    return window.innerHeight;
+  }
+
   getContainerHeightForActionButtonWithFooter(): number {
     return window.innerHeight - 140;
   }

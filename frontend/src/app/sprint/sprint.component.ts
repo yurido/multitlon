@@ -54,6 +54,10 @@ export class SprintComponent implements OnInit {
     this.month = (monthObj !== undefined && monthObj !== null) ? monthObj.name : '';
   }
 
+  getBodyMinHeight(): number {
+      return this.sprintService.getContainerHeightForActionButton() - 60;
+  }
+
   addExercise(): void {
     this.router.navigate(['/sprint/newExercise']);
   }
