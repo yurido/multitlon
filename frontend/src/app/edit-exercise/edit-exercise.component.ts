@@ -78,7 +78,7 @@ export class EditExerciseComponent implements OnInit {
   }
 
   getBodyMinHeight(): number {
-    return this.sprintService.getContainerHeightForActionButton() - 40;
+    return this.sprintService.getContainerHeightForActionButton() - 30;
   }
 
   back(): void {

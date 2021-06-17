@@ -1,8 +1,8 @@
 <!-- reps list -->
-<div class="container element-width" *ngIf="exerciseMetadata.isWithReps()">
+<div class="container width-300" *ngIf="exerciseMetadata.isWithReps()">
   <div *ngFor="let rep of reps; let i = index">
     <div class="row">
-      <div class="col-4 padding-0 text-left">
+      <div class="col-4 padding-0 text-start">
         <input type="text"
                class="reps-input"
                [disabled]="loading"
@@ -23,7 +23,7 @@
                placeholder="reps"
                required>
       </div>
-      <div class="col-2 padding-0 text-right">
+      <div class="col-2 padding-0 text-end">
         <button class="btn btn-light btn-delete-reps"
                 (click)="deleteReps(i)"
                 [disabled]="loading">
@@ -35,9 +35,9 @@
 </div>
 
 <!-- + button -->
-<div class="container element-width" *ngIf="exerciseMetadata.isWithReps()">
+<div class="container width-300" *ngIf="exerciseMetadata.isWithReps()">
   <div class="row">
-    <div class="col-12 text-right padding-0" *ngIf="noEmptyReps()">
+    <div class="col-12 text-end padding-0" *ngIf="noEmptyReps()">
       <button class="btn btn-light btn-transparent" (click)="addReps()"
               [disabled]="loading">
         <fa-icon [icon]="faPlus"></fa-icon>
@@ -47,7 +47,7 @@
 </div>
 
 <!-- input for exercises without reps -->
-<div class="container element-width" *ngIf="exerciseMetadata !==undefined && exerciseMetadata.getSid() !== undefined && !exerciseMetadata.isWithReps()">
+<div class="container width-300" *ngIf="exerciseMetadata !==undefined && exerciseMetadata.getSid() !== undefined && !exerciseMetadata.isWithReps()">
   <div class="row">
     <div class="col-12 text-center padding-0">
       <input class="text" class="exercise-input"

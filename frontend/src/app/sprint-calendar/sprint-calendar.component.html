@@ -1,4 +1,4 @@
-<mat-form-field appearance="fill" class="element-width height-70">
+<mat-form-field appearance="fill" class="width-300 height-70">
   <mat-label>chose a day</mat-label>
   <input matInput [matDatepicker]="picker" [value]="chosenDate" [matDatepickerFilter]="weekendFilter"
          (dateChange)="dateChanged($event)" [disabled]="disabled">

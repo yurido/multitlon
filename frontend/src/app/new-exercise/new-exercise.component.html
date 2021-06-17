@@ -1,8 +1,8 @@
 <div class="container-fluid container-fluid-styling">
   <!-- header -->
-  <div class="badge-dark container sticky-top max-width">
+  <div class="container sticky-top width-1010 bgc-darkgrey-text-white">
     <div class="row">
-      <div class="col-2 text-left padding-left-0">
+      <div class="col-2 text-start padding-left-0">
         <button class="btn btn-dark margin-3" (click)="back()" [disabled]="conditions.clendarOpened || conditions.loading">
           <fa-icon [icon]="faChevronLeft"></fa-icon>
         </button>
@@ -10,16 +10,16 @@
       <div class="col-8 text-center">
         <span class="text-white header-text-style">add exercise</span>
       </div>
-      <div class="col-2 text-right header-rigth-column-style">
+      <div class="col-2 text-end padding-left">
       </div>
     </div>
   </div>
 
   <app-spinner [loading]="conditions.loading"></app-spinner>
 
-  <div class="container element-width text-align-center-padding-0">
+  <div class="container width-300 text-align-center-padding-0">
     <!-- body -->
-    <div class="container exercise-body element-width margin-bottom-20"
+    <div class="container exercise-body width-300 margin-bottom-20"
          style="min-height:{{getBodyMinHeight()}}px;">
 
       <!-- date picker -->
@@ -33,13 +33,13 @@
       </div>
 
       <!-- existing exercises -->
-      <div *ngIf="conditions.initialized" class="container element-width margin-bottom-6">
+      <div *ngIf="conditions.initialized" class="container width-300 margin-bottom-6">
         <div class="text-muted small margin-0" *ngFor="let exercise of chosenDayExercises">
           <div class="row">
-            <div class="col-8 text-left">
+            <div class="col-8 text-start">
               {{getExerciseName(exercise.getSid())}}
             </div>
-            <div class="col-4 text-right">
+            <div class="col-4 text-end">
               {{exercise.getTotalPoints()}}
             </div>
           </div>
@@ -49,7 +49,7 @@
         </div>
         <div class="text-muted small">
           <div class="row">
-            <div class="col-12 text-right">
+            <div class="col-12 text-end">
               {{totalPointsDay !== undefined ? totalPointsDay: ''}}
             </div>
           </div>
@@ -57,17 +57,19 @@
       </div>
 
       <!-- available exercises -->
-      <div class="btn-group margin-bottom-12" *ngIf="chosenDate !== undefined" >
-        <button class="btn dropdown-toggle dropdown-exercise-operate" type="button"
-                data-toggle="dropdown"
-                [disabled]="conditions.loading"
-                aria-haspopup="true"
-                aria-expanded="false">
+      <div class="dropdown margin-bottom-12" *ngIf="chosenDate !== undefined">
+        <a class="btn dropdown-exercise-operate dropdown-toggle"
+           href="#" role="button"
+           id="dropdownMenuL"
+           data-bs-toggle="dropdown"
+           aria-expanded="false"
+           aria-haspopup="true">
           {{chosenExerciseMetadata.getName()}}
-        </button>
-        <div class="dropdown-menu">
-          <button class="dropdown-item element-width" type="button"
-                  (click)="choseExercise(ex)" *ngFor="let ex of newExercises">{{ex.getName()}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuL">
+          <button class="dropdown-item width-300" type="button"
+                  (click)="choseExercise(ex)" *ngFor="let ex of newExercises"
+                  [disabled]="conditions.loading">{{ex.getName()}}
           </button>
         </div>
       </div>
@@ -80,7 +82,7 @@
       </app-exercise-reps>
     </div>
     <!-- footer -->
-    <div class="container element-width text-align-center-padding-0">
+    <div class="container width-300 text-align-center-padding-0">
       <button class="btn btn-success btn-exercise-operate" *ngIf="conditions.canSave" (click)="save()"
               [disabled]="conditions.loading">add
       </button>

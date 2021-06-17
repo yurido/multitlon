@@ -1,8 +1,8 @@
 <div class="container-fluid container-fluid-styling">
   <!-- header -->
-  <div class="badge-dark container sticky-top max-width">
+  <div class="container sticky-top width-1010 bgc-darkgrey-text-white">
     <div class="row">
-      <div class="col-2 text-left padding-left-0">
+      <div class="col-2 text-start padding-left-0">
         <button class="btn btn-dark margin-3" (click)="back()" [disabled]="conditions.loading">
           <fa-icon [icon]="faChevronLeft"></fa-icon>
         </button>
@@ -10,16 +10,16 @@
       <div class="col-8 text-center">
         <span class="text-white header-text-style">days off</span>
       </div>
-      <div class="col-2 text-right header-rigth-column-style">
+      <div class="col-2 text-end padding-left">
       </div>
     </div>
   </div>
 
   <app-spinner [loading]="conditions.loading"></app-spinner>
 
-  <div class="container element-width text-align-center-padding-0">
+  <div class="container width-300 text-align-center-padding-0">
     <!-- body -->
-    <div class="container element-width text-align-center-padding-0"
+    <div class="container width-300 text-align-center-padding-0"
          *ngIf="conditions.initialized" style="min-height:{{getBodyMinHeight()}}px; padding-top: 15px">
       <table class="table table-borderless table-sm">
         <tbody>
@@ -46,7 +46,7 @@
       </table>
     </div>
     <!-- footer -->
-    <div class="container element-width text-align-center-padding-0">
+    <div class="container width-300 text-align-center-padding-0">
       <button class="btn btn-success btn-exercise-operate" *ngIf="conditions.canSave" (click)="save()"
               [disabled]="conditions.loading">save
       </button>

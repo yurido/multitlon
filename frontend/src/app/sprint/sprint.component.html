@@ -1,6 +1,6 @@
 <div class="container-fluid container-fluid-styling">
   <!-- header -->
-  <div class="container sticky-top max-width bgc-darkgrey-text-white">
+  <div class="container sticky-top width-1010 bgc-darkgrey-text-white">
     <div class="row">
       <div class="col-2 text-start padding-left-0">
 
@@ -8,10 +8,14 @@
       <div class="col-8 text-align-center">
         <span class="text-white header-text-style">{{month}}</span>
       </div>
-      <div class="col-2 text-end header-rigth-column-style">
+      <div class="col-2 text-end padding-left">
         <div class="dropdown">
-          <a class="btn btn-secondary bgc-darkgrey-text-white" href="#" role="button" id="dropdownMenuLink"
-             data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+          <a class="btn btn-secondary bgc-darkgrey-text-white"
+             href="#" role="button"
+             id="dropdownMenuLink"
+             data-bs-toggle="dropdown"
+             aria-expanded="false"
+             aria-haspopup="true">
             <fa-icon [icon]="faPlus"></fa-icon>
           </a>
 
@@ -27,9 +31,9 @@
 
   <app-spinner [loading]="loading"></app-spinner>
 
-  <div class="container max-width text-align-center-padding-0">
+  <div class="container width-1010 text-align-center-padding-0">
     <!-- body -->
-    <div class="container text-align-center-padding-0 max-width" style="min-height:{{getBodyMinHeight()}}px;">
+    <div class="container text-align-center-padding-0 width-1010" style="min-height:{{getBodyMinHeight()}}px;">
       <table class="table table-sm table-borderless" *ngIf="!loading">
       <tbody>
       <tr *ngFor="let sprintExercise of sprintExercises">
@@ -75,10 +79,10 @@
       </tbody>
       </table>
       <!-- dummy div -->
-      <div class="max-width" style="height: 35px"></div>
+      <div class="width-1010" style="height: 35px"></div>
     </div>
     <!-- footer -->
-    <div class="container max-width sticky-bottom bgc-darkgrey-text-white">
+    <div class="container width-1010 sticky-bottom bgc-darkgrey-text-white">
       <div class="row">
         <div class="col-4">
           <button class="btn margin-3 bgc-darkgrey-text-white">goal</button>

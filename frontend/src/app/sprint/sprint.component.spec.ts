@@ -51,7 +51,7 @@ describe('SprintComponent', () => {
 
     const page: DebugElement = fixture.debugElement;
     // title is present
-    const headerDebugg = page.query(By.css('[class="badge-dark container sticky-top max-width"]'));
+    const headerDebugg = page.query(By.css('[class="container sticky-top width-1010"]'));
     const header: HTMLElement = headerDebugg.nativeElement;
     const span = header.querySelector('span');
     if (span !== null) {

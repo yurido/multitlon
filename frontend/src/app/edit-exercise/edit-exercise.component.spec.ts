@@ -67,7 +67,7 @@ describe('EditExerciseComponent', () => {
     expect(metadata.calls.any()).toBe(true, 'exercise metadata called');
 
     // title is present
-    const headerDebugg = page.query(By.css('[class="badge-dark sticky-top container max-width"]'));
+    const headerDebugg = page.query(By.css('[class="badge-dark sticky-top container width-1010"]'));
     const header: HTMLElement = headerDebugg.nativeElement;
     const span = header.querySelector('span');
     if (span !== null) {
