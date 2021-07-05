@@ -1,22 +1,35 @@
-const exercise = require('./routers/exercise');
+const exerciseMetadataRouter = require('./routers/exercises/metadata');
+const availableExercisesRouter = require('./routers/currentsprint/exercises/availableExercises');
+const exerciseProgressRouter = require('./routers/currentsprint/exercises/exerciseProgress');
+const daysOffRouter = require('./routers/currentsprint/daysOff');
+const sprintProgressRouter = require('./routers/currentsprint/progress');
 const path = require('path');
 const express = require('express');
 const app = express();
 const port = 3000;
-const basePath = '/rest';
+const basePath = '/';
+const restPath = '/rest';
 
 app.use(function(req, res, next) {
-	console.log('main app enter point, time: ', Date.now());
+	console.log('main app enter point');
     next();
 });
-app.use(`${basePath}/exercise`, exercise);
+app.use(`${restPath}/exercises/metadata`, exerciseMetadataRouter);
+app.use(`${restPath}/currentsprint/exercises/available`, availableExercisesRouter);
+app.use(`${restPath}/currentsprint/days-off`, daysOffRouter);
+app.use(`${restPath}/currentsprint/progress`, sprintProgressRouter);
+app.use(`${restPath}/currentsprint/exercises/:sid/progress`, function(req, res, next) {
+    req.sid = req.params.sid;
+    next();
+}, exerciseProgressRouter);
 
 app.get(basePath, function(req, res) {
+	console.log("get Index.html!");
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-app.get(`${basePath}/ping`, function(req, res) {
-	console.log("i ping");
+app.get(`${restPath}/ping`, function(req, res) {
+	console.log("PING!");
 	var status = {status: 'success'};
 	res.json(status);
 });

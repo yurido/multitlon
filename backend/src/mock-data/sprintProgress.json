@@ -1,0 +1,112 @@
+{
+  "sprintProgress": [
+    {
+      "sid": "PUSH-UPS",
+      "progress": 1,
+      "totalRaw": 2600,
+      "totalPoints": 725,
+      "averagePoints": 1020,
+      "maxPonts": 1600,
+      "quota": 15
+    },
+    {
+      "sid": "PULL-UPS",
+      "progress": 12,
+      "totalRaw": 2600,
+      "totalPoints": 725,
+      "averagePoints": 1020,
+      "maxPonts": 1600,
+      "quota": 20
+    },
+    {
+      "sid": "BARS",
+      "progress": 26,
+      "totalRaw": 2600,
+      "totalPoints": 725,
+      "averagePoints": 1020,
+      "maxPonts": 1600,
+      "quota": 24
+    },
+    {
+      "sid": "BICEPS",
+      "progress": 26,
+      "totalRaw": 2600,
+      "totalPoints": 725,
+      "averagePoints": 1020,
+      "maxPonts": 1600,
+      "quota": 26
+    },
+    {
+      "sid": "TRICEPS",
+      "progress": 26,
+      "totalRaw": 2600,
+      "totalPoints": 725,
+      "averagePoints": 1020,
+      "maxPonts": 1600,
+      "quota": 31
+    },
+    {
+      "sid": "SHOULDERS",
+      "progress": 26,
+      "totalRaw": 2600,
+      "totalPoints": 725,
+      "averagePoints": 1020,
+      "maxPonts": 1600,
+      "quota": 2
+    },
+    {
+      "sid": "PLANK",
+      "progress": 26,
+      "totalRaw": 2600,
+      "totalPoints": 725,
+      "averagePoints": 1020,
+      "maxPonts": 1600,
+      "quota": 2
+    },
+    {
+      "sid": "OVERHEAD_PRESS",
+      "progress": 88,
+      "totalRaw": 2600,
+      "totalPoints": 725,
+      "averagePoints": 1020,
+      "maxPonts": 1600,
+      "quota": 10
+    },
+    {
+      "sid": "SWIM",
+      "progress": 4,
+      "totalRaw": 2600,
+      "totalPoints": 725,
+      "averagePoints": 1020,
+      "maxPonts": 1600,
+      "quota": 11
+    },
+    {
+      "sid": "RUN",
+      "progress": 1,
+      "totalRaw": 200,
+      "totalPoints": 725,
+      "averagePoints": 1020,
+      "maxPonts": 1600,
+      "quota": 1
+    },
+    {
+      "sid": "SQUATS",
+      "progress": 1,
+      "totalRaw": 200,
+      "totalPoints": 725,
+      "averagePoints": 1020,
+      "maxPonts": 1600,
+      "quota": 1
+    },
+    {
+      "sid": "ABS",
+      "progress": 5,
+      "totalRaw": 200,
+      "totalPoints": 725,
+      "averagePoints": 1020,
+      "maxPonts": 18,
+      "quota": 1
+    }
+  ]
+}

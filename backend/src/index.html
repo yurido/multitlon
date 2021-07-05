@@ -18,7 +18,22 @@
     </script>
 </head>
 <body>
-    <button onClick="hamtaJson()">Klick me</button><br>
+    <h1>Multitlon backend</h1>
+    <br>
+    <h3>Available API</h3>
+    <br>
+    Ping backend: <a href="/rest/ping">/rest/ping</a>
+    <br>
+    GET exercise metadata: <a href="/rest/exercises/metadata">/rest/exercises/metadata</a>
+    <br>
+    GET users available exercises for current sprint: <a href="/rest/currentsprint/exercises/available">/rest/currentsprint/exercises/available</a>
+    <br>
+    GET users SID exercise progress in current sprint <a href="/rest/currentsprint/exercises/:sid/progress">/rest/currentsprint/exercises/:sid/progress</a>
+    <br>
+    GET users sprint progress <a href="/rest/currentsprint/progress">/rest/currentsprint/progress</a>
+    <br>
+    GET users days-off for current sprint <a href="/rest/currentsprint/days-off">/rest/currentsprint/days-off</a>
+    <!-- button onClick="hamtaJson()">Klick me</button><br -->
     <div id="resultat"/>
 </body>
 </html>
