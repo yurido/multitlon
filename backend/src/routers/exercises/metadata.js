@@ -1,13 +1,17 @@
 var express = require('express');
 var router = express.Router();
+// TODO: remove it when DB is introduced!
 var metadataModelMock = require('../../mock-data/exerciseMetadata');
 
-router.use(function(req, res, next) {
+router.use((req, res, next) => {
   console.log('router Metadata');
-  next();
+  setTimeout(() => {
+      console.log('delay 2 sec');
+      next();
+      }, 2000);
 });
 
-router.get('/', function(req, res) {
+router.get('/', (req, res) => {
     res.json(metadataModelMock);
 });
 

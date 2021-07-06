@@ -1,0 +1,258 @@
+{
+  "exercises": [
+    {
+      "id": 1,
+      "sid": "PUSH-UPS",
+      "date": 1581296400000,
+      "reps": [
+        {
+          "reps": 15,
+          "weight": 88
+        },
+        {
+          "reps": 10,
+          "weight": 88
+        },
+        {
+          "reps": 5,
+          "weight": 88
+        }
+      ],
+      "time": 0,
+      "distance": 0,
+      "totalPoints": 500,
+      "rawPoints": 1000
+    },
+    {
+      "id": 2,
+      "sid": "PULL-UPS",
+      "date": 1581296400000,
+      "reps": [
+        {
+          "reps": 15,
+          "weight": 88
+        },
+        {
+          "reps": 10,
+          "weight": 88
+        },
+        {
+          "reps": 5,
+          "weight": 88
+        }
+      ],
+      "time": 0,
+      "rawPoints": 1320,
+      "totalPoints": 900
+    },
+    {
+      "id": 3,
+      "sid": "BARS",
+      "date": 1581296400000,
+      "reps": [
+        {
+          "reps": 15,
+          "weight": 88
+        },
+        {
+          "reps": 10,
+          "weight": 88
+        },
+        {
+          "reps": 5,
+          "weight": 88
+        }
+      ],
+      "time": 0,
+      "rawPoints": 1000,
+      "totalPoints": 1300
+    },
+    {
+      "id": 4,
+      "sid": "BICEPS",
+      "date": 1580778000000,
+      "reps": [
+        {
+          "reps": 15,
+          "weight": 20
+        },
+        {
+          "reps": 10,
+          "weight": 15
+        },
+        {
+          "reps": 5,
+          "weight": 4
+        }
+      ],
+      "time": 0,
+      "rawPoints": 800,
+      "totalPoints": 500
+    },
+    {
+      "id": 5,
+      "sid": "TRICEPS",
+      "date": 1580778000000,
+      "reps": [
+        {
+          "reps": 15,
+          "weight": 5
+        },
+        {
+          "reps": 10,
+          "weight": 6
+        },
+        {
+          "reps": 5,
+          "weight": 9
+        }
+      ],
+      "time": 0,
+      "rawPoints": 200,
+      "totalPoints": 900
+    },
+    {
+      "id": 6,
+      "sid": "ABS",
+      "date": 1580778000000,
+      "reps": [],
+      "time": 0,
+      "rawPoints": 15,
+      "totalPoints": 1300
+    },
+    {
+      "id": 7,
+      "sid": "SHOULDERS",
+      "date": 1580518800000,
+      "reps": [
+        {
+          "reps": 15,
+          "weight": 5
+        },
+        {
+          "reps": 10,
+          "weight": 6
+        },
+        {
+          "reps": 5,
+          "weight": 9
+        }
+      ],
+      "time": 0,
+      "rawPoints": 600,
+      "totalPoints": 1820
+    },
+    {
+      "id": 8,
+      "sid": "TRICEPS",
+      "date": 1580518800000,
+      "reps": [
+        {
+          "reps": 15,
+          "weight": 5
+        },
+        {
+          "reps": 10,
+          "weight": 6
+        },
+        {
+          "reps": 5,
+          "weight": 9
+        }
+      ],
+      "time": 0,
+      "rawPoints": 650,
+      "totalPoints": 900
+    },
+    {
+      "id": 9,
+      "sid": "PLANK",
+      "date": 1580518800000,
+      "reps": [],
+      "time": 0,
+      "rawPoints": 2.30,
+      "totalPoints": 1650
+    },
+    {
+      "id": 10,
+      "sid": "OVERHEAD_PRESS",
+      "date": 1582074000000,
+      "reps": [
+        {
+          "weight": 130,
+          "reps": 2
+        }
+      ],
+      "time": 0,
+      "rawPoints": 650,
+      "totalPoints": 900
+    },
+    {
+      "id": 11,
+      "sid": "SWIM",
+      "date": 1582160400000,
+      "reps": [],
+      "time": 0.40,
+      "rawPoints": 2,
+      "totalPoints": 2000
+    },
+    {
+      "id": 12,
+      "sid": "SQUATS",
+      "date": 1582160400000,
+      "reps": [
+        {
+          "weight": 100,
+          "reps": 10
+        },
+        {
+          "weight": 120,
+          "reps": 5
+        }
+      ],
+      "time": 0,
+      "rawPoints": 2000,
+      "totalPoints": 1000
+    },
+    {
+      "id": 13,
+      "sid": "RUN",
+      "date": 1582160400000,
+      "reps": [],
+      "time": 0.20,
+      "rawPoints": 1.3,
+      "totalPoints": 1600
+    },
+    {
+      "id": 14,
+      "sid": "PLANK",
+      "date": 1582239600000,
+      "reps": [],
+      "time": 0,
+      "rawPoints": 1,
+      "totalPoints": 800
+    },
+    {
+      "id": 15,
+      "sid": "BARS",
+      "date": 1580864400000,
+      "reps": [
+        {
+          "reps": 15,
+          "weight": 88
+        },
+        {
+          "reps": 10,
+          "weight": 88
+        },
+        {
+          "reps": 5,
+          "weight": 88
+        }
+      ],
+      "time": 0,
+      "rawPoints": 1000,
+      "totalPoints": 1300
+    }
+  ]
+}
