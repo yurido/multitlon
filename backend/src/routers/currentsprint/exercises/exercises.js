@@ -6,11 +6,8 @@ var sprintExercisesModelMock = require('../../../mock-data/sprintExercises');
 var CURRENT_ID = 15;
 
 router.use((req, res, next) => {
-  console.log('router Sprint exercises');
-  setTimeout(() => {
-    console.log('delay 2 sec');
-    next();
-    }, 2000);
+  console.log('Router: Sprint Exercises');
+  next();
 });
 
 router.get('/', (req, res) => {
@@ -25,13 +22,13 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
     // TODO: remove it when DB is introduced! Change to DB call!
-    console.log('POST new exercise: ', req.body);
-    var exercise = req.body;
+    const exercise = req.body;
     CURRENT_ID+=1;
-    var newExercise = `{"id": ${CURRENT_ID}, "sid": "${exercise.getSid()}", "date": ${exercise.date}, "reps": [], "rawPoints": ${exercise.rawPoints}, "totalPoints": 1652, "time": 0}`;
+    var newExercise = `{"id": ${CURRENT_ID}, "sid": "${exercise.sid}", "date": ${exercise.date}, "reps": [], "rawPoints": ${exercise.rawPoints}, "totalPoints": 1652, "time": 0}`;
     if(newExercise.rawPoints === 0) {
         newExercise.rawPoints = 1566;
     }
+    res.json(newExercise);
 });
 
 module.exports = router;

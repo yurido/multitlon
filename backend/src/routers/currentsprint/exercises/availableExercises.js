@@ -4,7 +4,7 @@ var router = express.Router();
 var sprintAvailableExercisesModelMock = require('../../../mock-data/availableExercises');
 
 router.use(function(req, res, next) {
-  console.log('router availableExercises');
+  console.log('Router: AvailableExercises');
   next();
 });
 

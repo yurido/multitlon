@@ -4,11 +4,8 @@ var router = express.Router();
 var sprintProgressModelMock = require('../../mock-data/sprintProgress');
 
 router.use((req, res, next) => {
-  console.log('router Sprint progress');
-  setTimeout(() => {
-        console.log('delay 2 sec');
-        next();
-        }, 2000);
+  console.log('Router: SprintProgress');
+  next();
 });
 
 router.get('/', (req, res) => {

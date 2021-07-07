@@ -1,45 +1,81 @@
 <html>
 <head>
     <script type="text/javascript">
-        function hamtaJson() {
-            console.log("index.html is here!");
+        function sendPostRequest(url) {
+            console.log("POST request, url=", url);
+            var body = '';
 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
               if (this.readyState == 4 && this.status == 200) {
-                var resp = JSON.parse(this.response);
-                document.getElementById("resultat").innerHTML = resp.status;
+                document.getElementById("resultat").innerHTML = this.response;
               }
             };
-            xhttp.open("GET", "/rest/ping", true);
-            xhttp.open("GET", "/rest/exercise", true);
+            xhttp.open("POST", url, true);
+            xhttp.setRequestHeader("Content-Type", "application/json;harset=UTF-8");
+            if (url === '/rest/currentsprint/exercises') {
+                body = JSON.stringify({"sid": "ABS", "date": 123123123123, "reps":[], "rawPoints": 1982});
+            } else if (url === '/rest/currentsprint/days-off') {
+                var data = [];
+                data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 2).getTime());
+                data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 3).getTime());
+                data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 8).getTime());
+                data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 12).getTime());
+                data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 22).getTime());
+                data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 23).getTime());
+
+                body = JSON.stringify({"daysOff":data});
+            }
+            xhttp.send(body);
+        }
+
+        function sendGetRequest(url) {
+            console.log("GET request, uri=", url);
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("resultat").innerHTML = this.response;
+              }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.setRequestHeader("Content-Type", "application/json;harset=UTF-8");
             xhttp.send();
         }
     </script>
 </head>
 <body>
     <h1>Multitlon backend</h1>
-    <br>
     <h3>Available API</h3>
+    Ping app <b>/rest/ping</b>
+    <button onClick="sendGetRequest('/rest/ping')">GET</button>
     <br>
-    Ping app: <a href="/rest/ping">/rest/ping</a>
+    GET exercises metadata <b>/rest/exercises/metadata</b>
+    <button onClick="sendGetRequest('/rest/exercises/metadata')">GET</button>
     <br>
-    GET exercise metadata: <a href="/rest/exercises/metadata">/rest/exercises/metadata</a>
+    GET users available exercises for current sprint <b>/rest/currentsprint/exercises/available</b>
+    <button onClick="sendGetRequest('/rest/currentsprint/exercises/available')">GET</button>
     <br>
-    GET users available exercises for current sprint: <a href="/rest/currentsprint/exercises/available">/rest/currentsprint/exercises/available</a>
+    GET users SID exercise progress in current sprint <b>/rest/currentsprint/exercises/:sid/progress</b>
+    <button onClick="sendGetRequest('/rest/currentsprint/exercises/ABS/progress')">GET</button>
     <br>
-    GET users SID exercise progress in current sprint <a href="/rest/currentsprint/exercises/:sid/progress">/rest/currentsprint/exercises/:sid/progress</a>
+    GET users sprint progress <b>/rest/currentsprint/progress</b>
+    <button onClick="sendGetRequest('/rest/currentsprint/progress')">GET</button>
     <br>
-    GET users sprint progress <a href="/rest/currentsprint/progress">/rest/currentsprint/progress</a>
+    GET users days-off for current sprint <b>/rest/currentsprint/days-off</b>
+    <button onClick="sendGetRequest('/rest/currentsprint/days-off')">GET</button>
     <br>
-    GET users days-off for current sprint <a href="/rest/currentsprint/days-off">/rest/currentsprint/days-off</a>
+    POST days-off for current sprint <b>/rest/currentsprint/days-off</b>
+    <button onClick="sendPostRequest('/rest/currentsprint/days-off')">POST</button>
     <br>
-    POST days-off for current sprint <a>something here...</a>
+    GET users exercises for current sprint <b>/rest/currentsprint/exercises</b>
+    <button onClick="sendGetRequest('/rest/currentsprint/exercises')">GET</button>
     <br>
-    GET users exercises for current sprint <a href="/rest/currentsprint/exercises">/rest/currentsprint/exercises</a>
+    POST new exercise in current spint <b>/rest/currentsprint/exercises</b>
+    <button onClick="sendPostRequest('/rest/currentsprint/exercises')">POST</button>
     <br>
-    POST new exercise in current spint <a>sonething here...</a>
-    <!-- button onClick="hamtaJson()">Klick me</button><br -->
+    <br>
+    <h3>Result:</h3>
     <div id="resultat"/>
 </body>
 </html>
