@@ -47,32 +47,44 @@
 <body>
     <h1>Multitlon backend</h1>
     <h3>Available API</h3>
-    Ping app <b>/rest/ping</b>
-    <button onClick="sendGetRequest('/rest/ping')">GET</button>
-    <br>
-    GET exercises metadata <b>/rest/exercises/metadata</b>
-    <button onClick="sendGetRequest('/rest/exercises/metadata')">GET</button>
-    <br>
-    GET users available exercises for current sprint <b>/rest/currentsprint/exercises/available</b>
-    <button onClick="sendGetRequest('/rest/currentsprint/exercises/available')">GET</button>
-    <br>
-    GET users SID exercise progress in current sprint <b>/rest/currentsprint/exercises/:sid/progress</b>
-    <button onClick="sendGetRequest('/rest/currentsprint/exercises/ABS/progress')">GET</button>
-    <br>
-    GET users sprint progress <b>/rest/currentsprint/progress</b>
-    <button onClick="sendGetRequest('/rest/currentsprint/progress')">GET</button>
-    <br>
-    GET users days-off for current sprint <b>/rest/currentsprint/days-off</b>
-    <button onClick="sendGetRequest('/rest/currentsprint/days-off')">GET</button>
-    <br>
-    POST days-off for current sprint <b>/rest/currentsprint/days-off</b>
-    <button onClick="sendPostRequest('/rest/currentsprint/days-off')">POST</button>
-    <br>
-    GET users exercises for current sprint <b>/rest/currentsprint/exercises</b>
-    <button onClick="sendGetRequest('/rest/currentsprint/exercises')">GET</button>
-    <br>
-    POST new exercise in current spint <b>/rest/currentsprint/exercises</b>
-    <button onClick="sendPostRequest('/rest/currentsprint/exercises')">POST</button>
+    <table>
+        <tr>
+            <td>Ping app <b>/rest/ping</b></td>
+            <td><button onClick="sendGetRequest('/rest/ping')">GET</button></td>
+        </tr>
+        <tr>
+            <td>GET exercises metadata <b>/rest/exercises/metadata</b></td>
+            <td><button onClick="sendGetRequest('/rest/exercises/metadata')">GET</button></td>
+        </tr>
+        <tr>
+            <td>GET users available exercises for current sprint <b>/rest/currentsprint/exercises/available</b></td>
+            <td><button onClick="sendGetRequest('/rest/currentsprint/exercises/available')">GET</button></td>
+        </tr>
+        <tr>
+            <td>GET users SID exercise progress in current sprint <b>/rest/currentsprint/exercises/:sid/progress</b></td>
+            <td><button onClick="sendGetRequest('/rest/currentsprint/exercises/ABS/progress')">GET</button></td>
+        </tr>
+        <tr>
+            <td>GET users sprint progress <b>/rest/currentsprint/progress</b></td>
+            <td><button onClick="sendGetRequest('/rest/currentsprint/progress')">GET</button></td>
+        </tr>
+        <tr>
+            <td>GET users days-off for current sprint <b>/rest/currentsprint/days-off</b></td>
+            <td><button onClick="sendGetRequest('/rest/currentsprint/days-off')">GET</button></td>
+        </tr>
+        <tr>
+            <td>POST days-off for current sprint <b>/rest/currentsprint/days-off</b></td>
+            <td><button onClick="sendPostRequest('/rest/currentsprint/days-off')">POST</button></td>
+        </tr>
+        <tr>
+            <td>GET users exercises for current sprint <b>/rest/currentsprint/exercises</b></td>
+            <td><button onClick="sendGetRequest('/rest/currentsprint/exercises')">GET</button></td>
+        </tr>
+        <tr>
+            <td>POST new exercise in current spint <b>/rest/currentsprint/exercises</b></td>
+            <td><button onClick="sendPostRequest('/rest/currentsprint/exercises')">POST</button></td>
+        </tr>
+    </table>
     <br>
     <br>
     <h3>Result:</h3>
