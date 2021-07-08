@@ -1,17 +1,16 @@
 import {Serializable} from './serializable';
 import {Serializator} from './serializator';
 
-export class ExerciseStatistic implements Serializable<ExerciseStatistic> {
+export class ExerciseProgress implements Serializable<ExerciseProgress> {
   private sid: string;
   private progress: number;
   private totalRaw: number;
   private totalPoints: number;
   private averagePoints: number;
-  private maxPonts: number;
+  private maxPoints: number;
   private quota: number;
 
-  constructor() {
-  }
+  constructor() {}
 
   public getSid(): string {
     return this.sid;
@@ -33,22 +32,22 @@ export class ExerciseStatistic implements Serializable<ExerciseStatistic> {
     return this.averagePoints;
   }
 
-  getMaxPonts(): number {
-    return this.maxPonts;
+  getMaxPoints(): number {
+    return this.maxPoints;
   }
 
   getQuota(): number {
     return this.quota;
   }
 
-  deserialize(input: object): ExerciseStatistic {
-    const serializator = new Serializator(ExerciseStatistic.name);
+  deserialize(input: object): ExerciseProgress {
+    const serializator = new Serializator(ExerciseProgress.name);
     this.sid = serializator.getObjectProperty(input, 'sid');
     this.progress = serializator.getObjectProperty(input, 'progress');
     this.totalRaw = serializator.getObjectProperty(input, 'totalRaw');
     this.totalPoints = serializator.getObjectProperty(input, 'totalPoints');
     this.averagePoints = serializator.getObjectProperty(input, 'averagePoints');
-    this.maxPonts = serializator.getObjectProperty(input, 'maxPonts');
+    this.maxPoints = serializator.getObjectProperty(input, 'maxPoints');
     this.quota = serializator.getObjectProperty(input, 'quota');
     return this;
   }

@@ -4,7 +4,7 @@ import {SprintComponent} from './sprint.component';
 import {SprintService} from '../services/sprint.service';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 import {Router} from '@angular/router';
-import * as exerciseStatistic from '../mock-data/sprint-statistic.json';
+import * as sprintProgress from '../mock-data/sprint-progress.json';
 import * as sprintData from '../mock-data/sprint-exercises.json';
 import * as exerciseMetadata from '../mock-data/exercise-metadata.json';
 import {of} from 'rxjs';
@@ -19,9 +19,9 @@ describe('SprintComponent', () => {
   beforeEach(waitForAsync(() => {
 
     // tslint:disable-next-line:max-line-length
-    const spySprintService = jasmine.createSpyObj('SprintService', ['getExercisesForCurrentSprint', 'getExerciseStatisticsForCurrentSprint', 'getExerciseMetadata', 'sortSprintExercisesByDate']);
+    const spySprintService = jasmine.createSpyObj('SprintService', ['getExercisesForCurrentSprint', 'getCurrentSprintProgress', 'getExerciseMetadata', 'sortSprintExercisesByDate']);
     spySprintService.getExercisesForCurrentSprint.and.returnValue(of(((sprintData) as any).default));
-    spySprintService.getExerciseStatisticsForCurrentSprint.and.returnValue(of(((exerciseStatistic) as any).default));
+    spySprintService.getCurrentSprintProgress.and.returnValue(of(((sprintProgress) as any).default));
     spySprintService.getExerciseMetadata.and.returnValue(of(((exerciseMetadata) as any).default));
     const exercises = new ExerciseList().deserialize((((sprintData) as any).default));
     // spySprintService.sortSprintExercisesByDate.and.returnValue(exercises.getSprintExercises());

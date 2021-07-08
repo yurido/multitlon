@@ -22,10 +22,10 @@
   <app-spinner [loading]="conditions.loading"></app-spinner>
 
   <!-- progress bar -->
-  <div class="container width-1010 text-align-center-padding-0" *ngIf="statistic !== undefined">
-    <app-progress-bar [percent]="statistic.getProgress()"
+  <div class="container width-1010 text-align-center-padding-0" *ngIf="progress !== undefined">
+    <app-progress-bar [percent]="progress.getProgress()"
                       [striped]="true">
-      <span [class]="conditions.loading ? 'text-disabled': 'text-enabled'">{{statistic.getProgress()}} %</span>
+      <span [class]="conditions.loading ? 'text-disabled': 'text-enabled'">{{progress.getProgress()}} %</span>
     </app-progress-bar>
   </div>
 
@@ -47,7 +47,7 @@
         </div>
       </div>
       <div class="row margin-bottom-40" [class]="conditions.loading ? 'text-disabled': 'text-enabled'"
-           *ngIf="exercise !== undefined && exerciseMetadata !== undefined && statistic !== undefined">
+           *ngIf="exercise !== undefined && exerciseMetadata !== undefined && progress !== undefined">
         <div class="col-4 text-center" >
           {{exercise.getRawPoints()}} {{exerciseMetadata.getItem()}}
         </div>
@@ -56,7 +56,7 @@
         </div>
         <div class="col-4 text-center">
           <div class="container quota-style" [ngClass]="calcQuotaColor()">
-            {{statistic.getQuota()}} %
+            {{progress.getQuota()}} %
           </div>
         </div>
       </div>

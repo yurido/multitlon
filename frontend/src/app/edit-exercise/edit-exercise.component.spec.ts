@@ -5,7 +5,7 @@ import {SprintService} from '../services/sprint.service';
 import {Router} from '@angular/router';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 import {Exercise} from '../models/exercise';
-import {ExerciseStatistic} from '../models/exercise.statistic';
+import {ExerciseProgress} from '../models/exercise.progress';
 import * as exerciseMetadata from '../mock-data/exercise-metadata.json';
 import {By} from '@angular/platform-browser';
 import {DebugElement} from '@angular/core';
@@ -29,9 +29,9 @@ describe('EditExerciseComponent', () => {
     const jsonEx = JSON.parse('{"id": 12345678998, "sid": "SHOULDERS", "date": 1580511600000, "reps": [{"weight":600, "reps":500}], "rawPoints": 1500, "totalPoints": 1320, "time": 0}');
     const exerciseShoulders = new Exercise().deserialize(jsonEx);
     // tslint:disable-next-line:max-line-length
-    const jsonStatistic = JSON.parse('{"sid":"SHOULDERS", "progress":1, "totalRaw":1566, "totalPoints":444, "averagePoints":898, "maxPonts":89, "quota":23}');
-    const statisticShoulders = new ExerciseStatistic().deserialize(jsonStatistic);
-    const state = {ex: exerciseShoulders, statistic: statisticShoulders};
+    const jsonProgress = JSON.parse('{"sid":"SHOULDERS", "progress":1, "totalRaw":1566, "totalPoints":444, "averagePoints":898, "maxPonts":89, "quota":23}');
+    const statisticShoulders = new ExerciseProgress().deserialize(jsonProgress);
+    const state = {ex: exerciseShoulders, progress: statisticShoulders};
     history.pushState(state, 'ingen');
 
     TestBed.configureTestingModule({

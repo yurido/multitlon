@@ -7,7 +7,7 @@ import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {Router} from '@angular/router';
 import {Exercise} from '../models/exercise';
 import {environment} from '../../environments/environment';
-import {ExerciseStatistic} from '../models/exercise.statistic';
+import {ExerciseProgress} from '../models/exercise.progress';
 import {ExerciseMetadata} from '../models/exercise.metadata';
 import {MultiTError} from '../models/multiterror';
 import {forkJoin} from 'rxjs';
@@ -26,7 +26,7 @@ export class SprintComponent implements OnInit {
   faChevronRight = faChevronRight;
   loading: boolean;
   month: string;
-  sprintExerciseStatistic: ExerciseStatistic[];
+  sprintProgress: ExerciseProgress[];
   exerciseConfig: ExerciseMetadata[];
 
   constructor(private sprintService: SprintService, private router: Router) {
@@ -36,16 +36,16 @@ export class SprintComponent implements OnInit {
     this.loading = true;
 
     const metadata = this.sprintService.getExerciseMetadata();
-    const exStatistic = this.sprintService.getExerciseStatisticsForCurrentSprint(this.sprintService.isSprintModified());
+    const progress = this.sprintService.getCurrentSprintProgress(this.sprintService.isSprintModified());
 
-    forkJoin([metadata, exStatistic]).subscribe(
+    forkJoin([metadata, progress]).subscribe(
       result => {
         if(result[0] === undefined || result[1] === undefined) {
           this.sprintService.handleError(new MultiTError('Some sprint data isn\'t loaded'));
           return;
         }
         this.exerciseConfig = result[0];
-        this.sprintExerciseStatistic = result[1];
+        this.sprintProgress = result[1];
         this.loadExercises();
       },
       error => this.sprintService.handleError(error)

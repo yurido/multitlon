@@ -5,7 +5,7 @@ import {Exercise} from '../models/exercise';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {SprintService} from '../services/sprint.service';
-import {ExerciseStatistic} from '../models/exercise.statistic';
+import {ExerciseProgress} from '../models/exercise.progress';
 import {MultiTError} from '../models/multiterror';
 import {ExerciseMetadata} from '../models/exercise.metadata';
 import {forkJoin} from 'rxjs';
@@ -24,7 +24,7 @@ export class EditExerciseComponent implements OnInit {
   faTrash = faTrash;
   faPlus = faPlus;
   exercise: Exercise;
-  statistic: ExerciseStatistic | undefined;
+  progress: ExerciseProgress | undefined;
   exerciseMetadata: ExerciseMetadata | undefined;
   conditions = {
     loading: false,
@@ -46,19 +46,19 @@ export class EditExerciseComponent implements OnInit {
     }
     this.exercise = ex;
 
-    const exStat = this.sprintService.getExerciseStatisticsForCurrentSprint(false);
+    const sprintProgressData = this.sprintService.getCurrentSprintProgress(false);
     const exMetadata = this.sprintService.getExerciseMetadata();
 
-    forkJoin([exStat, exMetadata]).subscribe(
+    forkJoin([sprintProgressData, exMetadata]).subscribe(
       result => {
         if (result[0] === undefined || result[1] === undefined) {
           this.back();
           return;
         }
 
-        this.statistic = result[0].find(stat => stat.getSid() === this.exercise.getSid());
-        if (this.statistic === undefined) {
-          this.sprintService.handleError(new MultiTError(`Statistic for exercise ${this.exercise.getSid()} is not loaded`));
+        this.progress = result[0].find(stat => stat.getSid() === this.exercise.getSid());
+        if (this.progress === undefined) {
+          this.sprintService.handleError(new MultiTError(`Progress for exercise ${this.exercise.getSid()} is not loaded`));
         }
         this.exerciseMetadata = result[1].find(ex => ex.getSid() === this.exercise.getSid());
         if(this.exerciseMetadata === undefined) {
@@ -129,9 +129,9 @@ export class EditExerciseComponent implements OnInit {
     this.sprintService.updateExercise(this.exercise).subscribe(
       data => {
         this.exercise = data;
-        this.sprintService.getExerciseStatisticForCurrentSprint(this.exercise.getSid()).subscribe(
+        this.sprintService.getExerciseProgress(this.exercise.getSid()).subscribe(
           response => {
-            this.statistic = response;
+            this.progress = response;
             this.sprintService.updateSprintExerciseInCache(this.exercise);
             const modalDialogRef = this.dialog.open(ConfirmationModalComponent, this.sprintService.getConfirmationModalDialogConfig());
             modalDialogRef.afterClosed().subscribe(
@@ -168,9 +168,9 @@ export class EditExerciseComponent implements OnInit {
       return 'quota-disabled';
     }
 
-    if (this.statistic !== undefined && this.statistic.getQuota() < 26) {
+    if (this.progress !== undefined && this.progress.getQuota() < 26) {
       return 'quota-green';
-    } else if (this.statistic !== undefined && this.statistic.getQuota() >= 26 && this.statistic.getQuota() < 31) {
+    } else if (this.progress !== undefined && this.progress.getQuota() >= 26 && this.progress.getQuota() < 31) {
       return 'quota-yellow';
     } else {
       return 'quota-red';

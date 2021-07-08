@@ -11,8 +11,8 @@ import {Observable, of} from 'rxjs';
 import * as sprintData from './mock-data/sprint-exercises.json';
 import {delay} from 'rxjs/operators';
 import {Exercise} from './models/exercise';
-import * as exerciseStatistic from './mock-data/sprint-statistic.json';
-import {ExerciseStatistic} from './models/exercise.statistic';
+import * as sprintProgress from './mock-data/sprint-progress.json';
+import {ExerciseProgress} from './models/exercise.progress';
 import * as exerciseMetadata from './mock-data/exercise-metadata.json';
 import {SprintService} from './services/sprint.service';
 import {DaysOffList} from './models/days.off.list';
@@ -50,20 +50,20 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
         .pipe(
           delay(2000)
         );
-    } else if (request.url === (this.sprintService.getExerciseStatisticsCurrentSprintURL())) {
+    } else if (request.url === (this.sprintService.getCurrentSprintProgressURL())) {
       // this.throwError(request.headers, request.url, 'statistics not loaded!');
-      return of(new HttpResponse({status: 200, body: ((exerciseStatistic) as any).default}))
+      return of(new HttpResponse({status: 200, body: ((sprintProgress) as any).default}))
         .pipe(
           delay(1000)
         );
-    } else if (request.url.indexOf(this.sprintService.getExerciseStatisticsCurrentSprintURL() + '/') >= 0) {
+    } else if (request.url.indexOf(this.sprintService.getCurrentSprintProgressURL() + '/') >= 0) {
       // this.throwError(request.headers, request.url);
       // tslint:disable-next-line:max-line-length
-      const sidPos = request.url.indexOf(this.sprintService.getExerciseStatisticsCurrentSprintURL() + '/') + (this.sprintService.getExerciseStatisticsCurrentSprintURL() + '/').length;
+      const sidPos = request.url.indexOf(this.sprintService.getCurrentSprintProgressURL() + '/') + (this.sprintService.getCurrentSprintProgressURL() + '/').length;
       const sid = request.url.substr(sidPos, request.url.length - sidPos);
-      const json = JSON.parse(`{"sid": "${sid}", "progress": 44, "totalRaw": 123, "totalPoints": 1500, "averagePoints": 45, "maxPonts": 500, "quota": 16}`);
-      const statistic = new ExerciseStatistic().deserialize(json);
-      return of(new HttpResponse({status: 200, body: statistic}))
+      const json = JSON.parse(`{"sid": "${sid}", "progress": 44, "totalRaw": 123, "totalPoints": 1500, "averagePoints": 45, "maxPoints": 500, "quota": 16}`);
+      const progress = new ExerciseProgress().deserialize(json);
+      return of(new HttpResponse({status: 200, body: progress}))
         .pipe(
           delay(1000)
         );
@@ -73,7 +73,7 @@ export class MockHttpCalIInterceptor implements HttpInterceptor {
         .pipe(
           delay(1000)
         );
-    } else if (request.url === this.sprintService.getSprintExercisesURL() && request.method === 'DELETE') {
+    } else if (request.url.indexOf(this.sprintService.getSprintExercisesURL() + '/') >=0  && request.method === 'DELETE') {
       // this.throwError(request.headers, request.url, 'DB is not available, retry later!');
       return of(new HttpResponse({status: 200}))
         .pipe(

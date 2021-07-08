@@ -4,8 +4,8 @@ import {SprintExercise} from '../models/sprint.exercise';
 import {EMPTY, Observable, of} from 'rxjs';
 import {map, shareReplay, tap} from 'rxjs/operators';
 import {Exercise} from '../models/exercise';
-import {ExerciseStatistic} from '../models/exercise.statistic';
-import {ExerciseStatisticList} from '../models/exercise.statistic.list';
+import {ExerciseProgress} from '../models/exercise.progress';
+import {SprintProgress} from '../models/sprint.progress';
 import {ExerciseMetadataList} from '../models/exercise.metadata.list';
 import {DaysOffList} from '../models/days.off.list';
 import {ExerciseList} from '../models/exercise.list';
@@ -30,13 +30,13 @@ enum ActionEnum {
   providedIn: 'root'
 })
 export class SprintService {
-  private SPRINT_EXERCISES_URL = 'rest/sprint/sprintExercises';
-  private SPRINT_AVAILABLE_EXERCISES_URL = 'rest/sprint/availableExercises';
+  private SPRINT_EXERCISES_URL = 'rest/currentsprint/exercises';
+  private SPRINT_AVAILABLE_EXERCISES_URL = 'rest/currentsprint/exercises/available';
   private EXERCISE_METADATA_URL = 'rest/exercises/metadata';
-  private STATISTICS_EXERCISES_SPRINT_URL = 'rest/statistics/sprintExercises';
-  private DAYS_OFF_URL = 'rest/daysoff';
+  private CURRENT_SPRINT_PROGRESS_URL = 'rest/currentsprint/progress';
+  private DAYS_OFF_URL = 'rest/currentsprint/days-off';
   private SPRINT_EXERCISE_LIST_CACHE: Observable<SprintExercise[]> = EMPTY;
-  private EXERCISE_STATISTIC_CACHE: Observable<ExerciseStatistic[]> = EMPTY;
+  private SPRINT_PROGRESS_CACHE: Observable<ExerciseProgress[]> = EMPTY;
   private EXERCISE_METADATA_CACHE: Observable<ExerciseMetadata[]> = EMPTY;
   private SPRINT_AVAILABLE_EXERCISES_CACHE: Observable<string[]> = EMPTY;
   private EXERCISE: Exercise | undefined;
@@ -61,8 +61,8 @@ export class SprintService {
     return this.EXERCISE_METADATA_URL;
   }
 
-  getExerciseStatisticsCurrentSprintURL(): string {
-    return this.STATISTICS_EXERCISES_SPRINT_URL;
+  getCurrentSprintProgressURL(): string {
+    return this.CURRENT_SPRINT_PROGRESS_URL;
   }
 
   getSprintExercisesURL(): string {
@@ -122,30 +122,30 @@ export class SprintService {
   }
 
   /**
-   * method returns user sprint exercise statistics for current sprint from server or cache
+   * Returns user's sprint progress from server or cache
    * @param forceCallServer - force to read from server
    */
-  getExerciseStatisticsForCurrentSprint(forceCallServer: boolean): Observable<ExerciseStatistic[]> {
+  getCurrentSprintProgress(forceCallServer: boolean): Observable<ExerciseProgress[]> {
     // tslint:disable-next-line:max-line-length
-    if ((this.EXERCISE_STATISTIC_CACHE !== undefined && this.EXERCISE_STATISTIC_CACHE !== null && this.EXERCISE_STATISTIC_CACHE !== EMPTY) && !forceCallServer) {
-      console.log('got statistic from cache');
-      return this.EXERCISE_STATISTIC_CACHE;
+    if ((this.SPRINT_PROGRESS_CACHE !== undefined && this.SPRINT_PROGRESS_CACHE !== null && this.SPRINT_PROGRESS_CACHE !== EMPTY) && !forceCallServer) {
+      console.log('got progress from cache');
+      return this.SPRINT_PROGRESS_CACHE;
     }
-    console.log('getting statistic from server');
-    this.EXERCISE_STATISTIC_CACHE = this.http.get<ExerciseStatisticList>(this.STATISTICS_EXERCISES_SPRINT_URL, {
+    console.log('getting progress from server');
+    this.SPRINT_PROGRESS_CACHE = this.http.get<SprintProgress>(this.CURRENT_SPRINT_PROGRESS_URL, {
       headers: httpOptions.headers,
       params: httpOptions.params
         .set('date', new Date().getTime().toString())
     })
       .pipe(
         shareReplay(1),
-        map(data => new ExerciseStatisticList().deserialize(data).getExerciseStatistic())
+        map(data => new SprintProgress().deserialize(data).getSprintProgress())
       );
-    return this.EXERCISE_STATISTIC_CACHE;
+    return this.SPRINT_PROGRESS_CACHE;
   }
 
   /**
-   * method updates sprint exercise on server and return updated object
+   * Updates sprint exercise on server and return updated object
    * @param exercise - exercise to be updated
    */
   updateExercise(exercise: Exercise): Observable<Exercise> {
@@ -157,22 +157,22 @@ export class SprintService {
   }
 
   /**
-   * method returns sprint statistic for sprint exercise sid
+   * Returns exercise progress for current sprint
    * @param sid exercise
    */
-  getExerciseStatisticForCurrentSprint(sid: string): Observable<ExerciseStatistic> {
-    return this.http.get<ExerciseStatistic>(this.STATISTICS_EXERCISES_SPRINT_URL + '/' + sid, {
+  getExerciseProgress(sid: string): Observable<ExerciseProgress> {
+    return this.http.get<ExerciseProgress>(this.CURRENT_SPRINT_PROGRESS_URL + '/' + sid, {
       headers: httpOptions.headers,
       params: httpOptions.params
         .set('date', new Date().getTime().toString())
     })
       .pipe(
-        map(data => new ExerciseStatistic().deserialize(data))
+        map(data => new ExerciseProgress().deserialize(data))
       );
   }
 
   /**
-   * method returns exercise global metadata from server or cache
+   * Returns exercises metadata from server or cache
    */
   getExerciseMetadata(): Observable<ExerciseMetadata[]> {
     if (this.EXERCISE_METADATA_CACHE !== undefined && this.EXERCISE_METADATA_CACHE !== null && this.EXERCISE_METADATA_CACHE !== EMPTY) {
@@ -189,7 +189,7 @@ export class SprintService {
   }
 
   /**
-   * method returns days-off for user for sprint from server
+   * Returns user's days-off for current sprint from server
    */
   getDaysOffForCurrentSprint(): Observable<number[]> {
     console.log('getting days-off from server');
@@ -333,7 +333,7 @@ export class SprintService {
   }
 
   deleteSprintExercise(id: number): Observable<any> {
-    return this.http.delete(this.SPRINT_EXERCISES_URL, {
+    return this.http.delete(`${this.SPRINT_EXERCISES_URL}/${id}`, {
       headers: httpOptions.headers,
       params: httpOptions.params
     })
