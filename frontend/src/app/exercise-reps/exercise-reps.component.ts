@@ -114,13 +114,11 @@ export class ExerciseRepsComponent implements OnInit {
         newRep.setReps(this.sprintService.getNumberFromString(rep.getReps()));
         ex.getReps().push(newRep);
       });
-      console.log('rawPoints=', this.rawPoints);
       this.rawPoints === undefined ? ex.setRawPoints(0): ex.setRawPoints(this.sprintService.getFloatFromString(this.rawPoints));
     } else {
       ex.setRawPoints(this.sprintService.getFloatFromString(this.rawPoints));
     }
     this.onExerciseChanged.emit(ex);
-    console.log('emit exercise=', ex);
   }
 
 }

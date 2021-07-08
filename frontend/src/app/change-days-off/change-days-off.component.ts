@@ -11,6 +11,7 @@ import {SprintExercise} from '../models/sprint.exercise';
 import {SprintDay} from '../models/sprint.day';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmationModalComponent} from '../confirmation-modal/confirmation-modal.component';
+import {DaysOffList} from '../models/days.off.list';
 
 @Component({
   selector: 'app-change-days-off',
@@ -169,7 +170,9 @@ export class ChangeDaysOffComponent implements OnInit {
       }
     }
 
-    this.sprintService.saveDaysOff(daysOff).subscribe(
+    let daysOffObj = new DaysOffList();
+    daysOffObj.setDaysOff(daysOff);
+    this.sprintService.saveDaysOff(daysOffObj).subscribe(
       data => {
         this.sprintService.clearSprintExercisesInCache();
         const modalDialogRef = this.dialog.open(ConfirmationModalComponent, this.sprintService.getConfirmationModalDialogConfig());

@@ -4,11 +4,14 @@ import {Serializator} from './serializator';
 export class DaysOffList implements Serializable<DaysOffList> {
   private daysOff: number[] = [];
 
-  constructor() {
-  }
+  constructor() {}
 
   public getDaysOff(): number[] {
     return this.daysOff;
+  }
+
+  public setDaysOff(daysOff: number[]) {
+    this.daysOff = daysOff;
   }
 
   deserialize(input: object): DaysOffList {

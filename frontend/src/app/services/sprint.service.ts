@@ -88,9 +88,7 @@ export class SprintService {
     }
     console.log('getting sprint available exercises from server');
     this.SPRINT_AVAILABLE_EXERCISES_CACHE = this.http.get<AvailableExerciseList>(this.SPRINT_AVAILABLE_EXERCISES_URL, {
-      headers: httpOptions.headers,
-      params: httpOptions.params
-        .set('date', new Date().getTime().toString())
+      headers: httpOptions.headers
     }).pipe(
       shareReplay(1),
       map(data => new AvailableExerciseList().deserialize(data).getExercises())
@@ -113,9 +111,7 @@ export class SprintService {
   getExerciseListForCurrentSprint(): Observable<Exercise[]> {
     console.log('getting exercises from server');
     return this.http.get<ExerciseList>(this.SPRINT_EXERCISES_URL, {
-      headers: httpOptions.headers,
-      params: httpOptions.params
-        .set('date', new Date().getTime().toString())
+      headers: httpOptions.headers
     }).pipe(
       map(data => new ExerciseList().deserialize(data).getExercises())
     );
@@ -133,9 +129,7 @@ export class SprintService {
     }
     console.log('getting progress from server');
     this.SPRINT_PROGRESS_CACHE = this.http.get<SprintProgress>(this.CURRENT_SPRINT_PROGRESS_URL, {
-      headers: httpOptions.headers,
-      params: httpOptions.params
-        .set('date', new Date().getTime().toString())
+      headers: httpOptions.headers
     })
       .pipe(
         shareReplay(1),
@@ -162,9 +156,7 @@ export class SprintService {
    */
   getExerciseProgress(sid: string): Observable<ExerciseProgress> {
     return this.http.get<ExerciseProgress>(this.CURRENT_SPRINT_PROGRESS_URL + '/' + sid, {
-      headers: httpOptions.headers,
-      params: httpOptions.params
-        .set('date', new Date().getTime().toString())
+      headers: httpOptions.headers
     })
       .pipe(
         map(data => new ExerciseProgress().deserialize(data))
@@ -194,9 +186,7 @@ export class SprintService {
   getDaysOffForCurrentSprint(): Observable<number[]> {
     console.log('getting days-off from server');
     return this.http.get<DaysOffList>(this.DAYS_OFF_URL, {
-      headers: httpOptions.headers,
-      params: httpOptions.params
-        .set('date', new Date().getTime().toString())
+      headers: httpOptions.headers
     }).pipe(
       map(data => new DaysOffList().deserialize(data).getDaysOff())
     );
@@ -342,7 +332,7 @@ export class SprintService {
       );
   }
 
-  saveDaysOff(daysOff: number[]): Observable<any> {
+  saveDaysOff(daysOff: DaysOffList): Observable<any> {
     return this.http.post(this.DAYS_OFF_URL, daysOff, {
        headers: httpOptions.headers,
        params: httpOptions.params
