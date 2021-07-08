@@ -8,6 +8,9 @@ router.use((req, res, next) => {
   next();
 });
 
+/**
+* Get exercises metadata
+**/
 router.get('/', (req, res) => {
     res.json(metadataModelMock);
 });

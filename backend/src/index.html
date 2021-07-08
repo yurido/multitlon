@@ -1,6 +1,24 @@
 <html>
 <head>
     <script type="text/javascript">
+        function sendPutRequest(url) {
+            console.log("PUT request, url=", url);
+            var body = '';
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("resultat").innerHTML = this.response;
+              }
+            };
+            xhttp.open("PUT", url, true);
+            xhttp.setRequestHeader("Content-Type", "application/json;harset=UTF-8");
+            if (url === '/rest/currentsprint/exercises') {
+                body = JSON.stringify({"id":198, "sid": "ABS", "date": 1582160400000, "reps":[], "rawPoints": 1982, "time":0.4, "totalPoints": 2000});
+            }
+            xhttp.send(body);
+        }
+
         function sendPostRequest(url) {
             console.log("POST request, url=", url);
             var body = '';
@@ -27,6 +45,19 @@
                 body = JSON.stringify({"daysOff":data});
             }
             xhttp.send(body);
+        }
+
+        function sendDeleteRequest(url) {
+            console.log("DELETE request, url=", url);
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("resultat").innerHTML = this.response;
+              }
+            };
+            xhttp.open("DELETE", url, true);
+            xhttp.setRequestHeader("Content-Type", "application/json;harset=UTF-8");
+            xhttp.send();
         }
 
         function sendGetRequest(url) {
@@ -59,14 +90,9 @@
             <td><button onClick="sendGetRequest('/rest/exercises/metadata')">GET</button></td>
         </tr>
         <tr>
-            <td>GET users available exercises for current sprint</td>
-            <td><b>/rest/currentsprint/exercises/available</b></td>
-            <td><button onClick="sendGetRequest('/rest/currentsprint/exercises/available')">GET</button></td>
-        </tr>
-        <tr>
-            <td>GET users SID exercise progress in current sprint</td>
-            <td><b>/rest/currentsprint/exercises/:sid/progress</b></td>
-            <td><button onClick="sendGetRequest('/rest/currentsprint/exercises/ABS/progress')">GET</button></td>
+            <td>GET user's exercise progress for current sprint</td>
+            <td><b>/rest/currentsprint/progress/:sid</b></td>
+            <td><button onClick="sendGetRequest('/rest/currentsprint/progress/ABS')">GET</button></td>
         </tr>
         <tr>
             <td>GET users sprint progress</td>
@@ -84,6 +110,11 @@
             <td><button onClick="sendPostRequest('/rest/currentsprint/days-off')">POST</button></td>
         </tr>
         <tr>
+            <td>GET user's available exercises for current sprint</td>
+            <td><b>/rest/currentsprint/exercises/available</b></td>
+            <td><button onClick="sendGetRequest('/rest/currentsprint/exercises/available')">GET</button></td>
+        </tr>
+        <tr>
             <td>GET users exercises for current sprint</td>
             <td><b>/rest/currentsprint/exercises</b></td>
             <td><button onClick="sendGetRequest('/rest/currentsprint/exercises')">GET</button></td>
@@ -92,6 +123,16 @@
             <td>POST new exercise in current spint</td>
             <td><b>/rest/currentsprint/exercises</b></td>
             <td><button onClick="sendPostRequest('/rest/currentsprint/exercises')">POST</button></td>
+        </tr>
+        <tr>
+            <td>UPDATE exercise in current spint</td>
+            <td><b>/rest/currentsprint/exercises</b></td>
+            <td><button onClick="sendPutRequest('/rest/currentsprint/exercises')">PUT</button></td>
+        </tr>
+        <tr>
+            <td>DELETE exercise from current spint</td>
+            <td><b>/rest/currentsprint/exercises/:id</b></td>
+            <td><button onClick="sendDeleteRequest('/rest/currentsprint/exercises/568')">DELETE</button></td>
         </tr>
     </table>
     <br>

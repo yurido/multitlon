@@ -8,8 +8,16 @@ router.use((req, res, next) => {
   next();
 });
 
+/**
+* Get Sprint progress or exercise progress for user
+**/
 router.get('/', (req, res) => {
-    res.json(sprintProgressModelMock);
+    if (req.sid === undefined) {
+        res.json(sprintProgressModelMock);
+    } else {
+        var data = {sid: req.sid, progress: 44, totalRaw: 123, totalPoints: 1500, averagePoints: 45, maxPonts: 500, quota: 16};
+        res.json(data);
+    }
 });
 
 module.exports = router;

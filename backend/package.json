@@ -1,14 +1,15 @@
 {
   "name": "backend",
-  "version": "1.0.0",
-  "author": "Danjel Nyberg",
-  "description": "",
+  "version": "0.0.1",
+  "author": "Danjel Nyberg, Yury Dorofeev",
+  "description": "NodeJs backend for Multitlon app",
   "license": "MIT",
   "main": "src/app.js",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src",
+    "lintfix": "eslint --fix src",
     "start": "node src/app.js",
     "devstart": "nodemon src/app.js",
     "serverstart": "DEBUG=backend:* npm run devstart"
@@ -22,5 +23,20 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.9"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true,
+      "es6": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "impliedStrict": true
+      }
+    },
+    "extends": "eslint:recommended"
   }
 }
