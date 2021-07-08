@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
     if (req.sid === undefined) {
         res.json(sprintProgressModelMock);
     } else {
-        var data = {sid: req.sid, progress: 44, totalRaw: 123, totalPoints: 1500, averagePoints: 45, maxPonts: 500, quota: 16};
+        var data = {sid: req.sid, progress: 44, totalRaw: 123, totalPoints: 1500, averagePoints: 45, maxPoints: 500, quota: 16};
         res.json(data);
     }
 });

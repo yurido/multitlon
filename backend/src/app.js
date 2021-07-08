@@ -57,4 +57,10 @@ app.get(`${restPath}/ping`, (req, res) => {
 	res.json(status);
 });
 
+/*
+app.get(`${restPath}`, (req, res) => {
+    console.log("Not Found");
+    throw new Error('Resource not found!');
+}); */
+
 app.listen(port, () => console.log(`Backend server is listening on port ${port}!`));

@@ -13,7 +13,7 @@ router.use((req, res, next) => {
 router.get('/', (req, res) => {
     var data = [];
     // TODO: remove it when DB is introduced!
-    if(DAYSOFF_CACHE.daysOff.length === 0) {
+    if(DAYSOFF_CACHE.daysOff === undefined || DAYSOFF_CACHE.daysOff.length === 0) {
         data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 2).getTime());
         data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 3).getTime());
         data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 8).getTime());
