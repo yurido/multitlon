@@ -20,8 +20,14 @@ export class AlertComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: AlertData) { }
 
   ngOnInit(): void {
-    this.message = this.data.error.message;
-    console.error('Error: ', this.data.error.message);
+    console.error('Error.error: ', this.data.error.error);
+
+    if (this.data.error.error !== undefined) {
+      this.message = this.data.error.error.message;
+    } else {
+      this.message = this.data.error.message;
+    }
+
   }
 
 }
