@@ -17,7 +17,7 @@
     {"sid": "CALVES", "name": "calves", "item": "kg", "withReps": true},
     {"sid": "ZUMBA", "name": "zumba", "item": "h", "withReps": false},
     {"sid": "BODY-PUMP", "name": "bodyPump", "item": "h", "withReps": false},
-    {"sid": "SCOOTER", "name": "Scooter", "item": "km", "withReps": false},
+    {"sid": "SCOOTER", "name": "scooter", "item": "km", "withReps": false},
     {"sid": "BURPEE", "name": "burpee", "item": "n", "withReps": false},
     {"sid": "SKATING", "name": "skating", "item": "km", "withReps": false},
     {"sid": "SKIING", "name": "skiing(x-country)", "item": "km", "withReps": false},
@@ -27,7 +27,7 @@
     {"sid": "STRETCHING", "name": "stretching", "item": "10min", "withReps": false},
     {"sid": "TENNIS", "name": "tennis", "item": "h", "withReps": false},
     {"sid": "SHAPE-UP", "name": "shape Up", "item": "h", "withReps": false},
-    {"sid": "KNEE-ROLL-OUT", "name": "knee roll-out", "item": "n", "withReps": false},
+    {"sid": "KNEE-ROLL-OUT", "name": "knee roll-out", "item": "kg", "withReps": true},
     {"sid": "ZEPN", "name": "zEPN", "item": "h", "withReps": false},
     {"sid": "HYPEREXTENSION", "name": "hyperextension", "item": "kg", "withReps": true},
     {"sid": "BENCH-PRESS", "name": "bench press", "item": "kg", "withReps": true}

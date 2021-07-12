@@ -8,5 +8,5 @@ const pool = new Pool({
 });
 
 module.exports = {
-    getExerciseMetadata: () => pool.query('SELECT sid, name,item, withreps FROM exercise_metadata')
+    getExerciseMetadata: () => pool.query('SELECT sid, name, item, withreps FROM exercise_metadata')
 };
