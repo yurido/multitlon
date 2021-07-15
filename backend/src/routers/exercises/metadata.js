@@ -1,15 +1,14 @@
 const Router = require('express-promise-router');
 const router = new Router();
-const db = require('../../db/queries');
-const metadataMapper = require('../../db/mapper/metadataMapper');
+const db = require('../../db/db');
+const MetadataMapper = require('../../db/mapper/metadataMapper');
+const metadataMapper = new MetadataMapper();
 const errorService = require('../../service/errorService');
 
-// TODO: remove it when DB is introduced!
-const metadataModelMock = require('../../mock-data/exerciseMetadata');
 var METADATA_CACHE = [];
 
 router.use((req, res, next) => {
-  console.log('Router: Metadata');
+  console.log('Router: Metadata, cache=', METADATA_CACHE.length);
   next();
 });
 
@@ -19,13 +18,14 @@ router.use((req, res, next) => {
 router.get('/', async(req, res) => {
     try {
         if (METADATA_CACHE.length === 0) {
-            const { rows } = await db.getExerciseMetadata();
+            const data = await db.getExerciseMetadata();
+            // console.log(   'data=', data);
             // mapping response
-            rows.forEach( (value) =>
+            data.forEach( (value) =>
                 METADATA_CACHE.push(metadataMapper.getJSONObject(value))
             );
             console.log('   Got metadata from DB');
-             // console.log('metadata=', METADATA_CACHE);
+            // console.log('metadata=', METADATA_CACHE);
             res.json({exerciseMetadata: METADATA_CACHE});
         }
     } catch(err) {

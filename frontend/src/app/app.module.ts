@@ -64,13 +64,13 @@ import { ChangeDaysOffComponent } from './change-days-off/change-days-off.compon
     MatDialogModule,
     MatIconModule
   ],
-  providers: [
+  /* providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MockHttpCalIInterceptor,
       multi: true
     }
-  ],
+  ], */
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -9,6 +9,7 @@ const exerciseMetadataRouter = require('./routers/exercises/metadata');
 const sprintExercisesRouter = require('./routers/currentsprint/exercises');
 const daysOffRouter = require('./routers/currentsprint/daysOff');
 const sprintProgressRouter = require('./routers/currentsprint/progress');
+const testDataGenerator = require('./routers/testDataGenerator');
 
 const port = 3000;
 const basePath = '/';
@@ -57,10 +58,6 @@ app.get(`${restPath}/ping`, (req, res) => {
 	res.json(status);
 });
 
-/*
-app.get(`${restPath}`, (req, res) => {
-    console.log("Not Found");
-    throw new Error('Resource not found!');
-}); */
+app.use(`${restPath}/testdata`, testDataGenerator);
 
 app.listen(port, () => console.log(`Backend server is listening on port ${port}!`));

@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var DAYSOFF_CACHE = {daysOff:[]};
+var DAYSOFF_CACHE = [];
 
 router.use((req, res, next) => {
-  console.log('Router: DaysOff, cache=', DAYSOFF_CACHE.daysOff.length);
+  console.log('Router: DaysOff, cache=', DAYSOFF_CACHE.length);
   next();
 });
 
@@ -11,18 +11,16 @@ router.use((req, res, next) => {
 * Get user's days-off for curret sprint
 **/
 router.get('/', (req, res) => {
-    var data = [];
     // TODO: remove it when DB is introduced!
-    if(DAYSOFF_CACHE.daysOff === undefined || DAYSOFF_CACHE.daysOff.length === 0) {
-        data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 2).getTime());
-        data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 3).getTime());
-        data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 8).getTime());
-        data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 12).getTime());
-        data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 22).getTime());
-        data.push(new Date(new Date().getFullYear(), new Date().getMonth(), 23).getTime());
-        DAYSOFF_CACHE = {daysOff:data};
+    if(DAYSOFF_CACHE.length === 0) {
+        DAYSOFF_CACHE.push(new Date(new Date().getFullYear(), new Date().getMonth(), 2).getTime());
+        DAYSOFF_CACHE.push(new Date(new Date().getFullYear(), new Date().getMonth(), 3).getTime());
+        DAYSOFF_CACHE.push(new Date(new Date().getFullYear(), new Date().getMonth(), 8).getTime());
+        DAYSOFF_CACHE.push(new Date(new Date().getFullYear(), new Date().getMonth(), 12).getTime());
+        DAYSOFF_CACHE.push(new Date(new Date().getFullYear(), new Date().getMonth(), 22).getTime());
+        DAYSOFF_CACHE.push(new Date(new Date().getFullYear(), new Date().getMonth(), 23).getTime());
     }
-    res.json(DAYSOFF_CACHE);
+    res.json({daysOff:DAYSOFF_CACHE});
 });
 
 /**
@@ -30,7 +28,7 @@ router.get('/', (req, res) => {
 **/
 router.post('/', (req, res) =>  {
     // TODO: remove it when DB is introduced! Change to DB call!
-    DAYSOFF_CACHE = req.body;
+    DAYSOFF_CACHE = req.body.daysOff;
     res.json({status: 200});
 });
 

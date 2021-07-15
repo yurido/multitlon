@@ -22,7 +22,8 @@
     "body-parser": "^1.19.0",
     "pg": "^8.6.0",
     "pg-promise": "^10.10.2",
-    "express-promise-router": "^4.1.0"
+    "express-promise-router": "^4.1.0",
+    "moment": "2.29.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.9"
